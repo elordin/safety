@@ -1,0 +1,36 @@
+﻿Aufgabe 1
+
+Komponenten: 
+
+Zug:
+- Bremsen
+- Funkverbindung
+- Hodometer
+- Zwangsbremsverzögerungsbestimmung
+
+Bahnübergang:
+- Steuerung Schranken
+- Funkverbindung
+- Schließsensor
+
+Sonstiges:
+- Zentralregister für Bahnübergänge
+- Funkübertragung
+
+
+Störungen:
+
+Zug:
+ - Bremsen: Ausfall, Verspätete Bremseinleitung, Verringerte Bremswirkung
+ - Funkverbindung: Ausfall
+ - Hodometer: Ausfall, Geschwindigkeitsmessung signifikant zu hoch/klein, Signifikant ungenaue Positionsbestimmung, Geschwindigkeitsmessung verzögert
+ - Zwangsbremsverzögerungsbestimmung: Ausfall, Zwangsbremsverzögerungsbestimmung signifikant zu hoch/klein, Berechnung dauert zu lange
+ 
+ Bahnübergang:
+ - Steuerung Schranken: Ausfall, Signifikante Verzögerung beim Schließen der Schranken, Schranken schließen ohne Anweisung (e.g. Defekt der Positions-Sicherung)
+ - Funkverbindung: Ausfall, Falsche Antwort (Geschlossen, Antwort: offen; Offen, Antwort: geschlossen) wird gesendet
+ - Schließsensor: Ausfall, Veranlasst öffnen der Schranken signifikant zu früh/spät
+ 
+ Sonstiges:
+ - Zentralregister für Bahnübergänge: Ausfall, Falsche Werte eingetragen
+ - Funkübertragung: Fehlerhafte Übermittlung der Nachricht, Verlust einer oder mehrerer Nachrichten
