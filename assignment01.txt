@@ -27,7 +27,8 @@ Zug:
  - Zwangsbremsverzögerungsbestimmung: Ausfall, Zwangsbremsverzögerungsbestimmung signifikant zu hoch/klein, Berechnung dauert zu lange
  
  Bahnübergang:
- - Steuerung Schranken: Ausfall, Signifikante Verzögerung beim Schließen der Schranken, Schranken schließen ohne Anweisung (e.g. Defekt der Positions-Sicherung)
+ - Steuerung Schranken: Ausfall, Signifikante Verzögerung beim Schließen der Schranken, Schranken schließen ohne Anweisung (e.g. Defekt der Positions-Sicherung), Schranken öffnen ohne Anweisung
+ - Schrankensensor (Sensor der prüft ob die Schranken zu sind): Ausfall, Falsche Antwort (Geschlossen, Antwort: offen; Offen, Antwort: geschlossen)
  - Funkverbindung: Ausfall, Falsche Antwort (Geschlossen, Antwort: offen; Offen, Antwort: geschlossen) wird gesendet
  - Schließsensor: Ausfall, Veranlasst öffnen der Schranken signifikant zu früh/spät
  
