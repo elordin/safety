@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="46167685-619e-4ba4-be88-01ccfa514cb1" name="Breaks" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <initialNode Id="0d32d59b-d2ba-4279-b3a0-7ec439f1abbf" name="InitialNode1">
+      <successors>
+        <transition Id="370f1bef-2882-42b0-9f9e-1c85251f669c">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="35037367-5bac-4be3-8e60-da5072278d09" name="NotBreaking">
+      <successors>
+        <transition Id="da5d82a3-c135-496c-a8e7-424a721f7678">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="3d92b00c-f2a9-4f58-a873-69f0301aff6f" name="PartiallyBreaking">
+      <successors>
+        <transition Id="132616b7-075e-4512-bf8b-867f350ec8d0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/Breaking" />
+        </transition>
+        <transition Id="43981c3e-6c61-4c97-9884-33f3249ec630">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="126b9e90-d69a-4582-bc53-f73158d90bed" name="Breaking">
+      <successors>
+        <transition Id="3648d0c0-b8d2-48e9-b64e-9239fd09d2a0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+</programGraph>

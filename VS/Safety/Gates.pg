@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="46a52955-9a96-4afb-89e8-857d0799e142" name="Gates" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <initialNode Id="3cd73e02-5705-482c-b439-a05f2cc1c0ed" name="InitialNode1">
+      <successors>
+        <transition Id="5f1e38c1-8e58-4e8d-8602-c81cce789a6b">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="20694961-6648-47ae-a625-f19b9b41d59d" name="Open">
+      <successors>
+        <transition Id="cdd3a892-c686-41b2-8884-e4901080adc0">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="a36030d8-52f7-48c9-b9e3-f8285671d8e7" name="Closed">
+      <successors>
+        <transition Id="c224c956-05de-4669-b432-7339ce7da3f1">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+</programGraph>

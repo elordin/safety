@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="8782685e-3dea-4616-b50a-67b08873bafd" name="Train" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <initialNode Id="afca6352-fd87-4fec-b9ca-2f791187b636" name="InitialNode1">
+      <successors>
+        <transition Id="0faf8e92-58f6-4cc3-9798-aa8381fec5fe">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="2af58271-10d3-4261-8baa-3768420834e8" name="EP">
+      <successors>
+        <transition Id="b3382bd1-fe53-4e3b-9a6f-a0d9fc1f47ec">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="e48631c8-2a9b-438f-abaf-b68f0f3288c5" name="AP">
+      <successors>
+        <transition Id="0c066ddb-0c75-41e2-802c-f4c31f451437">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BEP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="0589470e-df9d-4192-99fb-00968313b67b" name="BEP">
+      <successors>
+        <transition Id="c3352fa9-b953-4790-8d65-880ab3d12309">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/GP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="01e30085-4cfb-4078-9589-5caf65e3bddb" name="GP">
+      <successors>
+        <transition Id="2a6a7e19-f42a-48c2-956d-36f3f3a81c7b">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/SP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="33bc3c63-b010-4846-bf5f-1a9c3ac31fa4" name="SP">
+      <successors>
+        <transition Id="ce688ae0-a45f-4268-aa50-67654231ca34">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+</programGraph>

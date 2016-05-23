@@ -1,0 +1,14 @@
+# Train is never on an unsecured crossing
+AG ( Zug = GP -> Gates = Closed )
+
+# Train eventually passes the crossing
+AG ( Zug = EP -> AF Zug = SP )
+
+# Train eventually leaves danger zone
+AG ( Zug = GP -> AF Zug = SP )
+
+# Gates eventually open again
+AG ( Gates = Closed -> AF Gates = Open )
+
+# No signal at BEP? Break and dont cross the crossing.
+AG ((Zug = BEP && Message = Pending) -> (AG !(Zug = GP) && AF (Breaks = Breaking)))
