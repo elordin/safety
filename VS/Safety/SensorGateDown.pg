@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="91309858-22ab-4105-91da-dc9f5ce62ffb" name="SensorGateDown" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="cb2a4953-fe28-4849-9e15-a0e3dbc32e56" name="open">
+      <successors>
+        <transition Id="9e7ffe5f-58b1-48a0-8b23-2c9ee8ed6f34" guard="Gates == Closed" label="Gates == Closed">
+          <stateMoniker name="/91309858-22ab-4105-91da-dc9f5ce62ffb/closed" />
+        </transition>
+        <transition Id="a7f1378f-0a45-4ff1-a37a-f0c67cb6800c" guard="Gates != Closed" label="Gates != Closed">
+          <stateMoniker name="/91309858-22ab-4105-91da-dc9f5ce62ffb/open" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="13f7f58f-c3a1-4566-bd8d-e1e5105495ce" name="closed">
+      <successors>
+        <transition Id="c7327a8d-7fa0-4fd8-9267-b236ef43392b" guard="Gates != Closed" label="Gates != Closed">
+          <stateMoniker name="/91309858-22ab-4105-91da-dc9f5ce62ffb/open" />
+        </transition>
+        <transition Id="2ed5321c-461c-4eb5-8ea8-ff6b862d0226" guard="Gates == Closed" label="Gates == Closed">
+          <stateMoniker name="/91309858-22ab-4105-91da-dc9f5ce62ffb/closed" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="d217637a-f08c-4836-a480-2da0ae101a06" name="InitialNode1">
+      <successors>
+        <transition Id="955b7be6-2af4-4b3d-975b-aa67c9de35db">
+          <stateMoniker name="/91309858-22ab-4105-91da-dc9f5ce62ffb/open" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="3447290e-ea42-4c11-b873-59bc2d94bcdb">
+      <importedVariable Id="beb66e71-5d81-4c5c-ae6d-10b0268c4dde" name="Gates" range="Open, Closed, HalfOpened" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>

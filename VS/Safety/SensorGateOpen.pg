@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="68c13310-8d0f-47f8-a3c0-28efa82ac28d" name="SensorGateOpen" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="9cb85eb6-322a-4b7b-b5f2-7ca703f7c16e" name="open">
+      <successors>
+        <transition Id="b76a9373-b058-4e30-ac69-afae1998a26a" guard="Gates == Open" label="Gates == Open">
+          <stateMoniker name="/68c13310-8d0f-47f8-a3c0-28efa82ac28d/closed" />
+        </transition>
+        <transition Id="3d889258-3500-4951-8bc2-9f8110b81a70" guard="Gates != Open" label="Gates != Open">
+          <stateMoniker name="/68c13310-8d0f-47f8-a3c0-28efa82ac28d/open" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="3235ca8a-3e1f-46a3-87dc-1bfcf4ccf643" name="closed">
+      <successors>
+        <transition Id="1f37c388-38c1-4fdb-a565-ef3a0a1e9a86" guard="Gates != Open" label="Gates != Open">
+          <stateMoniker name="/68c13310-8d0f-47f8-a3c0-28efa82ac28d/open" />
+        </transition>
+        <transition Id="08be2f3f-e80c-442f-b0e9-ee7e015819fa" guard="Gates == Open" label="Gates == Open">
+          <stateMoniker name="/68c13310-8d0f-47f8-a3c0-28efa82ac28d/closed" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="77759647-72cb-4e25-a99a-4de596369fcf" name="InitialNode1">
+      <successors>
+        <transition Id="977f4cba-add5-4e1b-8754-1547eeeb706a">
+          <stateMoniker name="/68c13310-8d0f-47f8-a3c0-28efa82ac28d/open" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="660f8802-0bfb-46c4-aa1d-1b46fd7d5708">
+      <importedVariable Id="6e6cdab6-8ddb-4b70-9f4d-f20ce86b2e5d" name="Gates" range="Open, Closed, HalfOpened" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>

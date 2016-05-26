@@ -1,47 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="8782685e-3dea-4616-b50a-67b08873bafd" name="Train" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
   <states>
-    <initialNode Id="afca6352-fd87-4fec-b9ca-2f791187b636" name="InitialNode1">
-      <successors>
-        <transition Id="0faf8e92-58f6-4cc3-9798-aa8381fec5fe">
-          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
-        </transition>
-      </successors>
-    </initialNode>
     <state Id="2af58271-10d3-4261-8baa-3768420834e8" name="EP">
       <successors>
-        <transition Id="b3382bd1-fe53-4e3b-9a6f-a0d9fc1f47ec">
-          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AP" />
+        <transition Id="b44770c0-74f4-4f57-b781-11e093cdc28e" action="Train_AfterEPCounter := 0" label="// Train_AfterEPCounter := 0" precondition="true">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterEP" />
         </transition>
       </successors>
     </state>
     <state Id="e48631c8-2a9b-438f-abaf-b68f0f3288c5" name="AP">
       <successors>
-        <transition Id="0c066ddb-0c75-41e2-802c-f4c31f451437">
-          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BEP" />
+        <transition Id="5040e4af-8833-4672-8e60-73fa26c23c1c" action="Train_AfterAPCounter := 0" label="// Train_AfterAPCounter := 0" precondition="true">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterAP" />
         </transition>
       </successors>
     </state>
     <state Id="0589470e-df9d-4192-99fb-00968313b67b" name="BEP">
       <successors>
-        <transition Id="c3352fa9-b953-4790-8d65-880ab3d12309">
-          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/GP" />
+        <transition Id="1b1253d4-4e71-4750-b183-ea1c12277735" guard="Speed &gt; 0 &amp;&amp; Crossing_Message != 1" action="Train_BrakeStatus := 2" label="Speed &gt; 0 &amp;&amp; Crossing_Message != 1 // Train_BrakeStatus := 2" precondition="true">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterBEP" />
+        </transition>
+        <transition Id="1b9e4048-5691-48a4-aad6-c9e3547845d9" guard="Speed &gt; 0 &amp;&amp; Crossing_Message == 1" label="Speed &gt; 0 &amp;&amp; Crossing_Message == 1">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterBEP" />
         </transition>
       </successors>
     </state>
     <state Id="01e30085-4cfb-4078-9589-5caf65e3bddb" name="GP">
       <successors>
-        <transition Id="2a6a7e19-f42a-48c2-956d-36f3f3a81c7b">
+        <transition Id="063a8d16-6965-4593-9b1d-56ec8e50e339" guard="Speed &gt; 0" label="Speed &gt; 0">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/SP" />
         </transition>
       </successors>
     </state>
     <state Id="33bc3c63-b010-4846-bf5f-1a9c3ac31fa4" name="SP">
       <successors>
-        <transition Id="ce688ae0-a45f-4268-aa50-67654231ca34">
+        <transition Id="659ccf53-e71f-495a-930e-ce7a333219b0" guard="Speed &gt; 0" label="Speed &gt; 0">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/Somewhere" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="a3db15ed-1aa8-4cb5-b9f2-e194ddfdf943" name="Somewhere">
+      <successors>
+        <transition Id="630eca10-55d0-4f41-a0c4-a7199f6df9f6" guard="Speed &gt; 0" label="Speed &gt; 0">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
+        </transition>
+        <transition Id="da25203d-a437-4fe7-8c3d-b255511c2014" guard="Speed &gt; 0" label="Speed &gt; 0">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/Somewhere" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="019ec932-2575-4fc9-902f-a5254167aaa0" name="InitialNode1">
+      <successors>
+        <transition Id="c9ef9cd8-253b-4fce-b5f6-f9269de6d328">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/Somewhere" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="151d598e-648a-4a1e-be1f-05ffd380af8c" name="AfterAP">
+      <successors>
+        <transition Id="9957bc50-5766-4af2-bf10-f676b26dcdb2" guard="Speed &gt; 0 &amp;&amp; Train_AfterAPCounter &lt; 3" action="Train_AfterAPCounter := Train_AfterAPCounter + 1" label="Speed &gt; 0 &amp;&amp; Train_AfterAPCounter &lt; 3 // Train_AfterAPCounter := Train_AfterAPCounter + 1" precondition="Train_AfterAPCounter &lt; 3">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterAP" />
+        </transition>
+        <transition Id="e71bae83-5431-4391-88db-b51ead09569d" guard="Speed &gt; 0 &amp;&amp; Train_AfterAPCounter == 3" label="Speed &gt; 0 &amp;&amp; Train_AfterAPCounter == 3">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BEP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="005510cc-aeac-4ec5-a247-8ef118a75f5f" name="AfterEP">
+      <successors>
+        <transition Id="79de9048-9933-43f9-9914-dcf5dc011743" guard="Speed &gt; 0 &amp;&amp; Train_AfterEPCounter &lt; 5 + Gates_TimeToClose" action="Train_AfterEPCounter := Train_AfterEPCounter + 1" label="Speed &gt; 0 &amp;&amp; Train_AfterEPCounter &lt; 5 + Gates_TimeToClose // Train_AfterEPCounter := Train_AfterEPCounter + 1" precondition="Train_AfterEPCounter &lt; 15">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterEP" />
+        </transition>
+        <transition Id="fb565424-58d9-45db-a170-3eaf4d2a9ac4" guard="Speed &gt; 0 &amp;&amp; Train_AfterEPCounter == 5 + Gates_TimeToClose" label="Speed &gt; 0 &amp;&amp; Train_AfterEPCounter == 5 + Gates_TimeToClose">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AP" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="2037f9e9-375d-469f-80b2-e26bc7de5a42" name="AfterBEP">
+      <successors>
+        <transition Id="c19f6fef-0ddd-4102-b4d5-12cb220fe0fe" guard="Speed &gt; 0 &amp;&amp; Train_BreakCounter &lt; 9" action="Train_BreakCounter := Train_BreakCounter + 1" label="Speed &gt; 0 &amp;&amp; Train_BreakCounter &lt; 9 // Train_BreakCounter := Train_BreakCounter + 1" precondition="Train_BreakCounter &lt; 9">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterBEP" />
+        </transition>
+        <transition Id="5fc757e1-98e4-4571-8670-8e52f77a7b54" guard="Speed &gt; 0 &amp;&amp; Train_BreakCounter == 9" label="Speed &gt; 0 &amp;&amp; Train_BreakCounter == 9">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/GP" />
         </transition>
       </successors>
     </state>
   </states>
+  <variables>
+    <programGraphHasVariables Id="505fbded-135d-4240-be67-5bb93aae7b79">
+      <variable Id="3188f8f8-d956-4646-aa99-343c180014c2" name="Train_AfterEPCounter" range="0..15" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="0630a942-f71b-47d3-ae4c-594db3875634">
+      <variable Id="26fa41c1-bfed-4bbb-973d-802f9d06cdb9" name="Gates_TimeToClose" range="0..10" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="62d71e2f-2e12-43cf-8778-ccd2c65e5ab4">
+      <variable Id="b04de410-e9fa-446f-98fd-fdadf138cc72" name="Train_AfterAPCounter" range="0..3" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="091f78ed-8df3-48c2-9bff-6e20b2a4bb14">
+      <variable Id="4d997f5c-dce4-46ee-a8f7-564a1bc27e18" name="Train_BreakCounter" range="0..9" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="584e878e-1fe4-4ca2-ae78-ee463922900e">
+      <variable Id="c68122e3-24ff-46db-a3bb-dc172fc8d9a3" name="Train_BrakeStatus" range="0..2" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="7883230e-83e6-4755-919b-f65f65c9b609">
+      <variable Id="ad7b1682-a6b8-4e21-8883-9dd316af4781" name="Speed" range="-20..160" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="5f07af5c-1978-4957-a555-f97a0aafc87b">
+      <variable Id="90b40e44-eb39-4399-8362-ef248906aa53" name="Crossing_Message" range="-1,0,1" />
+    </programGraphHasVariables>
+  </variables>
 </programGraph>

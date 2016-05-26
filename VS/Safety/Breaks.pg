@@ -10,27 +10,50 @@
     </initialNode>
     <state Id="35037367-5bac-4be3-8e60-da5072278d09" name="NotBreaking">
       <successors>
-        <transition Id="da5d82a3-c135-496c-a8e7-424a721f7678">
+        <transition Id="57ab0744-51e8-48fc-a503-58ca4bedb015" guard="Train_BrakeStatus == 0" label="Train_BrakeStatus == 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+        <transition Id="2330edf1-d488-4624-b597-f944fa46d452" guard="Train_BrakeStatus == 1" action="Speed := Speed - 10" label="Train_BrakeStatus == 1 // Speed := Speed - 10" precondition="Speed &gt; 0">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
+        </transition>
+        <transition Id="40b54a45-352e-4525-9fa8-a5515a4f2437" guard="Train_BrakeStatus == 2" action="Speed := Speed - 20" label="Train_BrakeStatus == 2 // Speed := Speed - 20" precondition="Speed &gt; 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
         </transition>
       </successors>
     </state>
     <state Id="3d92b00c-f2a9-4f58-a873-69f0301aff6f" name="PartiallyBreaking">
       <successors>
-        <transition Id="132616b7-075e-4512-bf8b-867f350ec8d0">
-          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/Breaking" />
-        </transition>
-        <transition Id="43981c3e-6c61-4c97-9884-33f3249ec630">
+        <transition Id="327154e9-885b-4fff-9a15-2c04414b7fa3" guard="Train_BrakeStatus == 0" label="Train_BrakeStatus == 0">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+        <transition Id="0e1f1630-4641-4d50-912d-3495938b3df7" guard="Train_BrakeStatus == 1" action="Speed := Speed - 10" label="Train_BrakeStatus == 1 // Speed := Speed - 10" precondition="Speed &gt; 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
+        </transition>
+        <transition Id="98d51d98-e8a0-4703-8c10-612a3c8cce5d" guard="Train_BrakeStatus == 2" action="Speed := Speed - 20" label="Train_BrakeStatus == 2 // Speed := Speed - 20" precondition="Speed &gt; 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
         </transition>
       </successors>
     </state>
-    <state Id="126b9e90-d69a-4582-bc53-f73158d90bed" name="Breaking">
+    <state Id="126b9e90-d69a-4582-bc53-f73158d90bed" name="FullyBreaking">
       <successors>
-        <transition Id="3648d0c0-b8d2-48e9-b64e-9239fd09d2a0">
+        <transition Id="6844ad14-97bf-490e-93e2-4fc7fc0e8ca3" guard="Train_BrakeStatus == 0" label="Train_BrakeStatus == 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+        <transition Id="587532ab-b99b-4588-acbe-55deae4ff837" guard="Train_BrakeStatus == 2" action="Speed := Speed - 20" label="Train_BrakeStatus == 2 // Speed := Speed - 20" precondition="Speed &gt; 0">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
+        </transition>
+        <transition Id="68721120-83bf-4e4c-bcff-baabb6a7aaef" guard="Train_BrakeStatus == 1" action="Speed := Speed - 10" label="Train_BrakeStatus == 1 // Speed := Speed - 10" precondition="Speed &gt; 0">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
         </transition>
       </successors>
     </state>
   </states>
+  <variables>
+    <programGraphHasVariables Id="beea14b8-770d-4d4f-a854-da3b2a9df40b">
+      <variable Id="1b1a0505-25f0-4087-b109-8c23dea621db" name="Speed" range="-20..160" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="ca80bd4f-bc01-4f40-97de-23b9e3f26ddd">
+      <variable Id="f058d27f-bfb9-4885-969c-c2151495e8f1" name="Train_BrakeStatus" range="0..2" />
+    </programGraphHasVariables>
+  </variables>
 </programGraph>

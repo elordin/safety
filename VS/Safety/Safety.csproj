@@ -32,6 +32,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Crossing.pg" />
+    <None Include="Crossing.pg.diagram">
+      <DependentUpon>Crossing.pg</DependentUpon>
+    </None>
+    <None Include="CrossingFunkmodule.pg" />
+    <None Include="CrossingFunkmodule.pg.diagram">
+      <DependentUpon>CrossingFunkmodule.pg</DependentUpon>
+    </None>
+    <None Include="CrossingTimer.pg" />
+    <None Include="CrossingTimer.pg.diagram">
+      <DependentUpon>CrossingTimer.pg</DependentUpon>
+    </None>
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
       <DependentUpon>Gates.pg</DependentUpon>
@@ -40,9 +52,25 @@
     <None Include="Breaks.pg.diagram">
       <DependentUpon>Breaks.pg</DependentUpon>
     </None>
+    <None Include="SensorGateDown.pg" />
+    <None Include="SensorGateDown.pg.diagram">
+      <DependentUpon>SensorGateDown.pg</DependentUpon>
+    </None>
+    <None Include="SensorGateOpen.pg" />
+    <None Include="SensorGateOpen.pg.diagram">
+      <DependentUpon>SensorGateOpen.pg</DependentUpon>
+    </None>
+    <None Include="SensorSP.pg" />
+    <None Include="SensorSP.pg.diagram">
+      <DependentUpon>SensorSP.pg</DependentUpon>
+    </None>
     <None Include="Train.pg" />
     <None Include="Train.pg.diagram">
       <DependentUpon>Train.pg</DependentUpon>
+    </None>
+    <None Include="TrainFunkmodule.pg" />
+    <None Include="TrainFunkmodule.pg.diagram">
+      <DependentUpon>TrainFunkmodule.pg</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

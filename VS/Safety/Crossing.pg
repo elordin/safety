@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f4ea3527-1145-4d4e-a4bd-b7e11568dba3" name="Crossing" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="d36670cf-3d9c-433d-9950-48e6e9444722" name="Open">
+      <successors>
+        <transition Id="5e15ddff-1884-4bca-b23d-46dccdb201c0" guard="CrossingFunkmodule == EP_Requested" label="CrossingFunkmodule == EP_Requested">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/ProtectionPhase" />
+        </transition>
+        <transition Id="ba8dec2d-84ba-49f6-9922-7112e5664dd2" guard="CrossingFunkmodule != EP_Requested" label="CrossingFunkmodule != EP_Requested">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="566fde31-2616-4170-8f5c-8462ee6efeab" name="ProtectionPhase">
+      <successors>
+        <transition Id="ae9a5ad1-e75d-4d1b-a741-062cc3d82756" guard="SensorGateDown == closed" label="SensorGateDown == closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Protected" />
+        </transition>
+        <transition Id="aef9405a-289f-4eea-a1b5-009614ab0990" guard="SensorGateDown != closed" label="SensorGateDown != closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/ProtectionPhase" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="72739c98-9ea9-46f0-9b6a-abe7ab05971a" name="InitialNode1">
+      <successors>
+        <transition Id="e7915c15-043f-4e4f-b68c-23ac6aa39dbd">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="bfda6841-f9a7-4c6a-a1fa-87dec4d18817" name="Protected">
+      <successors>
+        <transition Id="eae3d85e-2677-4faf-94e0-1e353a7a6559" guard="SP_CauseOpening == 1 || CrossingTimer == Finished" label="SP_CauseOpening == 1 || CrossingTimer == Finished">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/OpeningPhase" />
+        </transition>
+        <transition Id="5005af9c-0068-475a-a12f-e935e5266845" guard="SP_CauseOpening != 1 &amp;&amp; CrossingTimer != Finished" label="SP_CauseOpening != 1 &amp;&amp; CrossingTimer != Finished">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Protected" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="6271c830-24a1-4781-8054-cbf5752644e1" name="OpeningPhase">
+      <successors>
+        <transition Id="750cbc75-04ff-4a89-a88f-38ab59eadb6a" guard="SensorGateOpen == closed" label="SensorGateOpen == closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+        <transition Id="beff8edb-be0e-4dea-95d5-6295b2cb7c81" guard="SensorGateOpen != closed" label="SensorGateOpen != closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/OpeningPhase" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+  <variables>
+    <programGraphHasVariables Id="d6874f43-2d9d-4cca-b026-e587ce0b4930">
+      <variable Id="6eca7658-fae3-44a4-a21e-baf4c362c7a5" name="SP_CauseOpening" range="0,1" />
+    </programGraphHasVariables>
+  </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="23bf7a33-7260-4d63-a0c5-47dd7b1c0142">
+      <importedVariable Id="97fdd3c2-183f-40f5-9410-03e6f5989cb2" name="SensorGateDown" range="open, closed" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="84cfbe3e-37a2-4c74-a3f4-639da0a28b30">
+      <importedVariable Id="4b6ca9aa-6050-474e-8d3b-37ba5d5520c7" name="SensorGateOpen" range="open, closed" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="15cb938f-f28f-45c8-a738-838ac0dca2a7">
+      <importedVariable Id="27bdcda3-c63d-448e-bd53-12d7d03a5983" name="CrossingFunkmodule" range="Idle, EP_Requested, AP_Requested" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="8971b13d-c5a3-4c64-a7a0-0e19e087a24f">
+      <importedVariable Id="47278e06-9124-4ce3-82c6-88292ddca10b" name="CrossingTimer" range="Idle, Counting, Finished" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>
