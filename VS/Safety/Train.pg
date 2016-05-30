@@ -17,10 +17,10 @@
     </state>
     <state Id="0589470e-df9d-4192-99fb-00968313b67b" name="BEP">
       <successors>
-        <transition Id="1b1253d4-4e71-4750-b183-ea1c12277735" guard="Speed &gt; 0 &amp;&amp; Crossing_Message != 1" action="Train_BrakeStatus := 2" label="Speed &gt; 0 &amp;&amp; Crossing_Message != 1 // Train_BrakeStatus := 2" precondition="true">
+        <transition Id="1b1253d4-4e71-4750-b183-ea1c12277735" guard="Speed &gt; 0 &amp;&amp; Crossing_Message != Protected" action="Train_BrakeStatus := Full" label="Speed &gt; 0 &amp;&amp; Crossing_Message != Protected // Train_BrakeStatus := Full" precondition="true">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterBEP" />
         </transition>
-        <transition Id="1b9e4048-5691-48a4-aad6-c9e3547845d9" guard="Speed &gt; 0 &amp;&amp; Crossing_Message == 1" label="Speed &gt; 0 &amp;&amp; Crossing_Message == 1">
+        <transition Id="1b9e4048-5691-48a4-aad6-c9e3547845d9" guard="Speed &gt; 0 &amp;&amp; Crossing_Message == Protected" label="Speed &gt; 0 &amp;&amp; Crossing_Message == Protected">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterBEP" />
         </transition>
       </successors>
@@ -100,14 +100,14 @@
     <programGraphHasVariables Id="091f78ed-8df3-48c2-9bff-6e20b2a4bb14">
       <variable Id="4d997f5c-dce4-46ee-a8f7-564a1bc27e18" name="Train_BreakCounter" range="0..9" />
     </programGraphHasVariables>
-    <programGraphHasVariables Id="584e878e-1fe4-4ca2-ae78-ee463922900e">
-      <variable Id="c68122e3-24ff-46db-a3bb-dc172fc8d9a3" name="Train_BrakeStatus" range="0..2" />
-    </programGraphHasVariables>
     <programGraphHasVariables Id="7883230e-83e6-4755-919b-f65f65c9b609">
       <variable Id="ad7b1682-a6b8-4e21-8883-9dd316af4781" name="Speed" range="-20..160" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="5f07af5c-1978-4957-a555-f97a0aafc87b">
-      <variable Id="90b40e44-eb39-4399-8362-ef248906aa53" name="Crossing_Message" range="-1,0,1" />
+      <variable Id="90b40e44-eb39-4399-8362-ef248906aa53" name="Crossing_Message" range="Unknown, Insecure, Protected" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="a8549bbe-2016-440d-861a-348477a5637f">
+      <variable Id="ca76e3ac-46a6-4e17-9d56-7d5e4b95d72e" name="Train_BrakeStatus" range="Not, Partial, Full" />
     </programGraphHasVariables>
   </variables>
 </programGraph>
