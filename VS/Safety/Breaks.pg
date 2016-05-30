@@ -49,11 +49,13 @@
     </state>
   </states>
   <variables>
-    <programGraphHasVariables Id="beea14b8-770d-4d4f-a854-da3b2a9df40b">
-      <variable Id="1b1a0505-25f0-4087-b109-8c23dea621db" name="Speed" range="-20..160" />
-    </programGraphHasVariables>
     <programGraphHasVariables Id="ca80bd4f-bc01-4f40-97de-23b9e3f26ddd">
       <variable Id="f058d27f-bfb9-4885-969c-c2151495e8f1" name="Train_BrakeStatus" range="Not, Partial, Full" />
     </programGraphHasVariables>
   </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="939424e1-6938-4943-905c-b5b2e91dcb12">
+      <importedVariable Id="24a988ba-fefc-4219-8dd2-90028f9aa229" name="Train.Speed" range="-20..160" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
 </programGraph>

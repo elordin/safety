@@ -49,11 +49,6 @@
       </successors>
     </state>
   </states>
-  <variables>
-    <programGraphHasVariables Id="d6874f43-2d9d-4cca-b026-e587ce0b4930">
-      <variable Id="6eca7658-fae3-44a4-a21e-baf4c362c7a5" name="SP_CauseOpening" range="0,1" />
-    </programGraphHasVariables>
-  </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="23bf7a33-7260-4d63-a0c5-47dd7b1c0142">
       <importedVariable Id="97fdd3c2-183f-40f5-9410-03e6f5989cb2" name="SensorGateDown" range="open, closed" />
@@ -66,6 +61,9 @@
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="8971b13d-c5a3-4c64-a7a0-0e19e087a24f">
       <importedVariable Id="47278e06-9124-4ce3-82c6-88292ddca10b" name="CrossingTimer" range="Idle, Counting, Finished" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="47e0de07-c564-42f9-be70-ff858365eb07">
+      <importedVariable Id="75e2769c-6d34-41ff-a691-630fd7115ae6" name="SensorSP.SP_CauseOpening" range="0,1" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

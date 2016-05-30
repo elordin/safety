@@ -34,14 +34,6 @@
     <stateShape Id="50edf1a6-f8ea-4e90-8708-6d1d5587f3d5" absoluteBounds="8.875, 2.875, 1, 0.5">
       <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterAP" />
     </stateShape>
-    <transitionConnector Id="291d294d-7939-4c71-8d4f-eaa349c76d4c" edgePoints="[(5.125 : 1.125); (1.5 : 1.125); (1.5 : 1.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <transitionMoniker Id="630eca10-55d0-4f41-a0c4-a7199f6df9f6" />
-      <relativeChildShapes />
-      <nodes>
-        <stateShapeMoniker Id="20c3560d-54da-45b7-83e8-327511b422c3" />
-        <stateShapeMoniker Id="12bace49-ca87-48a0-8628-2a9ad409cde3" />
-      </nodes>
-    </transitionConnector>
     <stateShape Id="5fbf5705-02c5-40cd-adc4-9c6311125e5c" absoluteBounds="3.875, 1.75, 1, 0.5">
       <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/AfterEP" />
     </stateShape>

@@ -41,9 +41,6 @@
     </state>
     <state Id="a3db15ed-1aa8-4cb5-b9f2-e194ddfdf943" name="Somewhere">
       <successors>
-        <transition Id="630eca10-55d0-4f41-a0c4-a7199f6df9f6" guard="Speed &gt; 0" label="Speed &gt; 0">
-          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
-        </transition>
         <transition Id="da25203d-a437-4fe7-8c3d-b255511c2014" guard="Speed &gt; 0" label="Speed &gt; 0">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/Somewhere" />
         </transition>
@@ -91,9 +88,6 @@
     <programGraphHasVariables Id="505fbded-135d-4240-be67-5bb93aae7b79">
       <variable Id="3188f8f8-d956-4646-aa99-343c180014c2" name="Train_AfterEPCounter" range="0..15" />
     </programGraphHasVariables>
-    <programGraphHasVariables Id="0630a942-f71b-47d3-ae4c-594db3875634">
-      <variable Id="26fa41c1-bfed-4bbb-973d-802f9d06cdb9" name="Gates_TimeToClose" range="0..10" />
-    </programGraphHasVariables>
     <programGraphHasVariables Id="62d71e2f-2e12-43cf-8778-ccd2c65e5ab4">
       <variable Id="b04de410-e9fa-446f-98fd-fdadf138cc72" name="Train_AfterAPCounter" range="0..3" />
     </programGraphHasVariables>
@@ -103,11 +97,16 @@
     <programGraphHasVariables Id="7883230e-83e6-4755-919b-f65f65c9b609">
       <variable Id="ad7b1682-a6b8-4e21-8883-9dd316af4781" name="Speed" range="-20..160" />
     </programGraphHasVariables>
-    <programGraphHasVariables Id="5f07af5c-1978-4957-a555-f97a0aafc87b">
-      <variable Id="90b40e44-eb39-4399-8362-ef248906aa53" name="Crossing_Message" range="Unknown, Insecure, Protected" />
-    </programGraphHasVariables>
-    <programGraphHasVariables Id="a8549bbe-2016-440d-861a-348477a5637f">
-      <variable Id="ca76e3ac-46a6-4e17-9d56-7d5e4b95d72e" name="Train_BrakeStatus" range="Not, Partial, Full" />
-    </programGraphHasVariables>
   </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="b604d7b0-a5f1-4aa6-9a0f-980d819a906e">
+      <importedVariable Id="518210e6-5fde-4087-b65e-012e1971ff8b" name="Gates.Gates_TimeToClose" range="0..10" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="6855d6bd-e4ae-47ed-9667-014f46267f77">
+      <importedVariable Id="3809f61b-8495-4cc0-b480-4a09c46d11f8" name="CrossingFunkmodule.Crossing_Message" range="Unknown, Insecure, Protected" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="c275b19a-6314-449d-8d6b-988b4db324dc">
+      <importedVariable Id="1c487056-ae3d-4e5c-8cd4-766bda590eb4" name="Breaks.Train_BrakeStatus" range="Not, Partial, Full" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
 </programGraph>
