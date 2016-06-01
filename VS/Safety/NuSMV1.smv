@@ -171,4 +171,40 @@ MODULE main
 		p_Train : _P_Train(v);
 		p_TrainFunkmodule : _P_TrainFunkmodule(v);
 
+DEFINE
+	Breaks				:= v.V_Breaks;
+	Crossing			:= v.V_Crossing;
+	CrossingFunkmodule  := v.V_CrossingFunkmodule;
+	CrossingTimer		:= v.V_CrossingTimer;
+	Gates				:= v.V_Gates;
+	SensorGateDown		:= v.V_SensorGateDown;
+	SensorGateOpen		:= v.V_SensorGateOpen;
+	SensorSP			:= v.V_SensorSP;
+	Train				:= v.V_Train;
+	TrainFunkmodule		:= v.V_TrainFunkmodule;
+
+/-- Train never crosses an insecure crossing --/
+CTLSPEC AG ( Train = L_GP -> Crossing = L_Protected );
+
+/-- Train eventually leaves --/
+CTLSPEC AG ( Train = L_EP -> AF Train = L_Somewhere );
+CTLSPEC AG ( Train = L_GP -> AF Train = L_Somewhere );
+
+/-- Gates eventually open / Crossing becomes unprotected --/
+CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
+CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
+CTLSPEC ! EG Gates = L_Closed;
+
+/-- Crossing is only protected when gates are closed --/
+CTLSPEC AG Crossing = L_Protected <-> Gates = L_Closed;
+
+/-- Sensor is only active when train is on SP --/
+CTLSPEC AG Train = L_SP <-> SensorSP = L_Active;
+
+/-- After sending the first request, the train must break or pass a safe crossing --/
+CTLSPEC AG CrossingFunkmodule = L_EP_Request -> A [ Train != L_GP U (Crossing = L_Protected & AF Train = L_Somewhere) | Breaks = L_FullyBreaking ]
+
+
+
+CTLSPEC EF (CrossingFunkmodule = L_EP_Request -> AG !(Crossing = L_Protected));
 
