@@ -52,6 +52,11 @@
     <None Include="Breaks.pg.diagram">
       <DependentUpon>Breaks.pg</DependentUpon>
     </None>
+    <None Include="NuSMV1.smv">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NuSMV1.tt</DependentUpon>
+    </None>
     <None Include="SensorGateDown.pg" />
     <None Include="SensorGateDown.pg.diagram">
       <DependentUpon>SensorGateDown.pg</DependentUpon>
@@ -75,6 +80,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NuSMV1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NuSMV1.smv</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

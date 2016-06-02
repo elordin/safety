@@ -36,11 +36,6 @@
       </successors>
     </initialNode>
   </states>
-  <variables>
-    <programGraphHasVariables Id="06c0ff88-7b1c-497e-976f-3fd5555b076c">
-      <variable Id="c8ded4ea-fc37-40cf-8f04-bfb75342843b" name="Crossing_Message" range="-1,0,1" />
-    </programGraphHasVariables>
-  </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="1c4fcb5a-42c1-448e-8d75-039543c9d61a">
       <importedVariable Id="e769666a-73fa-4152-9ab3-a249c69b4251" name="Train" range="EP, AP, BEP, GP, SP, Somewhere, AfterAP, AfterEP, AfterBEP" />
