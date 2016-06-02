@@ -1,14 +1,23 @@
 # Train is never on an unsecured crossing
-AG ( Zug = GP -> Gates = Closed )
+AG ( Train = GP -> Crossing = Protected )
 
 # Train eventually passes the crossing
-AG ( Zug = EP -> AF Zug = SP )
+AG ( Train = EP -> AF Train = SP )
 
 # Train eventually leaves danger zone
-AG ( Zug = GP -> AF Zug = SP )
+AG ( Train = GP -> AF Train = SP )
 
 # Gates eventually open again
+AG ( Crossing = Protected -> AF Crossing = Open )
 AG ( Gates = Closed -> AF Gates = Open )
+!EG Gates = Closed
 
-# No signal at BEP? Break and dont cross the crossing.
-AG ((Zug = BEP && Message = Pending) -> (AG !(Zug = GP) && AF (Breaks = Breaking)))
+# The crossing is protected when the gates are closed
+AG Crossing = Protected <-> Gates = Closed
+
+# The sensor always triggers when the train passes
+AG Train = SP <-> SensorSP = Active
+
+# When requesting protection the train will either break before reaching the GP or it becomes protected before the train reaches it but one of these two options must happen.
+AG CrossingFunkmodule = EP_Request -> A (Train != GP U Crossing = Protected || Breaks = Breaking)
+
