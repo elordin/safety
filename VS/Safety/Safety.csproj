@@ -52,10 +52,14 @@
     <None Include="Breaks.pg.diagram">
       <DependentUpon>Breaks.pg</DependentUpon>
     </None>
-    <None Include="NuSMV1.smv">
+    <None Include="Check.smv">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>NuSMV1.tt</DependentUpon>
+      <DependentUpon>Check.tt</DependentUpon>
+    </None>
+    <None Include="RealTrain.pg" />
+    <None Include="RealTrain.pg.diagram">
+      <DependentUpon>RealTrain.pg</DependentUpon>
     </None>
     <None Include="SensorGateDown.pg" />
     <None Include="SensorGateDown.pg.diagram">
@@ -85,9 +89,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuSMV1.tt">
+    <Content Include="Check.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>NuSMV1.smv</LastGenOutput>
+      <LastGenOutput>Check.smv</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
