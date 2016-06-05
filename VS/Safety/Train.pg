@@ -41,8 +41,11 @@
     </state>
     <state Id="a3db15ed-1aa8-4cb5-b9f2-e194ddfdf943" name="Somewhere">
       <successors>
-        <transition Id="da25203d-a437-4fe7-8c3d-b255511c2014" guard="Speed &gt; 0" label="Speed &gt; 0">
+        <transition Id="da25203d-a437-4fe7-8c3d-b255511c2014" guard="Speed == 0" label="Speed == 0">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/Somewhere" />
+        </transition>
+        <transition Id="48000296-e213-43dc-bb61-214bb11e9099" guard="Speed &gt; 0" label="Speed &gt; 0">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EP" />
         </transition>
       </successors>
     </state>
