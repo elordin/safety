@@ -125,8 +125,8 @@
     </programGraphHasVariables>
   </variables>
   <importedVariables>
-    <programGraphHasImportedVariables Id="239c6f3e-15e0-4bcd-9a9b-26625ca8e746">
-      <importedVariable Id="84ca927e-4124-4790-a2e6-5db885b33639" name="Train.Speed" range="-20..160" />
+    <programGraphHasImportedVariables Id="1310a164-c772-4814-b2b1-06273369f7b5">
+      <importedVariable Id="a369633b-1352-4f8f-80c3-259c7df6b749" name="DriveTrain.Speed" range="0..16" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

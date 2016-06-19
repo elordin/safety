@@ -1,46 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="46a52955-9a96-4afb-89e8-857d0799e142" name="Gates" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
   <states>
-    <initialNode Id="3cd73e02-5705-482c-b439-a05f2cc1c0ed" name="InitialNode1">
+    <state Id="fcb23f4f-8255-46fc-9810-a38f081e1a9b" name="Open">
       <successors>
-        <transition Id="5f1e38c1-8e58-4e8d-8602-c81cce789a6b">
+        <transition Id="3cb78b41-c8b5-4b4f-8906-632e10746874" guard="Crossing != ProtectionPhase" label="Crossing != ProtectionPhase">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+        <transition Id="b88156d3-7f68-4889-baad-a3f2115169d3" guard="Crossing == ProtectionPhase" label="Crossing == ProtectionPhase">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closing" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="d212fd33-acde-4dd5-8b47-c5f786a797ac" name="Opening">
+      <successors>
+        <transition Id="ff5d52d9-ab36-4f48-b456-be4de27a85ff" guard="Angle == 0" label="Angle == 0">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+        <transition Id="82608388-1c4e-443e-8372-bb19c8e459bc" guard="Angle &gt; 0" action="Angle := Angle - 1" label="Angle &gt; 0 // Angle := Angle - 1" precondition="Angle &gt; 0">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Opening" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="17b01cb4-70bb-4707-a441-48925a02eea6" name="Closing">
+      <successors>
+        <transition Id="fd8e31f2-5397-4986-bcc2-72180c18c8c3" guard="Angle == 9" label="Angle == 9">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
+        </transition>
+        <transition Id="03ebaa1a-a7a8-47fc-89fb-c6a2417de232" guard="Angle &lt; 9" action="Angle := Angle + 1" label="Angle &lt; 9 // Angle := Angle + 1" precondition="Angle &lt; 9">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closing" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="240875f3-807e-4ba1-ba91-021a0683feef" name="Closed">
+      <successors>
+        <transition Id="7e608836-465c-435e-9ac7-347332de04cf" guard="Crossing == OpeningPhase" label="Crossing == OpeningPhase">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Opening" />
+        </transition>
+        <transition Id="7b40e62d-918a-46a2-b10d-501ad023e949" guard="Crossing != OpeningPhase" label="Crossing != OpeningPhase">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="1473574c-0bfb-46c6-ba2d-8d0b4f4b0e6a" name="InitialNode2">
+      <successors>
+        <transition Id="6337802a-38f7-4d0b-8e3e-ad25cfe11983">
           <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
         </transition>
       </successors>
     </initialNode>
-    <state Id="20694961-6648-47ae-a625-f19b9b41d59d" name="Open">
-      <successors>
-        <transition Id="ad834ecd-ca1a-47bc-8fc1-7865a70f9621" guard="Crossing == ProtectionPhase" action="Gates_Counter := 0" label="Crossing == ProtectionPhase // Gates_Counter := 0" precondition="true">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/HalfOpened" />
-        </transition>
-        <transition Id="4f474900-7d98-4d91-b616-876900f2f1c8" guard="Crossing != ProtectionPhase" label="Crossing != ProtectionPhase">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="a36030d8-52f7-48c9-b9e3-f8285671d8e7" name="Closed">
-      <successors>
-        <transition Id="e49ced53-5ac3-41ce-81ac-70a2ea5ee79a" guard="Crossing == OpeningPhase" action="Gates_Counter := 0" label="Crossing == OpeningPhase // Gates_Counter := 0" precondition="true">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/HalfOpened" />
-        </transition>
-        <transition Id="76d7ad87-5c3a-42ff-b381-1b52d07aea03" guard="Crossing != OpeningPhase" label="Crossing != OpeningPhase">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="b742f493-24b4-4e4f-8f68-7b3a6b1e1332" name="HalfOpened">
-      <successors>
-        <transition Id="1788d80d-5b7b-4c54-82ff-e5fa055dca84" guard="Gates_Counter == Gates_TimeToClose &amp;&amp; Crossing == ProtectionPhase" label="Gates_Counter == Gates_TimeToClose &amp;&amp; Crossing == ProtectionPhase" precondition="true">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
-        </transition>
-        <transition Id="3b750bde-6728-4f07-a897-711bc1dd4d45" guard="Gates_Counter == Gates_TimeToClose &amp;&amp; Crossing == OpeningPhase" label="Gates_Counter == Gates_TimeToClose &amp;&amp; Crossing == OpeningPhase">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
-        </transition>
-        <transition Id="3a12fe04-68f6-4b2f-bcf4-5c6c60b9c895" guard="Gates_Counter &lt; Gates_TimeToClose" action="Gates_Counter := Gates_Counter + 1" label="Gates_Counter &lt; Gates_TimeToClose // Gates_Counter := Gates_Counter + 1" precondition="Gates_Counter &lt; 9">
-          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/HalfOpened" />
-        </transition>
-      </successors>
-    </state>
   </states>
   <variables>
     <programGraphHasVariables Id="c694498a-efb6-4697-ba3d-9bfe40d99207">
@@ -48,6 +55,9 @@
     </programGraphHasVariables>
     <programGraphHasVariables Id="7f866087-4ab3-4554-ae6d-ccdb99455a43">
       <variable Id="b6046b15-ed04-4f9c-b348-c0c8dc17155b" name="Gates_Counter" range="0..10" />
+    </programGraphHasVariables>
+    <programGraphHasVariables Id="69b042b5-e314-435e-a20d-f751f625f187">
+      <variable Id="97c9202f-953c-432c-a3ef-a1d92555d1c6" name="Angle" range="0..9" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>

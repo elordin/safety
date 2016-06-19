@@ -3,20 +3,20 @@
   <states>
     <state Id="9fe44ca0-01c1-484f-b089-48296b5f20d1" name="Active">
       <successors>
-        <transition Id="5a87df96-940b-4c4f-bd7a-1e85820c0a73" guard="Train != SP" action="SP_CauseOpening := 1" label="Train != SP // SP_CauseOpening := 1" precondition="true">
+        <transition Id="5a87df96-940b-4c4f-bd7a-1e85820c0a73" guard="RealTrain != OnSP" action="SP_CauseOpening := Yes" label="RealTrain != OnSP // SP_CauseOpening := Yes" precondition="true">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
         </transition>
-        <transition Id="fad8aa20-1dc3-45dc-9649-92f187da444f" guard="Train == SP" label="Train == SP">
+        <transition Id="fad8aa20-1dc3-45dc-9649-92f187da444f" guard="RealTrain == OnSP" label="RealTrain == OnSP">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Active" />
         </transition>
       </successors>
     </state>
     <state Id="1911a68b-c537-44c6-8537-ee4b69fa2414" name="Inactive">
       <successors>
-        <transition Id="18f1abbb-2896-43b6-9696-6a7407fd506a" guard="Train == SP" action="SP_CauseOpening := 0" label="Train == SP // SP_CauseOpening := 0" precondition="true">
+        <transition Id="18f1abbb-2896-43b6-9696-6a7407fd506a" guard="RealTrain == OnSP" action="SP_CauseOpening := No" label="RealTrain == OnSP // SP_CauseOpening := No" precondition="true">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Active" />
         </transition>
-        <transition Id="88f5e9a5-1b11-44ca-b8d6-d1c2997d3680" guard="Train != SP" action="SP_CauseOpening := 0" label="Train != SP // SP_CauseOpening := 0" precondition="true">
+        <transition Id="88f5e9a5-1b11-44ca-b8d6-d1c2997d3680" guard="RealTrain != OnSP" action="SP_CauseOpening := No" label="RealTrain != OnSP // SP_CauseOpening := No" precondition="true">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
         </transition>
       </successors>
@@ -31,12 +31,12 @@
   </states>
   <variables>
     <programGraphHasVariables Id="02248699-2453-4281-8e6d-c11acbd245d2">
-      <variable Id="3b9751b4-6e4b-4b3d-96bf-c37fbd410728" name="SP_CauseOpening" range="0,1" />
+      <variable Id="3b9751b4-6e4b-4b3d-96bf-c37fbd410728" name="SP_CauseOpening" range="Yes, No" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="0135340f-003d-427a-8fc0-8438a53231e7">
-      <importedVariable Id="a7e69d64-f485-4e0d-ba12-76317bdd2fe2" name="Train" range="EP, AP, BEP, GP, SP, Somewhere, AfterAP, AfterEP, AfterBEP" />
+      <importedVariable Id="a7e69d64-f485-4e0d-ba12-76317bdd2fe2" name="RealTrain" range="OnGP, BEPtoGP, AfterGP, OnSP, AfterSP, APtoBEP, BeforeEP, OnEP, EPtoAP, OnAP, OnBEP" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

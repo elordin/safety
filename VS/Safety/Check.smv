@@ -3,78 +3,72 @@ MODULE _VARS
 	VAR
 		V_Breaks : {L_NotBreaking, L_PartiallyBreaking, L_FullyBreaking};
 		V_Train_BrakeStatus : {L_Not, L_Partial, L_Full};
-		V_Speed : -20..160;
 		V_Crossing : {L_Open, L_ProtectionPhase, L_Protected, L_OpeningPhase};
-		V_SensorGateDown : {L_open, L_closed};
-		V_SensorGateOpen : {L_open, L_closed};
-		V_CrossingFunkmodule : {L_Idle, L_EP_Requested, L_AP_Requested};
+		V_CrossingRadioModule : {L_Idle, L_EP_Requested, L_AP_Requested};
+		V_SensorGate : {L_Open, L_Closed, L_InBetween};
+		V_SensorSP : {L_Active, L_Inactive};
 		V_CrossingTimer : {L_Idle, L_Counting, L_Finished};
-		V_SP_CauseOpening : {0, 1};
 		V_Crossing_Message : {L_Unknown, L_Insecure, L_Protected};
-		V_TrainFunkmodule : {L_Idle, L_EP_Request, L_AP_Request};
+		V_TrainRadioModule : {L_Idle, L_EP_Request, L_AP_Request};
 		V_Timer_Counter : 0..60;
-		V_Gates : {L_Open, L_Closed, L_HalfOpened};
+		V_DriveTrain : {L_Running};
+		V_Speed : 0..16;
+		V_Gates : {L_Open, L_Opening, L_Closing, L_Closed};
 		V_Gates_TimeToClose : 0..10;
 		V_Gates_Counter : 0..10;
+		V_Angle : 0..9;
+		V_Hodometer : {L_Measuring};
+		V_measuredDistance : -128..512;
+		V_d : -128..512;
 		V_RealTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
 		V_tick : {1};
 		V_c : {2};
 		V_t : {32};
 		V_a : {8};
 		V_z : {128};
-		V_d : -128..512;
 		V_distToSP : {16};
-		V_SensorSP : {L_Active, L_Inactive};
-		V_Train : {L_EP, L_AP, L_BEP, L_GP, L_SP, L_Somewhere, L_AfterAP, L_AfterEP, L_AfterBEP};
-		V_Train_AfterEPCounter : 0..15;
-		V_Train_AfterAPCounter : 0..3;
-		V_Train_BreakCounter : 0..9;
+		V_SP_CauseOpening : {L_Yes, L_No};
+		V_VirtualTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
 	TRANS
-		next(V_Gates_TimeToClose) = V_Gates_TimeToClose & next(V_tick) = V_tick & next(V_c) = V_c & next(V_t) = V_t & next(V_a) = V_a & next(V_z) = V_z & next(V_distToSP) = V_distToSP;
+		next(V_tick) = V_tick & next(V_c) = V_c & next(V_t) = V_t & next(V_a) = V_a & next(V_z) = V_z & next(V_distToSP) = V_distToSP;
 MODULE _P_Breaks(v)
 	INIT
 		(v.V_Breaks = L_NotBreaking) & (TRUE)
 	TRANS
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_Train_BrakeStatus = L_Not) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_PartiallyBreaking & ((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 10)))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_FullyBreaking & ((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 20)))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_Train_BrakeStatus = L_Not) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_PartiallyBreaking & ((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 10)))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_FullyBreaking & ((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 20)))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_Train_BrakeStatus = L_Not) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & ((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 20)))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_PartiallyBreaking & ((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 10)))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (!(v.V_Train_BrakeStatus = L_Not) & (!((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)) & !((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)))) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_PartiallyBreaking & (!(v.V_Train_BrakeStatus = L_Not) & (!((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)) & !((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)))) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & (!(v.V_Train_BrakeStatus = L_Not) & (!((v.V_Train_BrakeStatus = L_Full) & (v.V_Speed > 0)) & !((v.V_Train_BrakeStatus = L_Partial) & (v.V_Speed > 0)))) & (next(v.V_Speed) = v.V_Speed));
+		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_PartiallyBreaking & TRUE & (TRUE))  |
+		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_FullyBreaking & TRUE & (TRUE))  |
+		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_FullyBreaking & TRUE & (TRUE))  |
+		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_NotBreaking & TRUE & (TRUE))  |
+		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_PartiallyBreaking & TRUE & (TRUE))  |
+		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_NotBreaking & TRUE & (TRUE));
 MODULE _P_Crossing(v)
 	INIT
 		(v.V_Crossing = L_Open) & (TRUE)
 	TRANS
-		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_ProtectionPhase & (v.V_CrossingFunkmodule = L_EP_Requested) & (TRUE))  |
-		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_Open & (v.V_CrossingFunkmodule != L_EP_Requested) & (TRUE))  |
-		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_Protected & (v.V_SensorGateDown = L_closed) & (TRUE))  |
-		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_ProtectionPhase & (v.V_SensorGateDown != L_closed) & (TRUE))  |
-		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_OpeningPhase & ((v.V_SP_CauseOpening = 1) | (v.V_CrossingTimer = L_Finished)) & (TRUE))  |
-		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_Protected & ((v.V_SP_CauseOpening != 1) & (v.V_CrossingTimer != L_Finished)) & (TRUE))  |
-		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_Open & (v.V_SensorGateOpen = L_closed) & (TRUE))  |
-		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_OpeningPhase & (v.V_SensorGateOpen != L_closed) & (TRUE))  |
-		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_Open & (!(v.V_CrossingFunkmodule = L_EP_Requested) & !(v.V_CrossingFunkmodule != L_EP_Requested)) & (TRUE))  |
-		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_ProtectionPhase & (!(v.V_SensorGateDown = L_closed) & !(v.V_SensorGateDown != L_closed)) & (TRUE))  |
-		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_Protected & (!((v.V_SP_CauseOpening = 1) | (v.V_CrossingTimer = L_Finished)) & !((v.V_SP_CauseOpening != 1) & (v.V_CrossingTimer != L_Finished))) & (TRUE))  |
-		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_OpeningPhase & (!(v.V_SensorGateOpen = L_closed) & !(v.V_SensorGateOpen != L_closed)) & (TRUE));
-MODULE _P_CrossingFunkmodule(v)
+		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_ProtectionPhase & (v.V_CrossingRadioModule = L_EP_Requested) & (TRUE))  |
+		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_Open & (v.V_CrossingRadioModule != L_EP_Requested) & (TRUE))  |
+		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_Protected & (v.V_SensorGate = L_Closed) & (TRUE))  |
+		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_ProtectionPhase & (v.V_SensorGate != L_Closed) & (TRUE))  |
+		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_OpeningPhase & ((v.V_SensorSP = L_Active) | (v.V_CrossingTimer = L_Finished)) & (TRUE))  |
+		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_Protected & ((v.V_SensorSP != L_Active) & (v.V_CrossingTimer != L_Finished)) & (TRUE))  |
+		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_Open & (v.V_SensorGate = L_Open) & (TRUE))  |
+		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_OpeningPhase & (v.V_SensorGate != L_Open) & (TRUE))  |
+		 ( v.V_Crossing = L_Open & next(v.V_Crossing) = L_Open & (!(v.V_CrossingRadioModule = L_EP_Requested) & !(v.V_CrossingRadioModule != L_EP_Requested)) & (TRUE))  |
+		 ( v.V_Crossing = L_ProtectionPhase & next(v.V_Crossing) = L_ProtectionPhase & (!(v.V_SensorGate = L_Closed) & !(v.V_SensorGate != L_Closed)) & (TRUE))  |
+		 ( v.V_Crossing = L_Protected & next(v.V_Crossing) = L_Protected & (!((v.V_SensorSP = L_Active) | (v.V_CrossingTimer = L_Finished)) & !((v.V_SensorSP != L_Active) & (v.V_CrossingTimer != L_Finished))) & (TRUE))  |
+		 ( v.V_Crossing = L_OpeningPhase & next(v.V_Crossing) = L_OpeningPhase & (!(v.V_SensorGate = L_Open) & !(v.V_SensorGate != L_Open)) & (TRUE));
+MODULE _P_CrossingRadioModule(v)
 	INIT
-		(v.V_CrossingFunkmodule = L_Idle) & (TRUE)
+		(v.V_CrossingRadioModule = L_Idle) & (TRUE)
 	TRANS
-		 ( v.V_CrossingFunkmodule = L_Idle & next(v.V_CrossingFunkmodule) = L_Idle & ((v.V_TrainFunkmodule != L_AP_Request) & (v.V_TrainFunkmodule != L_EP_Request)) & (next(v.V_Crossing_Message) = L_Unknown))  |
-		 ( v.V_CrossingFunkmodule = L_Idle & next(v.V_CrossingFunkmodule) = L_AP_Requested & (v.V_TrainFunkmodule = L_AP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
-		 ( v.V_CrossingFunkmodule = L_Idle & next(v.V_CrossingFunkmodule) = L_EP_Requested & (v.V_TrainFunkmodule = L_EP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
-		 ( v.V_CrossingFunkmodule = L_EP_Requested & next(v.V_CrossingFunkmodule) = L_Idle & TRUE & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
-		 ( v.V_CrossingFunkmodule = L_AP_Requested & next(v.V_CrossingFunkmodule) = L_Idle & (v.V_Crossing = L_Protected) & (next(v.V_Crossing_Message) = L_Protected))  |
-		 ( v.V_CrossingFunkmodule = L_AP_Requested & next(v.V_CrossingFunkmodule) = L_Idle & (v.V_Crossing != L_Protected) & (next(v.V_Crossing_Message) = L_Insecure))  |
-		 ( v.V_CrossingFunkmodule = L_Idle & next(v.V_CrossingFunkmodule) = L_Idle & (!((v.V_TrainFunkmodule != L_AP_Request) & (v.V_TrainFunkmodule != L_EP_Request)) & (!(v.V_TrainFunkmodule = L_AP_Request) & !(v.V_TrainFunkmodule = L_EP_Request))) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
-		 ( v.V_CrossingFunkmodule = L_AP_Requested & next(v.V_CrossingFunkmodule) = L_AP_Requested & (!(v.V_Crossing = L_Protected) & !(v.V_Crossing != L_Protected)) & (next(v.V_Crossing_Message) = v.V_Crossing_Message));
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & ((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_AP_Requested & (v.V_TrainRadioModule = L_AP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_EP_Requested & (v.V_TrainRadioModule = L_EP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_EP_Requested & next(v.V_CrossingRadioModule) = L_Idle & TRUE & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (v.V_Crossing = L_Protected) & (next(v.V_Crossing_Message) = L_Protected))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (v.V_Crossing != L_Protected) & (next(v.V_Crossing_Message) = L_Insecure))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & (!((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (!(v.V_TrainRadioModule = L_AP_Request) & !(v.V_TrainRadioModule = L_EP_Request))) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_AP_Requested & (!(v.V_Crossing = L_Protected) & !(v.V_Crossing != L_Protected)) & (next(v.V_Crossing_Message) = v.V_Crossing_Message));
 MODULE _P_CrossingTimer(v)
 	INIT
 		(v.V_CrossingTimer = L_Idle) & (TRUE)
@@ -87,20 +81,35 @@ MODULE _P_CrossingTimer(v)
 		 ( v.V_CrossingTimer = L_Finished & next(v.V_CrossingTimer) = L_Idle & TRUE & (next(v.V_Timer_Counter) = v.V_Timer_Counter))  |
 		 ( v.V_CrossingTimer = L_Idle & next(v.V_CrossingTimer) = L_Idle & (!(v.V_Crossing != L_Protected) & !(v.V_Crossing = L_Protected)) & (next(v.V_Timer_Counter) = v.V_Timer_Counter))  |
 		 ( v.V_CrossingTimer = L_Counting & next(v.V_CrossingTimer) = L_Counting & (!(v.V_Crossing != L_Protected) & (!((v.V_Crossing = L_Protected) & (v.V_Timer_Counter = 60)) & !(((v.V_Crossing = L_Protected) & (v.V_Timer_Counter < 60)) & (v.V_Timer_Counter < 60)))) & (next(v.V_Timer_Counter) = v.V_Timer_Counter));
+MODULE _P_DriveTrain(v)
+	INIT
+		(v.V_DriveTrain = L_Running) & (TRUE)
+	TRANS
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & (next(v.V_Speed) = (v.V_Speed - 2)))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_Breaks = L_PartiallyBreaking) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 1)))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (v.V_Breaks = L_NotBreaking) & (next(v.V_Speed) = v.V_Speed))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & (!((v.V_Breaks = L_PartiallyBreaking) & (v.V_Speed > 0)) & !(v.V_Breaks = L_NotBreaking))) & (next(v.V_Speed) = v.V_Speed));
 MODULE _P_Gates(v)
 	INIT
 		(v.V_Gates = L_Open) & (TRUE)
 	TRANS
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_HalfOpened & (v.V_Crossing = L_ProtectionPhase) & (next(v.V_Gates_Counter) = 0))  |
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (v.V_Crossing != L_ProtectionPhase) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_HalfOpened & (v.V_Crossing = L_OpeningPhase) & (next(v.V_Gates_Counter) = 0))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (v.V_Crossing != L_OpeningPhase) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_HalfOpened & next(v.V_Gates) = L_Closed & ((v.V_Gates_Counter = v.V_Gates_TimeToClose) & (v.V_Crossing = L_ProtectionPhase)) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_HalfOpened & next(v.V_Gates) = L_Open & ((v.V_Gates_Counter = v.V_Gates_TimeToClose) & (v.V_Crossing = L_OpeningPhase)) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_HalfOpened & next(v.V_Gates) = L_HalfOpened & ((v.V_Gates_Counter < v.V_Gates_TimeToClose) & (v.V_Gates_Counter < 9)) & (next(v.V_Gates_Counter) = (v.V_Gates_Counter + 1)))  |
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (!(v.V_Crossing = L_ProtectionPhase) & !(v.V_Crossing != L_ProtectionPhase)) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (!(v.V_Crossing = L_OpeningPhase) & !(v.V_Crossing != L_OpeningPhase)) & (next(v.V_Gates_Counter) = v.V_Gates_Counter))  |
-		 ( v.V_Gates = L_HalfOpened & next(v.V_Gates) = L_HalfOpened & (!((v.V_Gates_Counter = v.V_Gates_TimeToClose) & (v.V_Crossing = L_ProtectionPhase)) & (!((v.V_Gates_Counter = v.V_Gates_TimeToClose) & (v.V_Crossing = L_OpeningPhase)) & !((v.V_Gates_Counter < v.V_Gates_TimeToClose) & (v.V_Gates_Counter < 9)))) & (next(v.V_Gates_Counter) = v.V_Gates_Counter));
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (v.V_Crossing != L_ProtectionPhase) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Closing & (v.V_Crossing = L_ProtectionPhase) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Open & (v.V_Angle = 0) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & ((v.V_Angle > 0) & (v.V_Angle > 0)) & (next(v.V_Angle) = (v.V_Angle - 1)))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closed & (v.V_Angle = 9) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & ((v.V_Angle < 9) & (v.V_Angle < 9)) & (next(v.V_Angle) = (v.V_Angle + 1)))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Opening & (v.V_Crossing = L_OpeningPhase) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (v.V_Crossing != L_OpeningPhase) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (!(v.V_Crossing != L_ProtectionPhase) & !(v.V_Crossing = L_ProtectionPhase)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & (!(v.V_Angle = 0) & !((v.V_Angle > 0) & (v.V_Angle > 0))) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & (!(v.V_Angle = 9) & !((v.V_Angle < 9) & (v.V_Angle < 9))) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (!(v.V_Crossing = L_OpeningPhase) & !(v.V_Crossing != L_OpeningPhase)) & (next(v.V_Angle) = v.V_Angle));
+MODULE _P_Hodometer(v)
+	INIT
+		(v.V_Hodometer = L_Measuring) & (TRUE)
+	TRANS
+		 ( v.V_Hodometer = L_Measuring & next(v.V_Hodometer) = L_Measuring & TRUE & (next(v.V_measuredDistance) = v.V_d));
 MODULE _P_RealTrain(v)
 	INIT
 		(v.V_RealTrain = L_BeforeEP) & (TRUE)
@@ -108,8 +117,8 @@ MODULE _P_RealTrain(v)
 		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_AfterGP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_OnGP & (v.V_d <= 0) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d > 0) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_OnSP & (v.V_d <= (-1 * v.V_distToSP)) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & ((v.V_d > (-1 * v.V_distToSP)) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_OnSP & ((v.V_d * -1) >= v.V_distToSP) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_AfterSP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_AfterSP & next(v.V_RealTrain) = L_AfterSP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & ((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
@@ -123,7 +132,7 @@ MODULE _P_RealTrain(v)
 		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_OnGP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & (!(v.V_d <= 0) & !((v.V_d > 0) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (!(v.V_d <= (-1 * v.V_distToSP)) & !((v.V_d > (-1 * v.V_distToSP)) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (!((v.V_d * -1) >= v.V_distToSP) & !(((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_OnSP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_AfterSP & next(v.V_RealTrain) = L_AfterSP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & (!((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (next(v.V_d) = v.V_d))  |
@@ -132,115 +141,117 @@ MODULE _P_RealTrain(v)
 		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_EPtoAP & (!((v.V_d > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_OnAP & next(v.V_RealTrain) = L_OnAP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_OnBEP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d));
-MODULE _P_SensorGateDown(v)
+MODULE _P_SensorGate(v)
 	INIT
-		(v.V_SensorGateDown = L_open) & (TRUE)
+		(v.V_SensorGate = L_Open) & (TRUE)
 	TRANS
-		 ( v.V_SensorGateDown = L_open & next(v.V_SensorGateDown) = L_closed & (v.V_Gates = L_Closed) & (TRUE))  |
-		 ( v.V_SensorGateDown = L_open & next(v.V_SensorGateDown) = L_open & (v.V_Gates != L_Closed) & (TRUE))  |
-		 ( v.V_SensorGateDown = L_closed & next(v.V_SensorGateDown) = L_open & (v.V_Gates != L_Closed) & (TRUE))  |
-		 ( v.V_SensorGateDown = L_closed & next(v.V_SensorGateDown) = L_closed & (v.V_Gates = L_Closed) & (TRUE))  |
-		 ( v.V_SensorGateDown = L_open & next(v.V_SensorGateDown) = L_open & (!(v.V_Gates = L_Closed) & !(v.V_Gates != L_Closed)) & (TRUE))  |
-		 ( v.V_SensorGateDown = L_closed & next(v.V_SensorGateDown) = L_closed & (!(v.V_Gates != L_Closed) & !(v.V_Gates = L_Closed)) & (TRUE));
-MODULE _P_SensorGateOpen(v)
-	INIT
-		(v.V_SensorGateOpen = L_open) & (TRUE)
-	TRANS
-		 ( v.V_SensorGateOpen = L_open & next(v.V_SensorGateOpen) = L_closed & (v.V_Gates = L_Open) & (TRUE))  |
-		 ( v.V_SensorGateOpen = L_open & next(v.V_SensorGateOpen) = L_open & (v.V_Gates != L_Open) & (TRUE))  |
-		 ( v.V_SensorGateOpen = L_closed & next(v.V_SensorGateOpen) = L_open & (v.V_Gates != L_Open) & (TRUE))  |
-		 ( v.V_SensorGateOpen = L_closed & next(v.V_SensorGateOpen) = L_closed & (v.V_Gates = L_Open) & (TRUE))  |
-		 ( v.V_SensorGateOpen = L_open & next(v.V_SensorGateOpen) = L_open & (!(v.V_Gates = L_Open) & !(v.V_Gates != L_Open)) & (TRUE))  |
-		 ( v.V_SensorGateOpen = L_closed & next(v.V_SensorGateOpen) = L_closed & (!(v.V_Gates != L_Open) & !(v.V_Gates = L_Open)) & (TRUE));
+		 ( v.V_SensorGate = L_Open & next(v.V_SensorGate) = L_Open & (v.V_Gates = L_Open) & (TRUE))  |
+		 ( v.V_SensorGate = L_Open & next(v.V_SensorGate) = L_InBetween & (v.V_Gates != L_Open) & (TRUE))  |
+		 ( v.V_SensorGate = L_Closed & next(v.V_SensorGate) = L_InBetween & (v.V_Gates != L_Closed) & (TRUE))  |
+		 ( v.V_SensorGate = L_Closed & next(v.V_SensorGate) = L_Closed & (v.V_Gates = L_Closed) & (TRUE))  |
+		 ( v.V_SensorGate = L_InBetween & next(v.V_SensorGate) = L_Open & (v.V_Gates = L_Open) & (TRUE))  |
+		 ( v.V_SensorGate = L_InBetween & next(v.V_SensorGate) = L_InBetween & ((v.V_Gates != L_Open) & (v.V_Gates != L_Closed)) & (TRUE))  |
+		 ( v.V_SensorGate = L_InBetween & next(v.V_SensorGate) = L_Closed & (v.V_Gates = L_Closed) & (TRUE))  |
+		 ( v.V_SensorGate = L_Open & next(v.V_SensorGate) = L_Open & (!(v.V_Gates = L_Open) & !(v.V_Gates != L_Open)) & (TRUE))  |
+		 ( v.V_SensorGate = L_Closed & next(v.V_SensorGate) = L_Closed & (!(v.V_Gates != L_Closed) & !(v.V_Gates = L_Closed)) & (TRUE))  |
+		 ( v.V_SensorGate = L_InBetween & next(v.V_SensorGate) = L_InBetween & (!(v.V_Gates = L_Open) & (!((v.V_Gates != L_Open) & (v.V_Gates != L_Closed)) & !(v.V_Gates = L_Closed))) & (TRUE));
 MODULE _P_SensorSP(v)
 	INIT
 		(v.V_SensorSP = L_Inactive) & (TRUE)
 	TRANS
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Inactive & (v.V_Train != L_SP) & (next(v.V_SP_CauseOpening) = 1))  |
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (v.V_Train = L_SP) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Active & (v.V_Train = L_SP) & (next(v.V_SP_CauseOpening) = 0))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (v.V_Train != L_SP) & (next(v.V_SP_CauseOpening) = 0))  |
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (!(v.V_Train != L_SP) & !(v.V_Train = L_SP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (!(v.V_Train = L_SP) & !(v.V_Train != L_SP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening));
-MODULE _P_Train(v)
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Inactive & (v.V_RealTrain != L_OnSP) & (next(v.V_SP_CauseOpening) = L_Yes))  |
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (v.V_RealTrain = L_OnSP) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Active & (v.V_RealTrain = L_OnSP) & (next(v.V_SP_CauseOpening) = L_No))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (v.V_RealTrain != L_OnSP) & (next(v.V_SP_CauseOpening) = L_No))  |
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (!(v.V_RealTrain != L_OnSP) & !(v.V_RealTrain = L_OnSP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (!(v.V_RealTrain = L_OnSP) & !(v.V_RealTrain != L_OnSP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening));
+MODULE _P_TrainRadioModule(v)
 	INIT
-		(v.V_Train = L_Somewhere) & (TRUE)
+		(v.V_TrainRadioModule = L_Idle) & (TRUE)
 	TRANS
-		 ( v.V_Train = L_EP & next(v.V_Train) = L_AfterEP & TRUE & (next(v.V_Train_AfterEPCounter) = 0 & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AP & next(v.V_Train) = L_AfterAP & TRUE & (next(v.V_Train_AfterAPCounter) = 0 & next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_BEP & next(v.V_Train) = L_AfterBEP & ((v.V_Speed > 0) & (v.V_Crossing_Message != L_Protected)) & (next(v.V_Train_BrakeStatus) = L_Full & next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter))  |
-		 ( v.V_Train = L_BEP & next(v.V_Train) = L_AfterBEP & ((v.V_Speed > 0) & (v.V_Crossing_Message = L_Protected)) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_GP & next(v.V_Train) = L_SP & (v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_SP & next(v.V_Train) = L_Somewhere & (v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_Somewhere & next(v.V_Train) = L_Somewhere & (v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterAP & next(v.V_Train) = L_AfterAP & (((v.V_Speed > 0) & (v.V_Train_AfterAPCounter < 3)) & (v.V_Train_AfterAPCounter < 3)) & (next(v.V_Train_AfterAPCounter) = (v.V_Train_AfterAPCounter + 1) & next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterAP & next(v.V_Train) = L_BEP & ((v.V_Speed > 0) & (v.V_Train_AfterAPCounter = 3)) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterEP & next(v.V_Train) = L_AfterEP & (((v.V_Speed > 0) & (v.V_Train_AfterEPCounter < (5 + v.V_Gates_TimeToClose))) & (v.V_Train_AfterEPCounter < 15)) & (next(v.V_Train_AfterEPCounter) = (v.V_Train_AfterEPCounter + 1) & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterEP & next(v.V_Train) = L_AP & ((v.V_Speed > 0) & (v.V_Train_AfterEPCounter = (5 + v.V_Gates_TimeToClose))) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterBEP & next(v.V_Train) = L_AfterBEP & (((v.V_Speed > 0) & (v.V_Train_BreakCounter < 9)) & (v.V_Train_BreakCounter < 9)) & (next(v.V_Train_BreakCounter) = (v.V_Train_BreakCounter + 1) & next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterBEP & next(v.V_Train) = L_GP & ((v.V_Speed > 0) & (v.V_Train_BreakCounter = 9)) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_BEP & next(v.V_Train) = L_BEP & (!((v.V_Speed > 0) & (v.V_Crossing_Message != L_Protected)) & !((v.V_Speed > 0) & (v.V_Crossing_Message = L_Protected))) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_GP & next(v.V_Train) = L_GP & !(v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_SP & next(v.V_Train) = L_SP & !(v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_Somewhere & next(v.V_Train) = L_Somewhere & !(v.V_Speed > 0) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterAP & next(v.V_Train) = L_AfterAP & (!(((v.V_Speed > 0) & (v.V_Train_AfterAPCounter < 3)) & (v.V_Train_AfterAPCounter < 3)) & !((v.V_Speed > 0) & (v.V_Train_AfterAPCounter = 3))) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterEP & next(v.V_Train) = L_AfterEP & (!(((v.V_Speed > 0) & (v.V_Train_AfterEPCounter < (5 + v.V_Gates_TimeToClose))) & (v.V_Train_AfterEPCounter < 15)) & !((v.V_Speed > 0) & (v.V_Train_AfterEPCounter = (5 + v.V_Gates_TimeToClose)))) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus))  |
-		 ( v.V_Train = L_AfterBEP & next(v.V_Train) = L_AfterBEP & (!(((v.V_Speed > 0) & (v.V_Train_BreakCounter < 9)) & (v.V_Train_BreakCounter < 9)) & !((v.V_Speed > 0) & (v.V_Train_BreakCounter = 9))) & (next(v.V_Train_AfterEPCounter) = v.V_Train_AfterEPCounter & next(v.V_Train_AfterAPCounter) = v.V_Train_AfterAPCounter & next(v.V_Train_BreakCounter) = v.V_Train_BreakCounter & next(v.V_Train_BrakeStatus) = v.V_Train_BrakeStatus));
-MODULE _P_TrainFunkmodule(v)
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & ((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_AP_Request & (v.V_VirtualTrain = L_OnAP) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_EP_Request & (v.V_VirtualTrain = L_OnEP) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_EP_Request & next(v.V_TrainRadioModule) = L_Idle & TRUE & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_AP_Request & next(v.V_TrainRadioModule) = L_Idle & TRUE & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & (!((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (!(v.V_VirtualTrain = L_OnAP) & !(v.V_VirtualTrain = L_OnEP))) & (TRUE));
+MODULE _P_VirtualTrain(v)
 	INIT
-		(v.V_TrainFunkmodule = L_Idle) & (TRUE)
+		(v.V_VirtualTrain = L_BeforeEP) & (TRUE)
 	TRANS
-		 ( v.V_TrainFunkmodule = L_Idle & next(v.V_TrainFunkmodule) = L_Idle & ((v.V_Train != L_AP) & (v.V_Train != L_EP)) & (TRUE))  |
-		 ( v.V_TrainFunkmodule = L_Idle & next(v.V_TrainFunkmodule) = L_AP_Request & (v.V_Train = L_AP) & (TRUE))  |
-		 ( v.V_TrainFunkmodule = L_Idle & next(v.V_TrainFunkmodule) = L_EP_Request & (v.V_Train = L_EP) & (TRUE))  |
-		 ( v.V_TrainFunkmodule = L_EP_Request & next(v.V_TrainFunkmodule) = L_Idle & TRUE & (TRUE))  |
-		 ( v.V_TrainFunkmodule = L_AP_Request & next(v.V_TrainFunkmodule) = L_Idle & TRUE & (TRUE))  |
-		 ( v.V_TrainFunkmodule = L_Idle & next(v.V_TrainFunkmodule) = L_Idle & (!((v.V_Train != L_AP) & (v.V_Train != L_EP)) & (!(v.V_Train = L_AP) & !(v.V_Train = L_EP))) & (TRUE));
+		 ( v.V_VirtualTrain = L_OnGP & next(v.V_VirtualTrain) = L_AfterGP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_OnGP & (v.V_measuredDistance <= 0) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_measuredDistance > 0) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_OnSP & ((v.V_measuredDistance * -1) >= v.V_distToSP) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & ((v.V_measuredDistance * -1) < v.V_distToSP) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_OnSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_AfterSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_OnBEP & (v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_OnEP & (v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_OnEP & next(v.V_VirtualTrain) = L_EPtoAP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_OnAP & (v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_OnAP & next(v.V_VirtualTrain) = L_APtoBEP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & TRUE & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (!(v.V_measuredDistance <= 0) & !(v.V_measuredDistance > 0)) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & (!((v.V_measuredDistance * -1) >= v.V_distToSP) & !((v.V_measuredDistance * -1) < v.V_distToSP)) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (!(v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & !(v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (!(v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !(v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c))))) & (TRUE))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (!(v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & !(v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (TRUE));
 MODULE main
 	VAR
 		v : _VARS();
 		p_Breaks : _P_Breaks(v);
 		p_Crossing : _P_Crossing(v);
-		p_CrossingFunkmodule : _P_CrossingFunkmodule(v);
+		p_CrossingRadioModule : _P_CrossingRadioModule(v);
 		p_CrossingTimer : _P_CrossingTimer(v);
+		p_DriveTrain : _P_DriveTrain(v);
 		p_Gates : _P_Gates(v);
+		p_Hodometer : _P_Hodometer(v);
 		p_RealTrain : _P_RealTrain(v);
-		p_SensorGateDown : _P_SensorGateDown(v);
-		p_SensorGateOpen : _P_SensorGateOpen(v);
+		p_SensorGate : _P_SensorGate(v);
 		p_SensorSP : _P_SensorSP(v);
-		p_Train : _P_Train(v);
-		p_TrainFunkmodule : _P_TrainFunkmodule(v);
+		p_TrainRadioModule : _P_TrainRadioModule(v);
+		p_VirtualTrain : _P_VirtualTrain(v);
+
+
 
 
 DEFINE
     Breaks                          := v.V_Breaks;
     Crossing                        := v.V_Crossing;
-    CrossingFunkmodule              := v.V_CrossingFunkmodule;
+    CrossingRadioModule             := v.V_CrossingRadioModule;
     CrossingTimer                   := v.V_CrossingTimer;
+	DriveTrain                      := v.V_DriveTrain;
     Gates                           := v.V_Gates;
-    SensorGateDown                  := v.V_SensorGateDown;
-    SensorGateOpen                  := v.V_SensorGateOpen;
+	Hodometer                       := v.V_Hodometer;
+    RealTrain                       := v.V_RealTrain;
+    SensorGate                      := v.V_SensorGate;
     SensorSP                        := v.V_SensorSP;
-    Train                           := v.V_Train;
-    TrainFunkmodule                 := v.V_TrainFunkmodule;
+    TrainRadioModule                := v.V_TrainRadioModule;
+	VirtualTrain                    := v.V_VirtualTrain;
 
 /-- Train never crosses an insecure crossing --/
-CTLSPEC AG ( Train = L_GP -> Crossing = L_Protected );
+CTLSPEC AG ( RealTrain = L_OnGP -> Crossing = L_Protected );
 
-/-- Train eventually leaves --/
-CTLSPEC AG ( Train = L_EP -> AF Train = L_Somewhere );
-CTLSPEC AG ( Train = L_GP -> AF Train = L_Somewhere );
+/-- Train eventually leaves the GP --/
+CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
 
 /-- Gates eventually open / Crossing becomes unprotected --/
 CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
 CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
 CTLSPEC ! EG Gates = L_Closed;
 
-/-- Crossing is only protected when gates are closed --/
-CTLSPEC AG Crossing = L_Protected <-> Gates = L_Closed;
-
-/-- Sensor is only active when train is on SP --/
-CTLSPEC AG Train = L_SP <-> SensorSP = L_Active;
+/-- When breaking, the train never passes the crossing --/
+CTLSPEC AG ( Breaks = L_FullyBreaking -> ! EF RealTrain = L_OnGP );
 
 /-- After sending the first request, the train must break or pass a safe crossing --/
-CTLSPEC AG CrossingFunkmodule = L_EP_Request -> A [ Train != L_GP U (Crossing = L_Protected & AF Train = L_Somewhere) | Breaks = L_FullyBreaking ]Train != L_GP U (Crossing = L_Protected & AF Train = L_Somewhere) | Breaks = L_FullyBreaking ]
+CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | Breaks = L_FullyBreaking ]
+
+/-- Crossing is only protected when gates are closed --/
+LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
+
+/-- Sensor is only active when train is on SP --/
+LTLSPEC G RealTrain = L_OnSP <-> SensorSP = L_Active;
