@@ -38,7 +38,7 @@
     <initialStateShape Id="2c0df228-430d-46e1-a8fb-bd4a5eefb44f" absoluteBounds="3.375, 0.875, 0.125, 0.125">
       <initialNodeMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/InitialNode11" />
     </initialStateShape>
-    <transitionConnector Id="2a91738c-bac9-4978-9481-5df04341e3b7" edgePoints="[(8.5 : 3.75198412698413); (12.5 : 3.75198412698413)]" fixedFrom="Algorithm" fixedTo="Caller">
+    <transitionConnector Id="2a91738c-bac9-4978-9481-5df04341e3b7" edgePoints="[(8.5 : 3.75198412698413); (12.5 : 3.75198412698413)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <transitionMoniker Id="67517d59-f94f-46cb-b438-1d951894df04" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
@@ -159,7 +159,7 @@
         <stateShapeMoniker Id="643434a6-15e1-4148-88c7-3a199f839c78" />
       </nodes>
     </transitionConnector>
-    <transitionConnector Id="6e1ec93f-6ebf-432d-89c3-81ac980eb8e2" edgePoints="[(11.96875 : 3); (11.96875 : 3.56107305936073); (8.5 : 3.56107305936073)]" manuallyRouted="true" fixedFrom="Algorithm" fixedTo="Caller">
+    <transitionConnector Id="6e1ec93f-6ebf-432d-89c3-81ac980eb8e2" edgePoints="[(11.96875 : 3); (11.96875 : 3.56107305936073); (8.5 : 3.56107305936073)]" manuallyRouted="true" fixedFrom="NotFixed" fixedTo="NotFixed">
       <transitionMoniker Id="649506c7-0c45-42b7-b07d-5c5460115fd3" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
@@ -186,7 +186,7 @@
         <stateShapeMoniker Id="1ffc5576-6c5d-4435-bdd3-d080a0429a52" />
       </nodes>
     </transitionConnector>
-    <transitionConnector Id="0be5fc79-086a-43cc-9e47-47cc720ce2d3" edgePoints="[(11.5 : 2.9062525); (7.72836538461538 : 2.9062525); (7.72836538461538 : 3.375)]" fixedFrom="Algorithm" fixedTo="Caller">
+    <transitionConnector Id="0be5fc79-086a-43cc-9e47-47cc720ce2d3" edgePoints="[(11.5 : 2.9062525); (7.72836538461538 : 2.9062525); (7.72836538461538 : 3.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <transitionMoniker Id="2e234d8c-56e4-485e-a773-a4364a44f488" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>

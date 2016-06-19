@@ -1,8 +1,6 @@
 
 MODULE _VARS
 	VAR
-		V_Breaks : {L_NotBreaking, L_FullyBreaking};
-		V_BreakCommand : {L_Break, L_DoNotBreak};
 		V_Crossing : {L_Open, L_ProtectionPhase, L_Protected, L_OpeningPhase};
 		V_CrossingRadioModule : {L_Idle, L_EP_Requested, L_AP_Requested};
 		V_SensorGate : {L_Open, L_Closed, L_InBetween};
@@ -13,11 +11,15 @@ MODULE _VARS
 		V_Timer_Counter : 0..60;
 		V_DriveTrain : {L_Running};
 		V_Speed : 0..16;
+		V_F_DriveTrain : {L_BreaksOK, L_BreaksBroken};
+		V_BreakCommand : {L_Break, L_DoNotBreak};
+		V_F_Gates : {L_AllOK, L_EngineStuck, L_HingeBroken, L_EngineControlsBroken};
+		V_F_Odometer : {L_CorrectMeasurements, L_FaultyMeasurements};
+		V_F_SensorGate : {L_CorrectMeasurements, L_FaultyMeasurements};
+		V_F_SensorSP : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_Gates : {L_Open, L_Opening, L_Closing, L_Closed};
-		V_Gates_TimeToClose : 0..10;
-		V_Gates_Counter : 0..10;
 		V_Angle : 0..9;
-		V_Hodometer : {L_Measuring};
+		V_Odometer : {L_Measuring};
 		V_measuredDistance : -128..512;
 		V_d : -128..512;
 		V_RealTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
@@ -31,16 +33,6 @@ MODULE _VARS
 		V_VirtualTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
 	TRANS
 		next(V_tick) = V_tick & next(V_c) = V_c & next(V_t) = V_t & next(V_a) = V_a & next(V_z) = V_z & next(V_distToSP) = V_distToSP;
-MODULE _P_Breaks(v)
-	INIT
-		(v.V_Breaks = L_NotBreaking) & (TRUE)
-	TRANS
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_FullyBreaking & (v.V_BreakCommand = L_Break) & (TRUE))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_BreakCommand != L_Break) & (TRUE))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_BreakCommand = L_DoNotBreak) & (TRUE))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & (v.V_BreakCommand != L_DoNotBreak) & (TRUE))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (!(v.V_BreakCommand = L_Break) & !(v.V_BreakCommand != L_Break)) & (TRUE))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & (!(v.V_BreakCommand = L_DoNotBreak) & !(v.V_BreakCommand != L_DoNotBreak)) & (TRUE));
 MODULE _P_Crossing(v)
 	INIT
 		(v.V_Crossing = L_Open) & (TRUE)
@@ -85,9 +77,53 @@ MODULE _P_DriveTrain(v)
 	INIT
 		(v.V_DriveTrain = L_Running) & (TRUE)
 	TRANS
-		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & (next(v.V_Speed) = (v.V_Speed - 2)))  |
-		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (v.V_Breaks = L_NotBreaking) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & !(v.V_Breaks = L_NotBreaking)) & (next(v.V_Speed) = v.V_Speed));
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksOK)) & (v.V_Speed > 1)) & (next(v.V_Speed) = (v.V_Speed - 2)))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (v.V_BreakCommand = L_DoNotBreak) & (next(v.V_Speed) = v.V_Speed))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 1)))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (next(v.V_Speed) = v.V_Speed))  |
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!(((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksOK)) & (v.V_Speed > 1)) & (!(v.V_BreakCommand = L_DoNotBreak) & (!(((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (v.V_Speed > 0)) & !((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken))))) & (next(v.V_Speed) = v.V_Speed));
+MODULE _P_F_DriveTrain(v)
+	INIT
+		(v.V_F_DriveTrain = L_BreaksOK) & (TRUE)
+	TRANS
+		 ( v.V_F_DriveTrain = L_BreaksOK & next(v.V_F_DriveTrain) = L_BreaksBroken & TRUE & (TRUE))  |
+		 ( v.V_F_DriveTrain = L_BreaksOK & next(v.V_F_DriveTrain) = L_BreaksOK & TRUE & (TRUE))  |
+		 ( v.V_F_DriveTrain = L_BreaksBroken & next(v.V_F_DriveTrain) = L_BreaksBroken & TRUE & (TRUE));
+MODULE _P_F_Gates(v)
+	INIT
+		(v.V_F_Gates = L_AllOK) & (TRUE)
+	TRANS
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_EngineStuck & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_HingeBroken & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_EngineControlsBroken & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineStuck & next(v.V_F_Gates) = L_AllOK & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineStuck & next(v.V_F_Gates) = L_EngineStuck & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_HingeBroken & next(v.V_F_Gates) = L_HingeBroken & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineControlsBroken & next(v.V_F_Gates) = L_EngineControlsBroken & TRUE & (TRUE));
+MODULE _P_F_Odometer(v)
+	INIT
+		(v.V_F_Odometer = L_CorrectMeasurements) & (TRUE)
+	TRANS
+		 ( v.V_F_Odometer = L_CorrectMeasurements & next(v.V_F_Odometer) = L_FaultyMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_Odometer = L_CorrectMeasurements & next(v.V_F_Odometer) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_Odometer = L_FaultyMeasurements & next(v.V_F_Odometer) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_Odometer = L_FaultyMeasurements & next(v.V_F_Odometer) = L_FaultyMeasurements & TRUE & (TRUE));
+MODULE _P_F_SensorGate(v)
+	INIT
+		(v.V_F_SensorGate = L_CorrectMeasurements) & (TRUE)
+	TRANS
+		 ( v.V_F_SensorGate = L_CorrectMeasurements & next(v.V_F_SensorGate) = L_FaultyMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorGate = L_CorrectMeasurements & next(v.V_F_SensorGate) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorGate = L_FaultyMeasurements & next(v.V_F_SensorGate) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorGate = L_FaultyMeasurements & next(v.V_F_SensorGate) = L_FaultyMeasurements & TRUE & (TRUE));
+MODULE _P_F_SensorSP(v)
+	INIT
+		(v.V_F_SensorSP = L_CorrectMeasurements) & (TRUE)
+	TRANS
+		 ( v.V_F_SensorSP = L_CorrectMeasurements & next(v.V_F_SensorSP) = L_FaultyMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorSP = L_CorrectMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_FaultyMeasurements & TRUE & (TRUE));
 MODULE _P_Gates(v)
 	INIT
 		(v.V_Gates = L_Open) & (TRUE)
@@ -104,11 +140,14 @@ MODULE _P_Gates(v)
 		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & (!(v.V_Angle = 0) & !((v.V_Angle > 0) & (v.V_Angle > 0))) & (next(v.V_Angle) = v.V_Angle))  |
 		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & (!(v.V_Angle = 9) & !((v.V_Angle < 9) & (v.V_Angle < 9))) & (next(v.V_Angle) = v.V_Angle))  |
 		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (!(v.V_Crossing = L_OpeningPhase) & !(v.V_Crossing != L_OpeningPhase)) & (next(v.V_Angle) = v.V_Angle));
-MODULE _P_Hodometer(v)
+MODULE _P_Odometer(v)
 	INIT
-		(v.V_Hodometer = L_Measuring) & (TRUE)
+		(v.V_Odometer = L_Measuring) & (TRUE)
 	TRANS
-		 ( v.V_Hodometer = L_Measuring & next(v.V_Hodometer) = L_Measuring & TRUE & (next(v.V_measuredDistance) = v.V_d));
+		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (v.V_F_Odometer = L_CorrectMeasurements) & (next(v.V_measuredDistance) = v.V_d))  |
+		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (v.V_F_Odometer = L_FaultyMeasurements) & (next(v.V_measuredDistance) = v.V_measuredDistance))  |
+		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & ((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)) & (next(v.V_measuredDistance) = ((((1009 * v.V_d) + 1013) mod 631) - 128)))  |
+		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (!(v.V_F_Odometer = L_CorrectMeasurements) & (!(v.V_F_Odometer = L_FaultyMeasurements) & !((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)))) & (next(v.V_measuredDistance) = v.V_measuredDistance));
 MODULE _P_RealTrain(v)
 	INIT
 		(v.V_RealTrain = L_BeforeEP) & (TRUE)
@@ -204,13 +243,17 @@ MODULE _P_VirtualTrain(v)
 MODULE main
 	VAR
 		v : _VARS();
-		p_Breaks : _P_Breaks(v);
 		p_Crossing : _P_Crossing(v);
 		p_CrossingRadioModule : _P_CrossingRadioModule(v);
 		p_CrossingTimer : _P_CrossingTimer(v);
 		p_DriveTrain : _P_DriveTrain(v);
+		p_F_DriveTrain : _P_F_DriveTrain(v);
+		p_F_Gates : _P_F_Gates(v);
+		p_F_Odometer : _P_F_Odometer(v);
+		p_F_SensorGate : _P_F_SensorGate(v);
+		p_F_SensorSP : _P_F_SensorSP(v);
 		p_Gates : _P_Gates(v);
-		p_Hodometer : _P_Hodometer(v);
+		p_Odometer : _P_Odometer(v);
 		p_RealTrain : _P_RealTrain(v);
 		p_SensorGate : _P_SensorGate(v);
 		p_SensorSP : _P_SensorSP(v);
@@ -221,13 +264,12 @@ MODULE main
 
 
 DEFINE
-    Breaks                          := v.V_Breaks;
     Crossing                        := v.V_Crossing;
     CrossingRadioModule             := v.V_CrossingRadioModule;
     CrossingTimer                   := v.V_CrossingTimer;
 	DriveTrain                      := v.V_DriveTrain;
     Gates                           := v.V_Gates;
-	Hodometer                       := v.V_Hodometer;
+	Odometer                        := v.V_Odometer;
     RealTrain                       := v.V_RealTrain;
     SensorGate                      := v.V_SensorGate;
     SensorSP                        := v.V_SensorSP;
@@ -246,10 +288,10 @@ CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
 CTLSPEC ! EG Gates = L_Closed;
 
 /-- When breaking, the train never passes the crossing --/
-CTLSPEC AG ( Breaks = L_FullyBreaking -> ! EF RealTrain = L_OnGP );
+CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
 
 /-- After sending the first request, the train must break or pass a safe crossing --/
-CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | Breaks = L_FullyBreaking ]
+CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
 
 /-- Crossing is only protected when gates are closed --/
 LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;

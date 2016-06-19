@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="8e6831e9-3206-4c4b-914c-559131fa1487" name="F_Gates" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="9441b6dd-5f1d-48f0-af89-82af8691eabd" name="AllOK">
+      <successors>
+        <transition Id="5fc7ae3a-a5f9-4f72-9a56-37da241bc8c2">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineStuck" />
+        </transition>
+        <transition Id="b6097d0d-c50c-452b-9af9-2613bed7c55d">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/HingeBroken" />
+        </transition>
+        <transition Id="db2c4599-21cb-4b59-8495-9be1ef9d0820">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineControlsBroken" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="521042d7-0ba6-49cf-9985-15a8fa6967dc" name="EngineStuck">
+      <successors>
+        <transition Id="d7ec6852-8eed-4c2f-aad9-18a318ed6b63">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/AllOK" />
+        </transition>
+        <transition Id="04d8b2fe-f2bb-42e3-b3d1-af76b6af6d9e">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineStuck" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="eb7b0652-5e46-4731-bb7b-923410468091" name="HingeBroken">
+      <successors>
+        <transition Id="e83f13c2-5fd9-4273-b4cd-88b6fd3a024c">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/HingeBroken" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="e68c9c2a-35c7-41b1-a111-fd334517bf76" name="EngineControlsBroken">
+      <successors>
+        <transition Id="4a84b446-148a-483d-ba41-1b233ddedb0c">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineControlsBroken" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="47651983-362e-4ee0-b274-9e28186772db" name="InitialNode1">
+      <successors>
+        <transition Id="1a29697f-8e9f-448b-9da7-9404ecd9fb0d">
+          <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/AllOK" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+</programGraph>
