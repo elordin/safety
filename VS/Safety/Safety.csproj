@@ -48,22 +48,38 @@
     <None Include="DriveTrain.pg.diagram">
       <DependentUpon>DriveTrain.pg</DependentUpon>
     </None>
+    <None Include="F_DriveTrain.pg" />
+    <None Include="F_DriveTrain.pg.diagram">
+      <DependentUpon>F_DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_Gates.pg" />
+    <None Include="F_Gates.pg.diagram">
+      <DependentUpon>F_Gates.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorSP.pg" />
+    <None Include="F_SensorSP.pg.diagram">
+      <DependentUpon>F_SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorGate.pg" />
+    <None Include="F_SensorGate.pg.diagram">
+      <DependentUpon>F_SensorGate.pg</DependentUpon>
+    </None>
+    <None Include="F_Odometer.pg" />
+    <None Include="F_Odometer.pg.diagram">
+      <DependentUpon>F_Odometer.pg</DependentUpon>
+    </None>
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
       <DependentUpon>Gates.pg</DependentUpon>
-    </None>
-    <None Include="Breaks.pg" />
-    <None Include="Breaks.pg.diagram">
-      <DependentUpon>Breaks.pg</DependentUpon>
     </None>
     <None Include="Check.smv">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Check.tt</DependentUpon>
     </None>
-    <None Include="Hodometer.pg" />
-    <None Include="Hodometer.pg.diagram">
-      <DependentUpon>Hodometer.pg</DependentUpon>
+    <None Include="Odometer.pg" />
+    <None Include="Odometer.pg.diagram">
+      <DependentUpon>Odometer.pg</DependentUpon>
     </None>
     <None Include="RealTrain.pg" />
     <None Include="RealTrain.pg.diagram">
