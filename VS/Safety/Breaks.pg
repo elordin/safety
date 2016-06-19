@@ -10,38 +10,28 @@
     </initialNode>
     <state Id="35037367-5bac-4be3-8e60-da5072278d09" name="NotBreaking">
       <successors>
-        <transition Id="7602ff64-8499-4e21-97ba-ab7502b9df9d">
-          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
-        </transition>
-        <transition Id="5166ce6f-0d27-4d21-859f-a6366277303b">
+        <transition Id="9019a305-b716-4420-a736-35703f2f82c0" guard="BreakCommand == Break" label="BreakCommand == Break">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
         </transition>
-      </successors>
-    </state>
-    <state Id="3d92b00c-f2a9-4f58-a873-69f0301aff6f" name="PartiallyBreaking">
-      <successors>
-        <transition Id="2afa2691-4b37-4424-8817-300cf2ef436b">
-          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
-        </transition>
-        <transition Id="0adc6bc0-1323-4358-9be0-dfbe15c3426b">
+        <transition Id="06826bae-ea27-4de0-ba47-c7531f645f98" guard="BreakCommand != Break" label="BreakCommand != Break">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
         </transition>
       </successors>
     </state>
     <state Id="126b9e90-d69a-4582-bc53-f73158d90bed" name="FullyBreaking">
       <successors>
-        <transition Id="df1b6dd7-0d5e-415d-885b-0bab5b7d2b68">
-          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/PartiallyBreaking" />
-        </transition>
-        <transition Id="66e15579-5c9f-4599-b633-da94a2f1cc58">
+        <transition Id="96dd01da-51bb-4c68-83c8-2d17e57e11bd" guard="BreakCommand == DoNotBreak" label="BreakCommand == DoNotBreak">
           <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/NotBreaking" />
+        </transition>
+        <transition Id="9b735549-2551-4f74-b199-a089f9f56df8" guard="BreakCommand != DoNotBreak" label="BreakCommand != DoNotBreak">
+          <stateMoniker name="/46167685-619e-4ba4-be88-01ccfa514cb1/FullyBreaking" />
         </transition>
       </successors>
     </state>
   </states>
-  <variables>
-    <programGraphHasVariables Id="ca80bd4f-bc01-4f40-97de-23b9e3f26ddd">
-      <variable Id="f058d27f-bfb9-4885-969c-c2151495e8f1" name="Train_BrakeStatus" range="Not, Partial, Full" />
-    </programGraphHasVariables>
-  </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="90f14135-8e50-4cd4-9f7b-9de8fee69003">
+      <importedVariable Id="e6a81dea-7001-4193-bd2a-eb951d63fc9f" name="VirtualTrain.BreakCommand" range="Break, DoNotBreak" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
 </programGraph>

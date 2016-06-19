@@ -13,9 +13,6 @@
         <transition Id="e84dfaab-80c7-481e-b7b2-2d9d47d244c3" guard="Breaks == FullyBreaking" action="Speed := Speed  - 2" label="Breaks == FullyBreaking // Speed := Speed  - 2" precondition="Speed &gt; 1">
           <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
         </transition>
-        <transition Id="edd76633-9cd7-48ac-8b5e-b91dfa0ef17b" guard="Breaks == PartiallyBreaking" action="Speed := Speed  - 1" label="Breaks == PartiallyBreaking // Speed := Speed  - 1" precondition="Speed &gt; 0">
-          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
-        </transition>
         <transition Id="937f93fd-272f-48a3-86f1-12b64ea1f6f4" guard="Breaks == NotBreaking" label="Breaks == NotBreaking">
           <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
         </transition>
@@ -28,8 +25,8 @@
     </programGraphHasVariables>
   </variables>
   <importedVariables>
-    <programGraphHasImportedVariables Id="3d2a52db-cfa3-418e-a664-4c6d2040141c">
-      <importedVariable Id="85250cdc-b46b-44b0-ba49-73c27828c92b" name="Breaks" range="NotBreaking, PartiallyBreaking, FullyBreaking" />
+    <programGraphHasImportedVariables Id="80114f52-d69f-4629-a34b-c0412f9c6913">
+      <importedVariable Id="370d7fb1-8e04-4c25-8167-de37cc5d1daf" name="Breaks" range="NotBreaking, FullyBreaking" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

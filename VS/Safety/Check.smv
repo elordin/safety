@@ -1,8 +1,8 @@
 
 MODULE _VARS
 	VAR
-		V_Breaks : {L_NotBreaking, L_PartiallyBreaking, L_FullyBreaking};
-		V_Train_BrakeStatus : {L_Not, L_Partial, L_Full};
+		V_Breaks : {L_NotBreaking, L_FullyBreaking};
+		V_BreakCommand : {L_Break, L_DoNotBreak};
 		V_Crossing : {L_Open, L_ProtectionPhase, L_Protected, L_OpeningPhase};
 		V_CrossingRadioModule : {L_Idle, L_EP_Requested, L_AP_Requested};
 		V_SensorGate : {L_Open, L_Closed, L_InBetween};
@@ -35,12 +35,12 @@ MODULE _P_Breaks(v)
 	INIT
 		(v.V_Breaks = L_NotBreaking) & (TRUE)
 	TRANS
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_PartiallyBreaking & TRUE & (TRUE))  |
-		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_FullyBreaking & TRUE & (TRUE))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_FullyBreaking & TRUE & (TRUE))  |
-		 ( v.V_Breaks = L_PartiallyBreaking & next(v.V_Breaks) = L_NotBreaking & TRUE & (TRUE))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_PartiallyBreaking & TRUE & (TRUE))  |
-		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_NotBreaking & TRUE & (TRUE));
+		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_FullyBreaking & (v.V_BreakCommand = L_Break) & (TRUE))  |
+		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_BreakCommand != L_Break) & (TRUE))  |
+		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_NotBreaking & (v.V_BreakCommand = L_DoNotBreak) & (TRUE))  |
+		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & (v.V_BreakCommand != L_DoNotBreak) & (TRUE))  |
+		 ( v.V_Breaks = L_NotBreaking & next(v.V_Breaks) = L_NotBreaking & (!(v.V_BreakCommand = L_Break) & !(v.V_BreakCommand != L_Break)) & (TRUE))  |
+		 ( v.V_Breaks = L_FullyBreaking & next(v.V_Breaks) = L_FullyBreaking & (!(v.V_BreakCommand = L_DoNotBreak) & !(v.V_BreakCommand != L_DoNotBreak)) & (TRUE));
 MODULE _P_Crossing(v)
 	INIT
 		(v.V_Crossing = L_Open) & (TRUE)
@@ -86,9 +86,8 @@ MODULE _P_DriveTrain(v)
 		(v.V_DriveTrain = L_Running) & (TRUE)
 	TRANS
 		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & (next(v.V_Speed) = (v.V_Speed - 2)))  |
-		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_Breaks = L_PartiallyBreaking) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 1)))  |
 		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (v.V_Breaks = L_NotBreaking) & (next(v.V_Speed) = v.V_Speed))  |
-		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & (!((v.V_Breaks = L_PartiallyBreaking) & (v.V_Speed > 0)) & !(v.V_Breaks = L_NotBreaking))) & (next(v.V_Speed) = v.V_Speed));
+		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!((v.V_Breaks = L_FullyBreaking) & (v.V_Speed > 1)) & !(v.V_Breaks = L_NotBreaking)) & (next(v.V_Speed) = v.V_Speed));
 MODULE _P_Gates(v)
 	INIT
 		(v.V_Gates = L_Open) & (TRUE)
@@ -179,27 +178,29 @@ MODULE _P_VirtualTrain(v)
 	INIT
 		(v.V_VirtualTrain = L_BeforeEP) & (TRUE)
 	TRANS
-		 ( v.V_VirtualTrain = L_OnGP & next(v.V_VirtualTrain) = L_AfterGP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_OnGP & (v.V_measuredDistance <= 0) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_measuredDistance > 0) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_OnSP & ((v.V_measuredDistance * -1) >= v.V_distToSP) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & ((v.V_measuredDistance * -1) < v.V_distToSP) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_OnSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_AfterSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_OnBEP & (v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_OnEP & (v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_OnEP & next(v.V_VirtualTrain) = L_EPtoAP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_OnAP & (v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_OnAP & next(v.V_VirtualTrain) = L_APtoBEP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & TRUE & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (!(v.V_measuredDistance <= 0) & !(v.V_measuredDistance > 0)) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & (!((v.V_measuredDistance * -1) >= v.V_distToSP) & !((v.V_measuredDistance * -1) < v.V_distToSP)) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (!(v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & !(v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (!(v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !(v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c))))) & (TRUE))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (!(v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & !(v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (TRUE));
+		 ( v.V_VirtualTrain = L_OnGP & next(v.V_VirtualTrain) = L_AfterGP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_OnGP & (v.V_measuredDistance <= 0) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_measuredDistance > 0) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_OnSP & ((v.V_measuredDistance * -1) >= v.V_distToSP) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & ((v.V_measuredDistance * -1) < v.V_distToSP) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_AfterSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_OnBEP & (v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_OnEP & (v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnEP & next(v.V_VirtualTrain) = L_EPtoAP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_OnAP & (v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnAP & next(v.V_VirtualTrain) = L_APtoBEP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_Crossing_Message = L_Protected) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_Crossing_Message != L_Protected) & (next(v.V_BreakCommand) = L_Break))  |
+		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (!(v.V_measuredDistance <= 0) & !(v.V_measuredDistance > 0)) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & (!((v.V_measuredDistance * -1) >= v.V_distToSP) & !((v.V_measuredDistance * -1) < v.V_distToSP)) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (!(v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & !(v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (!(v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !(v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c))))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (!(v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & !(v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_OnBEP & (!(v.V_Crossing_Message = L_Protected) & !(v.V_Crossing_Message != L_Protected)) & (next(v.V_BreakCommand) = v.V_BreakCommand));
 MODULE main
 	VAR
 		v : _VARS();

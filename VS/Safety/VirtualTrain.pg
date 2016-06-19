@@ -88,7 +88,10 @@
     </state>
     <state Id="871e9049-b883-4c8a-8227-66afd6a0a02c" name="OnBEP">
       <successors>
-        <transition Id="649506c7-0c45-42b7-b07d-5c5460115fd3">
+        <transition Id="649506c7-0c45-42b7-b07d-5c5460115fd3" guard="Crossing_Message == Protected" label="Crossing_Message == Protected">
+          <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BEPtoGP" />
+        </transition>
+        <transition Id="2e234d8c-56e4-485e-a773-a4364a44f488" guard="Crossing_Message != Protected" action="BreakCommand := Break" label="Crossing_Message != Protected // BreakCommand := Break" precondition="true">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BEPtoGP" />
         </transition>
       </successors>
@@ -101,6 +104,11 @@
       </successors>
     </initialNode>
   </states>
+  <variables>
+    <programGraphHasVariables Id="2a26ff9e-d369-4960-83df-18066bf404b2">
+      <variable Id="c23e1290-024b-4115-9b43-591f005d603a" name="BreakCommand" range="Break, DoNotBreak" />
+    </programGraphHasVariables>
+  </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="a0869092-487c-43e0-87fc-7b1c27bd49cc">
       <importedVariable Id="46a426f9-ba6f-4825-9435-dcadb51541c5" name="Hodometer.measuredDistance" range="-128..512" />
@@ -122,6 +130,9 @@
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="19453c2f-973c-44d1-bf75-8f0c2242cd51">
       <importedVariable Id="52716e7b-eb31-4f3d-9989-b37a4c5ae579" name="DriveTrain.Speed" range="0..16" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="3b1495d5-50d2-42de-92ad-135710b17533">
+      <importedVariable Id="e51d222e-2c70-4117-86b4-b0f81baf4e70" name="CrossingRadioModule.Crossing_Message" range="Unknown, Insecure, Protected" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>
