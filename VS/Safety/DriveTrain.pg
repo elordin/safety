@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="70b3dc61-19e1-492f-aaa4-4b36e73b4a83" name="DriveTrain" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <initialNode Id="9d13ad53-001f-49cf-814a-acea19760830" name="InitialNode1">
+      <successors>
+        <transition Id="a02a907c-e721-42fc-85b1-a062ae2f7f6b">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="23c326af-1f96-456c-ba42-1a32e1065490" name="Running">
+      <successors>
+        <transition Id="e84dfaab-80c7-481e-b7b2-2d9d47d244c3" guard="Breaks == FullyBreaking" action="Speed := Speed  - 2" label="Breaks == FullyBreaking // Speed := Speed  - 2" precondition="Speed &gt; 1">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="edd76633-9cd7-48ac-8b5e-b91dfa0ef17b" guard="Breaks == PartiallyBreaking" action="Speed := Speed  - 1" label="Breaks == PartiallyBreaking // Speed := Speed  - 1" precondition="Speed &gt; 0">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="937f93fd-272f-48a3-86f1-12b64ea1f6f4" guard="Breaks == NotBreaking" label="Breaks == NotBreaking">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+  <variables>
+    <programGraphHasVariables Id="afe89e15-3ec7-44ce-ad38-97ca2cc7e6c1">
+      <variable Id="69efd684-8f0c-4f69-9406-78c3f55cccae" name="Speed" range="0..16" />
+    </programGraphHasVariables>
+  </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="3d2a52db-cfa3-418e-a664-4c6d2040141c">
+      <importedVariable Id="85250cdc-b46b-44b0-ba49-73c27828c92b" name="Breaks" range="NotBreaking, PartiallyBreaking, FullyBreaking" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>

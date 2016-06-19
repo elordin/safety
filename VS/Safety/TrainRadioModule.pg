@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="5efdfb1b-44ad-4ab6-b333-6008a6ba4035" name="TrainRadioModule" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="5971ecc5-b18d-412d-be98-07b3a5ba54fe" name="Idle">
+      <successors>
+        <transition Id="aa7ac169-124d-4d72-b088-3dc62a310377" guard="VirtualTrain != OnAP &amp;&amp; VirtualTrain != OnEP" label="VirtualTrain != OnAP &amp;&amp; VirtualTrain != OnEP">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/Idle" />
+        </transition>
+        <transition Id="b69e2111-fb0a-4609-ab54-f59aec388458" guard="VirtualTrain == OnAP" label="VirtualTrain == OnAP">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/AP_Request" />
+        </transition>
+        <transition Id="ae065f33-d7f6-4935-a8bc-8db044e9857e" guard="VirtualTrain == OnEP" label="VirtualTrain == OnEP">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/EP_Request" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="2c82c28c-a3de-403f-93b4-3ba8fd227b49" name="EP_Request">
+      <successors>
+        <transition Id="c1f7c93d-9b1d-4438-ae13-b7daf1303d42">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/Idle" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="f0642d13-6640-4a67-b088-b055b962d2f9" name="AP_Request">
+      <successors>
+        <transition Id="6ee4820b-3b27-4926-95b4-276fdbb805a4">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/Idle" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="b8ade937-855a-4b95-a42d-0277c3d333b5" name="InitialNode1">
+      <successors>
+        <transition Id="9350c376-579c-40e9-8e69-168bc4d5011c">
+          <stateMoniker name="/5efdfb1b-44ad-4ab6-b333-6008a6ba4035/Idle" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="ece2e23f-dbd6-41ac-a440-b5b75cd49133">
+      <importedVariable Id="36fb61da-4c0a-4826-9ce0-7567bfbe0f40" name="VirtualTrain" range="OnGP, BEPtoGP, AfterGP, OnSP, AfterSP, APtoBEP, BeforeEP, OnEP, EPtoAP, OnAP, OnBEP" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>
