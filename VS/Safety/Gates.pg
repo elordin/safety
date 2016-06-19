@@ -50,12 +50,6 @@
     </initialNode>
   </states>
   <variables>
-    <programGraphHasVariables Id="c694498a-efb6-4697-ba3d-9bfe40d99207">
-      <variable Id="9e5e9237-29c0-44a7-ae04-d8f7195f8f12" name="Gates_TimeToClose" range="0..10" />
-    </programGraphHasVariables>
-    <programGraphHasVariables Id="7f866087-4ab3-4554-ae6d-ccdb99455a43">
-      <variable Id="b6046b15-ed04-4f9c-b348-c0c8dc17155b" name="Gates_Counter" range="0..10" />
-    </programGraphHasVariables>
     <programGraphHasVariables Id="69b042b5-e314-435e-a20d-f751f625f187">
       <variable Id="97c9202f-953c-432c-a3ef-a1d92555d1c6" name="Angle" range="0..9" />
     </programGraphHasVariables>
