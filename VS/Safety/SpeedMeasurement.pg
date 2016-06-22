@@ -6,7 +6,7 @@
         <transition Id="49b160bd-ed74-49f5-8d12-788fac5e246a" guard="F_SpeedMeasurement == CorrectMeasurements" action="measuredSpeed := Speed" label="F_SpeedMeasurement == CorrectMeasurements // measuredSpeed := Speed" precondition="true">
           <stateMoniker name="/1355e58e-00d1-4dd9-bba4-5ba1d2a0a0d9/Measuring" />
         </transition>
-        <transition Id="b7be8618-686d-4a84-8f44-46e8e182a252" guard="F_SpeedMeasurement != CorrectMeasurements" action="measuredSpeed := Speed + 3" label="F_SpeedMeasurement != CorrectMeasurements // measuredSpeed := Speed + 3" precondition="true">
+        <transition Id="b7be8618-686d-4a84-8f44-46e8e182a252" guard="F_SpeedMeasurement != CorrectMeasurements" action="measuredSpeed := Speed - 3" label="F_SpeedMeasurement != CorrectMeasurements // measuredSpeed := Speed - 3" precondition="Speed &gt;= 3">
           <stateMoniker name="/1355e58e-00d1-4dd9-bba4-5ba1d2a0a0d9/Measuring" />
         </transition>
         <transition Id="6c11dba0-90ee-4ec9-8d3b-fcda31fa3e93" guard="F_SpeedMeasurement != CorrectMeasurements" label="F_SpeedMeasurement != CorrectMeasurements">
@@ -24,7 +24,7 @@
   </states>
   <variables>
     <programGraphHasVariables Id="53b5a28c-6ca9-4f33-9998-a77315087da5">
-      <variable Id="98c87b37-3edd-45cd-b22b-51e46606c3a7" name="measuredSpeed" range="0..19" />
+      <variable Id="98c87b37-3edd-45cd-b22b-51e46606c3a7" name="measuredSpeed" range="0..16" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>

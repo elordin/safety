@@ -131,8 +131,8 @@
     <programGraphHasImportedVariables Id="3b1495d5-50d2-42de-92ad-135710b17533">
       <importedVariable Id="e51d222e-2c70-4117-86b4-b0f81baf4e70" name="CrossingRadioModule.Crossing_Message" range="Unknown, Insecure, Protected" />
     </programGraphHasImportedVariables>
-    <programGraphHasImportedVariables Id="1a7438a1-5dbc-4919-af73-af608c6dc4f8">
-      <importedVariable Id="52f55402-6ee6-48a6-818b-21c893fae324" name="SpeedMeasurement.measuredSpeed" range="0..19" />
+    <programGraphHasImportedVariables Id="372f8532-40d6-4bfd-accb-0b945edbf482">
+      <importedVariable Id="0635d7b4-8303-49a7-a93d-e5b144ce8269" name="SpeedMeasurement.measuredSpeed" range="0..16" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>
