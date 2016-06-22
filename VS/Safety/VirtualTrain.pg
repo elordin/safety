@@ -44,20 +44,20 @@
     </state>
     <state Id="ddf5b147-ab66-41a8-ba50-821cf7932459" name="APtoBEP">
       <successors>
-        <transition Id="fd7725fd-2aee-4f0a-86b6-c83808215cf3" guard="measuredDistance &gt; z + Speed * Speed / 2 / a" label="measuredDistance &gt; z + Speed * Speed / 2 / a">
+        <transition Id="fd7725fd-2aee-4f0a-86b6-c83808215cf3" guard="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a" label="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/APtoBEP" />
         </transition>
-        <transition Id="62b32062-49c0-4182-b1e9-ee4248c0deb6" guard="measuredDistance &lt;= z + Speed * Speed / 2 / a" label="measuredDistance &lt;= z + Speed * Speed / 2 / a">
+        <transition Id="62b32062-49c0-4182-b1e9-ee4248c0deb6" guard="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a" label="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/OnBEP" />
         </transition>
       </successors>
     </state>
     <state Id="9c846d40-22a3-4118-b274-1eec4b210f39" name="BeforeEP">
       <successors>
-        <transition Id="78ad7b1f-d4be-42ab-a669-0be08c212084" guard="measuredDistance &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" label="measuredDistance &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
+        <transition Id="78ad7b1f-d4be-42ab-a669-0be08c212084" guard="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed + measuredSpeed * ( t + c )" label="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed + measuredSpeed * ( t + c )">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/OnEP" />
         </transition>
-        <transition Id="81e95142-02e1-44c0-acd9-535a79e6db33" guard="measuredDistance &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" label="measuredDistance &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
+        <transition Id="81e95142-02e1-44c0-acd9-535a79e6db33" guard="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed + measuredSpeed * ( t + c )" label="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed + measuredSpeed * ( t + c )">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BeforeEP" />
         </transition>
       </successors>
@@ -71,10 +71,10 @@
     </state>
     <state Id="473baea7-8e68-45cd-b54d-9b125ff029e8" name="EPtoAP">
       <successors>
-        <transition Id="f08c482c-b9d7-496b-89a4-cd6a4e72d6a5" guard="measuredDistance &gt; z + Speed * Speed / 2 / a + 2 * c * Speed" label="measuredDistance &gt; z + Speed * Speed / 2 / a + 2 * c * Speed">
+        <transition Id="f08c482c-b9d7-496b-89a4-cd6a4e72d6a5" guard="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed" label="measuredDistance &gt; z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/EPtoAP" />
         </transition>
-        <transition Id="935ebdfd-db9d-4090-a753-e2d0d3f524db" guard="measuredDistance &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed " label="measuredDistance &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed ">
+        <transition Id="935ebdfd-db9d-4090-a753-e2d0d3f524db" guard="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed " label="measuredDistance &lt;= z + measuredSpeed * measuredSpeed / 2 / a + 2 * c * measuredSpeed ">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/OnAP" />
         </transition>
       </successors>
@@ -128,11 +128,11 @@
     <programGraphHasImportedVariables Id="bec991ae-37ba-49d2-a51d-e21c2787a5d3">
       <importedVariable Id="78cfe5ab-af47-4ad6-a685-29e0d8fbd884" name="RealTrain.t" range="32" />
     </programGraphHasImportedVariables>
-    <programGraphHasImportedVariables Id="19453c2f-973c-44d1-bf75-8f0c2242cd51">
-      <importedVariable Id="52716e7b-eb31-4f3d-9989-b37a4c5ae579" name="DriveTrain.Speed" range="0..16" />
-    </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="3b1495d5-50d2-42de-92ad-135710b17533">
       <importedVariable Id="e51d222e-2c70-4117-86b4-b0f81baf4e70" name="CrossingRadioModule.Crossing_Message" range="Unknown, Insecure, Protected" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="1a7438a1-5dbc-4919-af73-af608c6dc4f8">
+      <importedVariable Id="52f55402-6ee6-48a6-818b-21c893fae324" name="SpeedMeasurement.measuredSpeed" range="0..19" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="21771795-ead9-453f-9c6b-d1be132d79cb" name="F_TrainRadioModule_Outage" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="f495ca4a-367a-4456-89c9-f696f3b9841d" name="WorkingCorrectly">
+      <successors>
+        <transition Id="46411f74-e8eb-413e-9e9b-4823ec55b908">
+          <stateMoniker name="/21771795-ead9-453f-9c6b-d1be132d79cb/WorkingCorrectly" />
+        </transition>
+        <transition Id="58a2302b-dfa1-49ab-99bc-5d51bf3eda3d">
+          <stateMoniker name="/21771795-ead9-453f-9c6b-d1be132d79cb/NotWorking" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="9a59aeda-b3c8-4895-9a62-813fc666e2fb" name="NotWorking">
+      <successors>
+        <transition Id="76befedd-70de-4244-8812-920c986b0d00">
+          <stateMoniker name="/21771795-ead9-453f-9c6b-d1be132d79cb/NotWorking" />
+        </transition>
+        <transition Id="9ac11a01-99e5-4bca-8498-75c8028f20dc">
+          <stateMoniker name="/21771795-ead9-453f-9c6b-d1be132d79cb/WorkingCorrectly" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="a9fe65c0-10d5-4477-bb8f-90f5c631baf2" name="InitialNode1">
+      <successors>
+        <transition Id="e7095dbd-96ce-4108-b9c3-b879e37b31d6">
+          <stateMoniker name="/21771795-ead9-453f-9c6b-d1be132d79cb/WorkingCorrectly" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+</programGraph>
