@@ -29,7 +29,7 @@
   </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="061b88b1-0b00-4e81-8ddf-2f66da2ccbdf">
-      <importedVariable Id="814aa0fa-b7c5-49ee-8a97-1c942d41e69e" name="DriveTrain.Speed" range="0..16" />
+      <importedVariable Id="814aa0fa-b7c5-49ee-8a97-1c942d41e69e" name="DriveTrain.Speed" range="0..8" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="d024f53e-72be-4faa-9062-69315bd0fcda">
       <importedVariable Id="c8f0fbe4-be21-4c6a-b4c8-95b3a52c6f8c" name="F_SpeedMeasurement" range="CorrectMeasurements, FaultyMeasurements" />

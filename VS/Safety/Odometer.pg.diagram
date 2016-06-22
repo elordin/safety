@@ -27,7 +27,7 @@
         <stateShapeMoniker Id="c6482777-f4c5-40c4-9634-7f3067dbfdc8" />
       </nodes>
     </transitionConnector>
-    <transitionConnector Id="4a26935d-654a-4fb8-b2d1-8a039ac07588" edgePoints="[(2.875 : 2.18452380952381); (3.17777250312348 : 2.18452380952381); (3.17777250312348 : 2.29891304347826); (2.875 : 2.29891304347826)]" manuallyRouted="true" fixedFrom="Caller" fixedTo="Caller">
+    <transitionConnector Id="4a26935d-654a-4fb8-b2d1-8a039ac07588" edgePoints="[(2.875 : 2.18452380952381); (3.17777250312348 : 2.18452380952381); (3.17777250312348 : 2.29891304347826); (2.875 : 2.29891304347826)]" manuallyRouted="true" fixedFrom="NotFixed" fixedTo="NotFixed">
       <transitionMoniker Id="a6463a3f-f0f4-49a3-8f1f-4d931cc64a16" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
@@ -38,11 +38,11 @@
         <stateShapeMoniker Id="c6482777-f4c5-40c4-9634-7f3067dbfdc8" />
       </nodes>
     </transitionConnector>
-    <transitionConnector Id="bb349293-1813-4a13-83b2-4bef2e5fdab0" edgePoints="[(2.875 : 2.00595238095238); (3.15625 : 2.00595238095238); (3.15625 : 2.11556603773585); (2.875 : 2.11556603773585)]" manuallyRouted="true" fixedFrom="Caller" fixedTo="Caller">
+    <transitionConnector Id="bb349293-1813-4a13-83b2-4bef2e5fdab0" edgePoints="[(2.875 : 2.00595238095238); (3.15625 : 2.00595238095238); (3.15625 : 2.11556603773585); (2.875 : 2.11556603773585)]" manuallyRouted="true" fixedFrom="NotFixed" fixedTo="NotFixed">
       <transitionMoniker Id="9f078bd7-a11f-4a14-aee3-ffd475226cf3" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
-        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="3.25, 2, 5.2699379920959473, 0.181884765625" shapeFieldName="Label" />
+        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="3.284698486328125, 1.9999999999999942, 5.2005410194396973, 0.181884765625" shapeFieldName="Label" />
       </moveableDecoratorHostShapes>
       <nodes>
         <stateShapeMoniker Id="c6482777-f4c5-40c4-9634-7f3067dbfdc8" />

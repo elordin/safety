@@ -51,7 +51,7 @@
   </states>
   <importedVariables>
     <programGraphHasImportedVariables Id="15cb938f-f28f-45c8-a738-838ac0dca2a7">
-      <importedVariable Id="27bdcda3-c63d-448e-bd53-12d7d03a5983" name="CrossingRadioModule" range="Idle, EP_Requested, AP_Requested" />
+      <importedVariable Id="27bdcda3-c63d-448e-bd53-12d7d03a5983" name="CrossingRadioModule" range="Idle, EP_Requested, AP_Requested, Outage" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="f2581cc7-db40-4374-b68a-6840649cc449">
       <importedVariable Id="9213b0fb-08cf-4340-a860-d5f828710fc7" name="SensorGate" range="Open, Closed, InBetween" />

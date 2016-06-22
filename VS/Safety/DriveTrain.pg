@@ -27,7 +27,7 @@
   </states>
   <variables>
     <programGraphHasVariables Id="afe89e15-3ec7-44ce-ad38-97ca2cc7e6c1">
-      <variable Id="69efd684-8f0c-4f69-9406-78c3f55cccae" name="Speed" range="0..16" />
+      <variable Id="69efd684-8f0c-4f69-9406-78c3f55cccae" name="Speed" range="0..8" />
     </programGraphHasVariables>
   </variables>
   <comments>

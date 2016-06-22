@@ -9,7 +9,7 @@
         <transition Id="a6463a3f-f0f4-49a3-8f1f-4d931cc64a16" guard="F_Odometer == FaultyMeasurements" label="F_Odometer == FaultyMeasurements">
           <stateMoniker name="/aa6a9835-3ebe-4d8b-8165-278225fe3f5c/Measuring" />
         </transition>
-        <transition Id="9f078bd7-a11f-4a14-aee3-ffd475226cf3" guard="F_Odometer == FaultyMeasurements" action="measuredDistance := (1009 * d + 1013) % 631 - 128" label="F_Odometer == FaultyMeasurements // measuredDistance := (1009 * d + 1013) % 631 - 128" precondition="d &gt; -1">
+        <transition Id="9f078bd7-a11f-4a14-aee3-ffd475226cf3" guard="F_Odometer == FaultyMeasurements" action="measuredDistance := (1009 * d + 1013) % 149 - 32" label="F_Odometer == FaultyMeasurements // measuredDistance := (1009 * d + 1013) % 149 - 32" precondition="d &gt; -1">
           <stateMoniker name="/aa6a9835-3ebe-4d8b-8165-278225fe3f5c/Measuring" />
         </transition>
       </successors>
@@ -24,7 +24,7 @@
   </states>
   <variables>
     <programGraphHasVariables Id="902a5ee8-952b-4aa5-bffa-4beb12deeb39">
-      <variable Id="7d0d8255-0e91-4fea-ba02-7784d8d867de" name="measuredDistance" range="-128..512" />
+      <variable Id="7d0d8255-0e91-4fea-ba02-7784d8d867de" name="measuredDistance" range="-32..128" />
     </programGraphHasVariables>
   </variables>
   <comments>
@@ -34,7 +34,7 @@
   </comments>
   <importedVariables>
     <programGraphHasImportedVariables Id="80aefd03-2517-4e4d-b3c7-720379cad7ab">
-      <importedVariable Id="56c36c0c-616a-4614-93c5-0eae23ea5e37" name="RealTrain.d" range="-128..512" />
+      <importedVariable Id="56c36c0c-616a-4614-93c5-0eae23ea5e37" name="RealTrain.d" range="-32..128" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="daf04d9e-7b9b-4ff6-ba0b-3c8b85c51666">
       <importedVariable Id="ed34ae5b-b92c-4ec5-a895-d0f7f3250453" name="F_Odometer" range="CorrectMeasurements, FaultyMeasurements" />

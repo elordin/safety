@@ -111,10 +111,10 @@
   </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="a0869092-487c-43e0-87fc-7b1c27bd49cc">
-      <importedVariable Id="46a426f9-ba6f-4825-9435-dcadb51541c5" name="Odometer.measuredDistance" range="-128..512" />
+      <importedVariable Id="46a426f9-ba6f-4825-9435-dcadb51541c5" name="Odometer.measuredDistance" range="-32..128" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="cc14b45f-6ff1-4c6a-a103-2a3e99be79d9">
-      <importedVariable Id="d91d6963-f555-4277-9188-fd0cfb5eb157" name="RealTrain.z" range="128" />
+      <importedVariable Id="d91d6963-f555-4277-9188-fd0cfb5eb157" name="RealTrain.z" range="32" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="3adcf93d-887b-4301-9312-09614c5debc2">
       <importedVariable Id="254217e5-278c-43d0-9138-03ce103bf5e4" name="RealTrain.a" range="8" />
@@ -126,7 +126,7 @@
       <importedVariable Id="03474962-16ad-4e5e-9680-4d050b9da2f8" name="RealTrain.distToSP" range="16" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="bec991ae-37ba-49d2-a51d-e21c2787a5d3">
-      <importedVariable Id="78cfe5ab-af47-4ad6-a685-29e0d8fbd884" name="RealTrain.t" range="32" />
+      <importedVariable Id="78cfe5ab-af47-4ad6-a685-29e0d8fbd884" name="RealTrain.t" range="4" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="3b1495d5-50d2-42de-92ad-135710b17533">
       <importedVariable Id="e51d222e-2c70-4117-86b4-b0f81baf4e70" name="CrossingRadioModule.Crossing_Message" range="Unknown, Insecure, Protected" />

@@ -109,16 +109,16 @@
       <variable Id="061278a9-918c-4780-873c-709b927f5365" name="c" range="2" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="2d7aca82-aace-4883-815d-08706c70fb0b">
-      <variable Id="3d7875d5-76b4-40b7-b1cd-8e3f1bd3631f" name="t" range="32" />
+      <variable Id="3d7875d5-76b4-40b7-b1cd-8e3f1bd3631f" name="t" range="4" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="2fa9a5d8-0cd1-4779-abf3-7f48cefd6d76">
       <variable Id="19210e74-6822-4774-b0f0-21b7c118e96a" name="a" range="8" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="b4bb7aac-846f-4bf2-9947-2805511caaf9">
-      <variable Id="81c20b75-14f2-4937-b479-421c3b639ea5" name="z" range="128" />
+      <variable Id="81c20b75-14f2-4937-b479-421c3b639ea5" name="z" range="32" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="da629314-1c49-44a6-b4b8-1d0b5954ca5f">
-      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-128..512" />
+      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-32..128" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="0ae58796-5a2c-40f9-aa20-fb482077b138">
       <variable Id="eac8ab0e-b1f5-4bdc-9d66-f3959515dc87" name="distToSP" range="16" />
@@ -126,7 +126,7 @@
   </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="1310a164-c772-4814-b2b1-06273369f7b5">
-      <importedVariable Id="a369633b-1352-4f8f-80c3-259c7df6b749" name="DriveTrain.Speed" range="0..16" />
+      <importedVariable Id="a369633b-1352-4f8f-80c3-259c7df6b749" name="DriveTrain.Speed" range="0..8" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

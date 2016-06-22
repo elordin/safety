@@ -71,7 +71,7 @@
       <importedVariable Id="6545c4b8-adcf-4c53-9e6d-501f77f4606e" name="Crossing" range="Open, ProtectionPhase, Protected, OpeningPhase" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="057262e2-cea3-4886-a488-5dcd187bb8aa">
-      <importedVariable Id="5ee15a8c-cdfa-4dad-a8a2-5f305bdcf8a0" name="TrainRadioModule" range="Idle, EP_Request, AP_Request" />
+      <importedVariable Id="5ee15a8c-cdfa-4dad-a8a2-5f305bdcf8a0" name="TrainRadioModule" range="Idle, EP_Request, AP_Request, Outage" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="8e214ef0-db45-476e-ba9a-4b891fa1c5c9">
       <importedVariable Id="8ebc6260-534b-48aa-aaf1-91bea8501307" name="F_CrossingRadioModule_WrongMessage" range="CorrectMessage, WrongMessage" />

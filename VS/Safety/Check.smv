@@ -2,34 +2,40 @@
 MODULE _VARS
 	VAR
 		V_Crossing : {L_Open, L_ProtectionPhase, L_Protected, L_OpeningPhase};
-		V_CrossingRadioModule : {L_Idle, L_EP_Requested, L_AP_Requested};
+		V_CrossingRadioModule : {L_Idle, L_EP_Requested, L_AP_Requested, L_Outage};
 		V_SensorGate : {L_Open, L_Closed, L_InBetween};
 		V_SensorSP : {L_Active, L_Inactive};
 		V_CrossingTimer : {L_Idle, L_Counting, L_Finished};
 		V_Crossing_Message : {L_Unknown, L_Insecure, L_Protected};
-		V_TrainRadioModule : {L_Idle, L_EP_Request, L_AP_Request};
+		V_TrainRadioModule : {L_Idle, L_EP_Request, L_AP_Request, L_Outage};
+		V_F_CrossingRadioModule_WrongMessage : {L_CorrectMessage, L_WrongMessage};
+		V_F_CrossingRadioModule_Outage : {L_WorkingCorrectly, L_NotWorking};
 		V_Timer_Counter : 0..60;
 		V_DriveTrain : {L_Running};
-		V_Speed : 0..16;
+		V_Speed : 0..8;
 		V_F_DriveTrain : {L_BreaksOK, L_BreaksBroken};
 		V_BreakCommand : {L_Break, L_DoNotBreak};
 		V_F_Gates : {L_AllOK, L_EngineStuck, L_HingeBroken, L_EngineControlsBroken};
 		V_F_Odometer : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_F_SensorGate : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_F_SensorSP : {L_CorrectMeasurements, L_FaultyMeasurements};
+		V_F_SpeedMeasurement : {L_CorrectMeasurements, L_FaultyMeasurements};
+		V_F_TrainRadioModule_Outage : {L_WorkingCorrectly, L_NotWorking};
 		V_Gates : {L_Open, L_Opening, L_Closing, L_Closed};
 		V_Angle : 0..9;
 		V_Odometer : {L_Measuring};
-		V_measuredDistance : -128..512;
-		V_d : -128..512;
+		V_measuredDistance : -32..128;
+		V_d : -32..128;
 		V_RealTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
 		V_tick : {1};
 		V_c : {2};
-		V_t : {32};
+		V_t : {4};
 		V_a : {8};
-		V_z : {128};
+		V_z : {32};
 		V_distToSP : {16};
 		V_SP_CauseOpening : {L_Yes, L_No};
+		V_SpeedMeasurement : {L_Measuring};
+		V_measuredSpeed : 0..16;
 		V_VirtualTrain : {L_OnGP, L_BEPtoGP, L_AfterGP, L_OnSP, L_AfterSP, L_APtoBEP, L_BeforeEP, L_OnEP, L_EPtoAP, L_OnAP, L_OnBEP};
 	TRANS
 		next(V_tick) = V_tick & next(V_c) = V_c & next(V_t) = V_t & next(V_a) = V_a & next(V_z) = V_z & next(V_distToSP) = V_distToSP;
@@ -53,14 +59,21 @@ MODULE _P_CrossingRadioModule(v)
 	INIT
 		(v.V_CrossingRadioModule = L_Idle) & (TRUE)
 	TRANS
-		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & ((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (next(v.V_Crossing_Message) = L_Unknown))  |
-		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_AP_Requested & (v.V_TrainRadioModule = L_AP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
-		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_EP_Requested & (v.V_TrainRadioModule = L_EP_Request) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & (((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_AP_Requested & ((v.V_TrainRadioModule = L_AP_Request) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_EP_Requested & ((v.V_TrainRadioModule = L_EP_Request) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Outage & (v.V_F_CrossingRadioModule_Outage != L_WorkingCorrectly) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
 		 ( v.V_CrossingRadioModule = L_EP_Requested & next(v.V_CrossingRadioModule) = L_Idle & TRUE & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
-		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (v.V_Crossing = L_Protected) & (next(v.V_Crossing_Message) = L_Protected))  |
-		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (v.V_Crossing != L_Protected) & (next(v.V_Crossing_Message) = L_Insecure))  |
-		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & (!((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (!(v.V_TrainRadioModule = L_AP_Request) & !(v.V_TrainRadioModule = L_EP_Request))) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
-		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_AP_Requested & (!(v.V_Crossing = L_Protected) & !(v.V_Crossing != L_Protected)) & (next(v.V_Crossing_Message) = v.V_Crossing_Message));
+		 ( v.V_CrossingRadioModule = L_EP_Requested & next(v.V_CrossingRadioModule) = L_Outage & (v.V_F_CrossingRadioModule_Outage != L_WorkingCorrectly) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (((v.V_Crossing = L_Protected) & (v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Protected))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & (((v.V_Crossing != L_Protected) & (v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Insecure))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & ((v.V_F_CrossingRadioModule_WrongMessage != L_CorrectMessage) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Protected))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Idle & ((v.V_F_CrossingRadioModule_WrongMessage != L_CorrectMessage) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (next(v.V_Crossing_Message) = L_Insecure))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_Outage & (v.V_F_CrossingRadioModule_Outage != L_WorkingCorrectly) & (next(v.V_Crossing_Message) = L_Unknown))  |
+		 ( v.V_CrossingRadioModule = L_Outage & next(v.V_CrossingRadioModule) = L_Idle & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_Idle & next(v.V_CrossingRadioModule) = L_Idle & (!(((v.V_TrainRadioModule != L_AP_Request) & (v.V_TrainRadioModule != L_EP_Request)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_TrainRadioModule = L_AP_Request) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_TrainRadioModule = L_EP_Request) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & !(v.V_F_CrossingRadioModule_Outage != L_WorkingCorrectly)))) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_AP_Requested & next(v.V_CrossingRadioModule) = L_AP_Requested & (!(((v.V_Crossing = L_Protected) & (v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (!(((v.V_Crossing != L_Protected) & (v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage)) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_F_CrossingRadioModule_WrongMessage != L_CorrectMessage) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_F_CrossingRadioModule_WrongMessage != L_CorrectMessage) & (v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly)) & !(v.V_F_CrossingRadioModule_Outage != L_WorkingCorrectly))))) & (next(v.V_Crossing_Message) = v.V_Crossing_Message))  |
+		 ( v.V_CrossingRadioModule = L_Outage & next(v.V_CrossingRadioModule) = L_Outage & !(v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly) & (next(v.V_Crossing_Message) = v.V_Crossing_Message));
 MODULE _P_CrossingTimer(v)
 	INIT
 		(v.V_CrossingTimer = L_Idle) & (TRUE)
@@ -82,6 +95,22 @@ MODULE _P_DriveTrain(v)
 		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (v.V_Speed > 0)) & (next(v.V_Speed) = (v.V_Speed - 1)))  |
 		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & ((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (next(v.V_Speed) = v.V_Speed))  |
 		 ( v.V_DriveTrain = L_Running & next(v.V_DriveTrain) = L_Running & (!(((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksOK)) & (v.V_Speed > 1)) & (!(v.V_BreakCommand = L_DoNotBreak) & (!(((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken)) & (v.V_Speed > 0)) & !((v.V_BreakCommand = L_Break) & (v.V_F_DriveTrain = L_BreaksBroken))))) & (next(v.V_Speed) = v.V_Speed));
+MODULE _P_F_CrossingRadioModule_Outage(v)
+	INIT
+		(v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly) & (TRUE)
+	TRANS
+		 ( v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly & next(v.V_F_CrossingRadioModule_Outage) = L_WorkingCorrectly & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly & next(v.V_F_CrossingRadioModule_Outage) = L_NotWorking & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_Outage = L_NotWorking & next(v.V_F_CrossingRadioModule_Outage) = L_NotWorking & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_Outage = L_NotWorking & next(v.V_F_CrossingRadioModule_Outage) = L_WorkingCorrectly & TRUE & (TRUE));
+MODULE _P_F_CrossingRadioModule_WrongMessage(v)
+	INIT
+		(v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage) & (TRUE)
+	TRANS
+		 ( v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage & next(v.V_F_CrossingRadioModule_WrongMessage) = L_WrongMessage & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage & next(v.V_F_CrossingRadioModule_WrongMessage) = L_CorrectMessage & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_WrongMessage = L_WrongMessage & next(v.V_F_CrossingRadioModule_WrongMessage) = L_CorrectMessage & TRUE & (TRUE))  |
+		 ( v.V_F_CrossingRadioModule_WrongMessage = L_WrongMessage & next(v.V_F_CrossingRadioModule_WrongMessage) = L_WrongMessage & TRUE & (TRUE));
 MODULE _P_F_DriveTrain(v)
 	INIT
 		(v.V_F_DriveTrain = L_BreaksOK) & (TRUE)
@@ -124,29 +153,45 @@ MODULE _P_F_SensorSP(v)
 		 ( v.V_F_SensorSP = L_CorrectMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
 		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
 		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_FaultyMeasurements & TRUE & (TRUE));
+MODULE _P_F_SpeedMeasurement(v)
+	INIT
+		(v.V_F_SpeedMeasurement = L_CorrectMeasurements) & (TRUE)
+	TRANS
+		 ( v.V_F_SpeedMeasurement = L_CorrectMeasurements & next(v.V_F_SpeedMeasurement) = L_FaultyMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_CorrectMeasurements & next(v.V_F_SpeedMeasurement) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_FaultyMeasurements & next(v.V_F_SpeedMeasurement) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_FaultyMeasurements & next(v.V_F_SpeedMeasurement) = L_FaultyMeasurements & TRUE & (TRUE));
+MODULE _P_F_TrainRadioModule_Outage(v)
+	INIT
+		(v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & (TRUE)
+	TRANS
+		 ( v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly & next(v.V_F_TrainRadioModule_Outage) = L_WorkingCorrectly & TRUE & (TRUE))  |
+		 ( v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly & next(v.V_F_TrainRadioModule_Outage) = L_NotWorking & TRUE & (TRUE))  |
+		 ( v.V_F_TrainRadioModule_Outage = L_NotWorking & next(v.V_F_TrainRadioModule_Outage) = L_NotWorking & TRUE & (TRUE))  |
+		 ( v.V_F_TrainRadioModule_Outage = L_NotWorking & next(v.V_F_TrainRadioModule_Outage) = L_WorkingCorrectly & TRUE & (TRUE));
 MODULE _P_Gates(v)
 	INIT
 		(v.V_Gates = L_Open) & (TRUE)
 	TRANS
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (v.V_Crossing != L_ProtectionPhase) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Closing & (v.V_Crossing = L_ProtectionPhase) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Open & (v.V_Angle = 0) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & ((v.V_Angle > 0) & (v.V_Angle > 0)) & (next(v.V_Angle) = (v.V_Angle - 1)))  |
-		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closed & (v.V_Angle = 9) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & ((v.V_Angle < 9) & (v.V_Angle < 9)) & (next(v.V_Angle) = (v.V_Angle + 1)))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Opening & (v.V_Crossing = L_OpeningPhase) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (v.V_Crossing != L_OpeningPhase) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (!(v.V_Crossing != L_ProtectionPhase) & !(v.V_Crossing = L_ProtectionPhase)) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & (!(v.V_Angle = 0) & !((v.V_Angle > 0) & (v.V_Angle > 0))) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & (!(v.V_Angle = 9) & !((v.V_Angle < 9) & (v.V_Angle < 9))) & (next(v.V_Angle) = v.V_Angle))  |
-		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (!(v.V_Crossing = L_OpeningPhase) & !(v.V_Crossing != L_OpeningPhase)) & (next(v.V_Angle) = v.V_Angle));
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & ((v.V_Crossing != L_ProtectionPhase) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Closing & ((v.V_Crossing = L_ProtectionPhase) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Open & ((v.V_Angle = 0) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & (((v.V_Angle > 0) & (v.V_F_Gates = L_AllOK)) & (v.V_Angle > 0)) & (next(v.V_Angle) = (v.V_Angle - 1)))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closed & ((v.V_Angle = 9) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & (((v.V_Angle < 9) & (v.V_F_Gates = L_AllOK)) & (v.V_Angle < 9)) & (next(v.V_Angle) = (v.V_Angle + 1)))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Opening & ((v.V_Crossing = L_OpeningPhase) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & ((v.V_Crossing != L_OpeningPhase) & (v.V_F_Gates = L_AllOK)) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Open & next(v.V_Gates) = L_Open & (!((v.V_Crossing != L_ProtectionPhase) & (v.V_F_Gates = L_AllOK)) & !((v.V_Crossing = L_ProtectionPhase) & (v.V_F_Gates = L_AllOK))) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Opening & next(v.V_Gates) = L_Opening & (!((v.V_Angle = 0) & (v.V_F_Gates = L_AllOK)) & !(((v.V_Angle > 0) & (v.V_F_Gates = L_AllOK)) & (v.V_Angle > 0))) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closing & next(v.V_Gates) = L_Closing & (!((v.V_Angle = 9) & (v.V_F_Gates = L_AllOK)) & !(((v.V_Angle < 9) & (v.V_F_Gates = L_AllOK)) & (v.V_Angle < 9))) & (next(v.V_Angle) = v.V_Angle))  |
+		 ( v.V_Gates = L_Closed & next(v.V_Gates) = L_Closed & (!((v.V_Crossing = L_OpeningPhase) & (v.V_F_Gates = L_AllOK)) & !((v.V_Crossing != L_OpeningPhase) & (v.V_F_Gates = L_AllOK))) & (next(v.V_Angle) = v.V_Angle));
 MODULE _P_Odometer(v)
 	INIT
 		(v.V_Odometer = L_Measuring) & (TRUE)
 	TRANS
 		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (v.V_F_Odometer = L_CorrectMeasurements) & (next(v.V_measuredDistance) = v.V_d))  |
 		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (v.V_F_Odometer = L_FaultyMeasurements) & (next(v.V_measuredDistance) = v.V_measuredDistance))  |
-		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & ((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)) & (next(v.V_measuredDistance) = ((((1009 * v.V_d) + 1013) mod 631) - 128)))  |
+		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & ((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)) & (next(v.V_measuredDistance) = ((((1009 * v.V_d) + 1013) mod 149) - 32)))  |
 		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (!(v.V_F_Odometer = L_CorrectMeasurements) & (!(v.V_F_Odometer = L_FaultyMeasurements) & !((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)))) & (next(v.V_measuredDistance) = v.V_measuredDistance));
 MODULE _P_RealTrain(v)
 	INIT
@@ -197,22 +242,40 @@ MODULE _P_SensorSP(v)
 	INIT
 		(v.V_SensorSP = L_Inactive) & (TRUE)
 	TRANS
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Inactive & (v.V_RealTrain != L_OnSP) & (next(v.V_SP_CauseOpening) = L_Yes))  |
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (v.V_RealTrain = L_OnSP) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Active & (v.V_RealTrain = L_OnSP) & (next(v.V_SP_CauseOpening) = L_No))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (v.V_RealTrain != L_OnSP) & (next(v.V_SP_CauseOpening) = L_No))  |
-		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (!(v.V_RealTrain != L_OnSP) & !(v.V_RealTrain = L_OnSP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
-		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (!(v.V_RealTrain = L_OnSP) & !(v.V_RealTrain != L_OnSP)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening));
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Inactive & ((v.V_RealTrain != L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (next(v.V_SP_CauseOpening) = L_Yes))  |
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & ((v.V_RealTrain = L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (v.V_F_SensorSP != L_CorrectMeasurements) & (next(v.V_SP_CauseOpening) = L_Yes))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Active & ((v.V_RealTrain = L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (next(v.V_SP_CauseOpening) = L_No))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & ((v.V_RealTrain != L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (next(v.V_SP_CauseOpening) = L_No))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (v.V_F_SensorSP != L_CorrectMeasurements) & (next(v.V_SP_CauseOpening) = L_Yes))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Active & (v.V_F_SensorSP != L_CorrectMeasurements) & (next(v.V_SP_CauseOpening) = L_Yes))  |
+		 ( v.V_SensorSP = L_Active & next(v.V_SensorSP) = L_Active & (!((v.V_RealTrain != L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (!((v.V_RealTrain = L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & !(v.V_F_SensorSP != L_CorrectMeasurements))) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening))  |
+		 ( v.V_SensorSP = L_Inactive & next(v.V_SensorSP) = L_Inactive & (!((v.V_RealTrain = L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (!((v.V_RealTrain != L_OnSP) & (v.V_F_SensorSP = L_CorrectMeasurements)) & (!(v.V_F_SensorSP != L_CorrectMeasurements) & !(v.V_F_SensorSP != L_CorrectMeasurements)))) & (next(v.V_SP_CauseOpening) = v.V_SP_CauseOpening));
+MODULE _P_SpeedMeasurement(v)
+	INIT
+		(v.V_SpeedMeasurement = L_Measuring) & (TRUE)
+	TRANS
+		 ( v.V_SpeedMeasurement = L_Measuring & next(v.V_SpeedMeasurement) = L_Measuring & (v.V_F_SpeedMeasurement = L_CorrectMeasurements) & (next(v.V_measuredSpeed) = v.V_Speed))  |
+		 ( v.V_SpeedMeasurement = L_Measuring & next(v.V_SpeedMeasurement) = L_Measuring & ((v.V_F_SpeedMeasurement != L_CorrectMeasurements) & (v.V_Speed >= 3)) & (next(v.V_measuredSpeed) = (v.V_Speed - 3)))  |
+		 ( v.V_SpeedMeasurement = L_Measuring & next(v.V_SpeedMeasurement) = L_Measuring & (v.V_F_SpeedMeasurement != L_CorrectMeasurements) & (next(v.V_measuredSpeed) = v.V_measuredSpeed))  |
+		 ( v.V_SpeedMeasurement = L_Measuring & next(v.V_SpeedMeasurement) = L_Measuring & (!(v.V_F_SpeedMeasurement = L_CorrectMeasurements) & (!((v.V_F_SpeedMeasurement != L_CorrectMeasurements) & (v.V_Speed >= 3)) & !(v.V_F_SpeedMeasurement != L_CorrectMeasurements))) & (next(v.V_measuredSpeed) = v.V_measuredSpeed));
 MODULE _P_TrainRadioModule(v)
 	INIT
 		(v.V_TrainRadioModule = L_Idle) & (TRUE)
 	TRANS
-		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & ((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (TRUE))  |
-		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_AP_Request & (v.V_VirtualTrain = L_OnAP) & (TRUE))  |
-		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_EP_Request & (v.V_VirtualTrain = L_OnEP) & (TRUE))  |
-		 ( v.V_TrainRadioModule = L_EP_Request & next(v.V_TrainRadioModule) = L_Idle & TRUE & (TRUE))  |
-		 ( v.V_TrainRadioModule = L_AP_Request & next(v.V_TrainRadioModule) = L_Idle & TRUE & (TRUE))  |
-		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & (!((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (!(v.V_VirtualTrain = L_OnAP) & !(v.V_VirtualTrain = L_OnEP))) & (TRUE));
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & (((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_AP_Request & ((v.V_VirtualTrain = L_OnAP) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_EP_Request & ((v.V_VirtualTrain = L_OnEP) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Outage & (v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_EP_Request & next(v.V_TrainRadioModule) = L_Idle & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_EP_Request & next(v.V_TrainRadioModule) = L_Outage & (v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_AP_Request & next(v.V_TrainRadioModule) = L_Idle & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_AP_Request & next(v.V_TrainRadioModule) = L_Outage & (v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Outage & next(v.V_TrainRadioModule) = L_Idle & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Idle & next(v.V_TrainRadioModule) = L_Idle & (!(((v.V_VirtualTrain != L_OnAP) & (v.V_VirtualTrain != L_OnEP)) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_VirtualTrain = L_OnAP) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & (!((v.V_VirtualTrain = L_OnEP) & (v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly)) & !(v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly)))) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_EP_Request & next(v.V_TrainRadioModule) = L_EP_Request & (!(v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & !(v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_AP_Request & next(v.V_TrainRadioModule) = L_AP_Request & (!(v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & !(v.V_F_TrainRadioModule_Outage != L_WorkingCorrectly)) & (TRUE))  |
+		 ( v.V_TrainRadioModule = L_Outage & next(v.V_TrainRadioModule) = L_Outage & !(v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly) & (TRUE));
 MODULE _P_VirtualTrain(v)
 	INIT
 		(v.V_VirtualTrain = L_BeforeEP) & (TRUE)
@@ -224,21 +287,21 @@ MODULE _P_VirtualTrain(v)
 		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & ((v.V_measuredDistance * -1) < v.V_distToSP) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_AfterSP & next(v.V_VirtualTrain) = L_AfterSP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_OnBEP & (v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_OnEP & (v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (v.V_measuredDistance > (v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_OnBEP & (v.V_measuredDistance <= (v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_OnEP & (v.V_measuredDistance <= (((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed)) + (v.V_measuredSpeed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (v.V_measuredDistance > (((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed)) + (v.V_measuredSpeed * (v.V_t + v.V_c)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnEP & next(v.V_VirtualTrain) = L_EPtoAP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_OnAP & (v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (v.V_measuredDistance > ((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_OnAP & (v.V_measuredDistance <= ((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnAP & next(v.V_VirtualTrain) = L_APtoBEP & TRUE & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_Crossing_Message = L_Protected) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_BEPtoGP & (v.V_Crossing_Message != L_Protected) & (next(v.V_BreakCommand) = L_Break))  |
 		 ( v.V_VirtualTrain = L_BEPtoGP & next(v.V_VirtualTrain) = L_BEPtoGP & (!(v.V_measuredDistance <= 0) & !(v.V_measuredDistance > 0)) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_AfterGP & next(v.V_VirtualTrain) = L_AfterGP & (!((v.V_measuredDistance * -1) >= v.V_distToSP) & !((v.V_measuredDistance * -1) < v.V_distToSP)) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (!(v.V_measuredDistance > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & !(v.V_measuredDistance <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (!(v.V_measuredDistance <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !(v.V_measuredDistance > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c))))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
-		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (!(v.V_measuredDistance > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & !(v.V_measuredDistance <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_APtoBEP & next(v.V_VirtualTrain) = L_APtoBEP & (!(v.V_measuredDistance > (v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a))) & !(v.V_measuredDistance <= (v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_BeforeEP & next(v.V_VirtualTrain) = L_BeforeEP & (!(v.V_measuredDistance <= (((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed)) + (v.V_measuredSpeed * (v.V_t + v.V_c)))) & !(v.V_measuredDistance > (((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed)) + (v.V_measuredSpeed * (v.V_t + v.V_c))))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
+		 ( v.V_VirtualTrain = L_EPtoAP & next(v.V_VirtualTrain) = L_EPtoAP & (!(v.V_measuredDistance > ((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed))) & !(v.V_measuredDistance <= ((v.V_z + (((v.V_measuredSpeed * v.V_measuredSpeed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_measuredSpeed)))) & (next(v.V_BreakCommand) = v.V_BreakCommand))  |
 		 ( v.V_VirtualTrain = L_OnBEP & next(v.V_VirtualTrain) = L_OnBEP & (!(v.V_Crossing_Message = L_Protected) & !(v.V_Crossing_Message != L_Protected)) & (next(v.V_BreakCommand) = v.V_BreakCommand));
 MODULE main
 	VAR
@@ -247,16 +310,21 @@ MODULE main
 		p_CrossingRadioModule : _P_CrossingRadioModule(v);
 		p_CrossingTimer : _P_CrossingTimer(v);
 		p_DriveTrain : _P_DriveTrain(v);
+		p_F_CrossingRadioModule_Outage : _P_F_CrossingRadioModule_Outage(v);
+		p_F_CrossingRadioModule_WrongMessage : _P_F_CrossingRadioModule_WrongMessage(v);
 		p_F_DriveTrain : _P_F_DriveTrain(v);
 		p_F_Gates : _P_F_Gates(v);
 		p_F_Odometer : _P_F_Odometer(v);
 		p_F_SensorGate : _P_F_SensorGate(v);
 		p_F_SensorSP : _P_F_SensorSP(v);
+		p_F_SpeedMeasurement : _P_F_SpeedMeasurement(v);
+		p_F_TrainRadioModule_Outage : _P_F_TrainRadioModule_Outage(v);
 		p_Gates : _P_Gates(v);
 		p_Odometer : _P_Odometer(v);
 		p_RealTrain : _P_RealTrain(v);
 		p_SensorGate : _P_SensorGate(v);
 		p_SensorSP : _P_SensorSP(v);
+		p_SpeedMeasurement : _P_SpeedMeasurement(v);
 		p_TrainRadioModule : _P_TrainRadioModule(v);
 		p_VirtualTrain : _P_VirtualTrain(v);
 
