@@ -36,46 +36,90 @@
     <None Include="Crossing.pg.diagram">
       <DependentUpon>Crossing.pg</DependentUpon>
     </None>
-    <None Include="CrossingFunkmodule.pg" />
-    <None Include="CrossingFunkmodule.pg.diagram">
-      <DependentUpon>CrossingFunkmodule.pg</DependentUpon>
+    <None Include="CrossingRadioModule.pg" />
+    <None Include="CrossingRadioModule.pg.diagram">
+      <DependentUpon>CrossingRadioModule.pg</DependentUpon>
     </None>
     <None Include="CrossingTimer.pg" />
     <None Include="CrossingTimer.pg.diagram">
       <DependentUpon>CrossingTimer.pg</DependentUpon>
     </None>
+    <None Include="DriveTrain.pg" />
+    <None Include="DriveTrain.pg.diagram">
+      <DependentUpon>DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_CrossingRadioModule_Outage.pg" />
+    <None Include="F_CrossingRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_Outage.pg</DependentUpon>
+    </None>
+    <None Include="F_CrossingRadioModule_WrongMessage.pg" />
+    <None Include="F_CrossingRadioModule_WrongMessage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_WrongMessage.pg</DependentUpon>
+    </None>
+    <None Include="F_DriveTrain.pg" />
+    <None Include="F_DriveTrain.pg.diagram">
+      <DependentUpon>F_DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_Gates.pg" />
+    <None Include="F_Gates.pg.diagram">
+      <DependentUpon>F_Gates.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorSP.pg" />
+    <None Include="F_SensorSP.pg.diagram">
+      <DependentUpon>F_SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorGate.pg" />
+    <None Include="F_SensorGate.pg.diagram">
+      <DependentUpon>F_SensorGate.pg</DependentUpon>
+    </None>
+    <None Include="F_Odometer.pg" />
+    <None Include="F_Odometer.pg.diagram">
+      <DependentUpon>F_Odometer.pg</DependentUpon>
+    </None>
+    <None Include="F_SpeedMeasurement.pg" />
+    <None Include="F_SpeedMeasurement.pg.diagram">
+      <DependentUpon>F_SpeedMeasurement.pg</DependentUpon>
+    </None>
+    <None Include="F_TrainRadioModule_Outage.pg" />
+    <None Include="F_TrainRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_TrainRadioModule_Outage.pg</DependentUpon>
+    </None>
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
       <DependentUpon>Gates.pg</DependentUpon>
     </None>
-    <None Include="Breaks.pg" />
-    <None Include="Breaks.pg.diagram">
-      <DependentUpon>Breaks.pg</DependentUpon>
-    </None>
-    <None Include="NuSMV1.smv">
+    <None Include="Check.smv">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>NuSMV1.tt</DependentUpon>
+      <DependentUpon>Check.tt</DependentUpon>
     </None>
-    <None Include="SensorGateDown.pg" />
-    <None Include="SensorGateDown.pg.diagram">
-      <DependentUpon>SensorGateDown.pg</DependentUpon>
+    <None Include="Odometer.pg" />
+    <None Include="Odometer.pg.diagram">
+      <DependentUpon>Odometer.pg</DependentUpon>
     </None>
-    <None Include="SensorGateOpen.pg" />
-    <None Include="SensorGateOpen.pg.diagram">
-      <DependentUpon>SensorGateOpen.pg</DependentUpon>
+    <None Include="RealTrain.pg" />
+    <None Include="RealTrain.pg.diagram">
+      <DependentUpon>RealTrain.pg</DependentUpon>
+    </None>
+    <None Include="SensorGate.pg" />
+    <None Include="SensorGate.pg.diagram">
+      <DependentUpon>SensorGate.pg</DependentUpon>
     </None>
     <None Include="SensorSP.pg" />
     <None Include="SensorSP.pg.diagram">
       <DependentUpon>SensorSP.pg</DependentUpon>
     </None>
-    <None Include="Train.pg" />
-    <None Include="Train.pg.diagram">
-      <DependentUpon>Train.pg</DependentUpon>
+    <None Include="SpeedMeasurement.pg" />
+    <None Include="SpeedMeasurement.pg.diagram">
+      <DependentUpon>SpeedMeasurement.pg</DependentUpon>
     </None>
-    <None Include="TrainFunkmodule.pg" />
-    <None Include="TrainFunkmodule.pg.diagram">
-      <DependentUpon>TrainFunkmodule.pg</DependentUpon>
+    <None Include="VirtualTrain.pg" />
+    <None Include="VirtualTrain.pg.diagram">
+      <DependentUpon>VirtualTrain.pg</DependentUpon>
+    </None>
+    <None Include="TrainRadioModule.pg" />
+    <None Include="TrainRadioModule.pg.diagram">
+      <DependentUpon>TrainRadioModule.pg</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +129,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NuSMV1.tt">
+    <Content Include="Check.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>NuSMV1.smv</LastGenOutput>
+      <LastGenOutput>Check.smv</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

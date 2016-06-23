@@ -1,0 +1,41 @@
+﻿<#@ template inherits="Safety.ProgramGraphDsl.ProgramGraphTransformation" hostspecific="true" #>
+<#@ output encoding="us-ascii" extension=".smv" #>
+<#@ assembly Name="Safety.ProgramGraphDsl.dll" #>
+
+<#=  TransformToNuSMV() #>
+
+DEFINE
+    Crossing                        := v.V_Crossing;
+    CrossingRadioModule             := v.V_CrossingRadioModule;
+    CrossingTimer                   := v.V_CrossingTimer;
+	DriveTrain                      := v.V_DriveTrain;
+    Gates                           := v.V_Gates;
+	Odometer                        := v.V_Odometer;
+    RealTrain                       := v.V_RealTrain;
+    SensorGate                      := v.V_SensorGate;
+    SensorSP                        := v.V_SensorSP;
+    TrainRadioModule                := v.V_TrainRadioModule;
+	VirtualTrain                    := v.V_VirtualTrain;
+
+/-- Train never crosses an insecure crossing --/
+CTLSPEC AG ( RealTrain = L_OnGP -> Crossing = L_Protected );
+
+/-- Train eventually leaves the GP --/
+CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
+
+/-- Gates eventually open / Crossing becomes unprotected --/
+CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
+CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
+CTLSPEC ! EG Gates = L_Closed;
+
+/-- When breaking, the train never passes the crossing --/
+CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
+
+/-- After sending the first request, the train must break or pass a safe crossing --/
+CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
+
+/-- Crossing is only protected when gates are closed --/
+LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
+
+/-- Sensor is only active when train is on SP --/
+LTLSPEC G RealTrain = L_OnSP <-> SensorSP = L_Active;
