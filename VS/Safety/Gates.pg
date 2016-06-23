@@ -23,10 +23,10 @@
     </state>
     <state Id="17b01cb4-70bb-4707-a441-48925a02eea6" name="Closing">
       <successors>
-        <transition Id="fd8e31f2-5397-4986-bcc2-72180c18c8c3" guard="Angle == 9 &amp;&amp; F_Gates == AllOK" label="Angle == 9 &amp;&amp; F_Gates == AllOK">
+        <transition Id="fd8e31f2-5397-4986-bcc2-72180c18c8c3" guard="Angle == 2 &amp;&amp; F_Gates == AllOK" label="Angle == 2 &amp;&amp; F_Gates == AllOK">
           <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
         </transition>
-        <transition Id="03ebaa1a-a7a8-47fc-89fb-c6a2417de232" guard="Angle &lt; 9 &amp;&amp; F_Gates == AllOK" action="Angle := Angle + 1" label="Angle &lt; 9 &amp;&amp; F_Gates == AllOK // Angle := Angle + 1" precondition="Angle &lt; 9">
+        <transition Id="03ebaa1a-a7a8-47fc-89fb-c6a2417de232" guard="Angle &lt; 9 &amp;&amp; F_Gates == AllOK" action="Angle := Angle + 1" label="Angle &lt; 9 &amp;&amp; F_Gates == AllOK // Angle := Angle + 1" precondition="Angle &lt; 2">
           <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closing" />
         </transition>
       </successors>
@@ -51,7 +51,7 @@
   </states>
   <variables>
     <programGraphHasVariables Id="69b042b5-e314-435e-a20d-f751f625f187">
-      <variable Id="97c9202f-953c-432c-a3ef-a1d92555d1c6" name="Angle" range="0..9" />
+      <variable Id="97c9202f-953c-432c-a3ef-a1d92555d1c6" name="Angle" range="0..2" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>
@@ -59,7 +59,7 @@
       <importedVariable Id="d34c3723-8ac0-4162-b57e-82a9be512ded" name="Crossing" range="Open, ProtectionPhase, Protected, OpeningPhase" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="9b3d9929-e71d-4177-b1c4-1c40601bde20">
-      <importedVariable Id="ffb67cb2-6b3b-4042-b94e-2dcbdea315fa" name="F_Gates" range="AllOK, EngineStuck, HingeBroken, EngineControlsBroken" />
+      <importedVariable Id="ffb67cb2-6b3b-4042-b94e-2dcbdea315fa" name="F_Gates" range="AllOK, EngineStuck, EngineControlsBroken" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

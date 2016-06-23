@@ -16,10 +16,10 @@
         <transition Id="59df04ed-0a83-4da9-a278-42a6a3baea42" guard="Crossing != Protected" label="Crossing != Protected">
           <stateMoniker name="/8a6d7ab6-82c9-4626-9d66-4f5789667316/Idle" />
         </transition>
-        <transition Id="06a36df2-4995-4053-ba10-ca2f1cf7c364" guard="Crossing == Protected &amp;&amp; Timer_Counter == 60" label="Crossing == Protected &amp;&amp; Timer_Counter == 60">
+        <transition Id="06a36df2-4995-4053-ba10-ca2f1cf7c364" guard="Crossing == Protected &amp;&amp; Timer_Counter == 16" label="Crossing == Protected &amp;&amp; Timer_Counter == 16">
           <stateMoniker name="/8a6d7ab6-82c9-4626-9d66-4f5789667316/Finished" />
         </transition>
-        <transition Id="a4c713f2-f908-4c05-aa23-509b9ebc0ee9" guard="Crossing == Protected &amp;&amp; Timer_Counter &lt; 60" action="Timer_Counter := Timer_Counter + 1" label="Crossing == Protected &amp;&amp; Timer_Counter &lt; 60 // Timer_Counter := Timer_Counter + 1" precondition="Timer_Counter &lt; 60">
+        <transition Id="a4c713f2-f908-4c05-aa23-509b9ebc0ee9" guard="Crossing == Protected &amp;&amp; Timer_Counter &lt; 16" action="Timer_Counter := Timer_Counter + 1" label="Crossing == Protected &amp;&amp; Timer_Counter &lt; 16 // Timer_Counter := Timer_Counter + 1" precondition="Timer_Counter &lt; 16">
           <stateMoniker name="/8a6d7ab6-82c9-4626-9d66-4f5789667316/Counting" />
         </transition>
       </successors>
@@ -41,7 +41,7 @@
   </states>
   <variables>
     <programGraphHasVariables Id="c2ff8c29-40e1-4033-9279-ef8f18fe8356">
-      <variable Id="d9b8ca17-303f-45a8-8687-6cb7f5e7e61e" name="Timer_Counter" range="0..60" />
+      <variable Id="d9b8ca17-303f-45a8-8687-6cb7f5e7e61e" name="Timer_Counter" range="0..16" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>

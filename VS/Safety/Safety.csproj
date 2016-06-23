@@ -32,6 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Check.smv">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Check.tt</DependentUpon>
+    </None>
     <None Include="Crossing.pg" />
     <None Include="Crossing.pg.diagram">
       <DependentUpon>Crossing.pg</DependentUpon>
@@ -87,11 +92,6 @@
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
       <DependentUpon>Gates.pg</DependentUpon>
-    </None>
-    <None Include="Check.smv">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Check.tt</DependentUpon>
     </None>
     <None Include="Odometer.pg" />
     <None Include="Odometer.pg.diagram">

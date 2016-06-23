@@ -89,7 +89,7 @@
       <transitionMoniker Id="bde7ccb2-c1b5-4c35-b96d-39503bf0f72d" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
-        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="-1.094264881447975, 0.625, 7.6504944111545639, 0.181884765625" shapeFieldName="Label" />
+        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="-1.6563973221719626, 0.625, 7.0883619704305767, 0.181884765625" shapeFieldName="Label" />
       </moveableDecoratorHostShapes>
       <nodes>
         <stateShapeMoniker Id="0857dd39-5bde-48b0-a574-7f81d92b14a0" />
@@ -100,7 +100,7 @@
       <transitionMoniker Id="9a271b61-e017-48f1-9737-5c295cf1f8a0" />
       <relativeChildShapes />
       <moveableDecoratorHostShapes>
-        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="-1.6889498376846319, 0.1875, 6.9798206853866569, 0.181884765625" shapeFieldName="Label" />
+        <moveableDecoratorHostShape manuallyPlaced="true" absoluteBounds="-2.5484247565269476, 0.1875, 6.1203457665443413, 0.181884765625" shapeFieldName="Label" />
       </moveableDecoratorHostShapes>
       <nodes>
         <stateShapeMoniker Id="0857dd39-5bde-48b0-a574-7f81d92b14a0" />

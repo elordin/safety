@@ -95,7 +95,7 @@
     </state>
     <initialNode Id="cc1f7751-9c4c-42d6-ac85-fda13307dc42" name="InitialNode1">
       <successors>
-        <transition Id="767a21ce-6055-43fb-bfd7-5389aa978963" precondition="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
+        <transition Id="767a21ce-6055-43fb-bfd7-5389aa978963" guard="d == 128" label="d == 128" precondition="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
           <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BeforeEP" />
         </transition>
       </successors>
@@ -118,10 +118,10 @@
       <variable Id="81c20b75-14f2-4937-b479-421c3b639ea5" name="z" range="32" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="da629314-1c49-44a6-b4b8-1d0b5954ca5f">
-      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-32..128" />
+      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-16..128" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="0ae58796-5a2c-40f9-aa20-fb482077b138">
-      <variable Id="eac8ab0e-b1f5-4bdc-9d66-f3959515dc87" name="distToSP" range="16" />
+      <variable Id="eac8ab0e-b1f5-4bdc-9d66-f3959515dc87" name="distToSP" range="8" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>
