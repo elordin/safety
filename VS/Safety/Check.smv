@@ -34,7 +34,7 @@ MODULE _VARS
 		V_c : {2};
 		V_t : {4};
 		V_a : {8};
-		V_z : {32};
+		V_z : {8};
 		V_distToSP : {8};
 		V_SP_CauseOpening : {L_Yes, L_No};
 		V_SpeedMeasurement : {L_Measuring};
@@ -196,35 +196,35 @@ MODULE _P_Odometer(v)
 		 ( v.V_Odometer = L_Measuring & next(v.V_Odometer) = L_Measuring & (!(v.V_F_Odometer = L_CorrectMeasurements) & (!(v.V_F_Odometer = L_FaultyMeasurements) & !((v.V_F_Odometer = L_FaultyMeasurements) & (v.V_d > -1)))) & (next(v.V_measuredDistance) = v.V_measuredDistance));
 MODULE _P_RealTrain(v)
 	INIT
-		(v.V_RealTrain = L_BeforeEP) & ((v.V_d = 128))
+		(v.V_RealTrain = L_BeforeEP) & ((v.V_d > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))))
 	TRANS
-		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_AfterGP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_AfterGP & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_OnGP & (v.V_d <= 0) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d > 0) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d > 0) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_OnSP & ((v.V_d * -1) >= v.V_distToSP) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_AfterSP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_AfterSP & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_AfterSP & next(v.V_RealTrain) = L_AfterSP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & ((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & ((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_OnBEP & (v.V_d <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_BeforeEP & next(v.V_RealTrain) = L_OnEP & (v.V_d <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_BeforeEP & next(v.V_RealTrain) = L_BeforeEP & ((v.V_d > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_OnEP & next(v.V_RealTrain) = L_EPtoAP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_EPtoAP & ((v.V_d > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_BeforeEP & next(v.V_RealTrain) = L_BeforeEP & ((v.V_d > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & ((v.V_d < (-16 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_OnEP & next(v.V_RealTrain) = L_EPtoAP & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_EPtoAP & ((v.V_d > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
 		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_OnAP & (v.V_d <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_OnAP & next(v.V_RealTrain) = L_APtoBEP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
-		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_OnGP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & (!(v.V_d <= 0) & !((v.V_d > 0) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (!((v.V_d * -1) >= v.V_distToSP) & !(((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_OnSP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_OnAP & next(v.V_RealTrain) = L_APtoBEP & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_BEPtoGP & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = (v.V_d - (v.V_Speed * v.V_tick))))  |
+		 ( v.V_RealTrain = L_OnGP & next(v.V_RealTrain) = L_OnGP & !((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_BEPtoGP & next(v.V_RealTrain) = L_BEPtoGP & (!(v.V_d <= 0) & !((v.V_d > 0) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_AfterGP & next(v.V_RealTrain) = L_AfterGP & (!((v.V_d * -1) >= v.V_distToSP) & !(((v.V_d * -1) < v.V_distToSP) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_OnSP & next(v.V_RealTrain) = L_OnSP & !((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
 		 ( v.V_RealTrain = L_AfterSP & next(v.V_RealTrain) = L_AfterSP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & (!((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_BeforeEP & next(v.V_RealTrain) = L_BeforeEP & (!(v.V_d <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !((v.V_d > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_OnEP & next(v.V_RealTrain) = L_OnEP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_EPtoAP & (!((v.V_d > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & ((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_OnAP & next(v.V_RealTrain) = L_OnAP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
-		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_OnBEP & !((v.V_d < (-127 + (v.V_Speed * v.V_tick))) & (v.V_d > (511 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d));
+		 ( v.V_RealTrain = L_APtoBEP & next(v.V_RealTrain) = L_APtoBEP & (!((v.V_d > (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a))) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= (v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_BeforeEP & next(v.V_RealTrain) = L_BeforeEP & (!(v.V_d <= (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & !((v.V_d > (((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)) + (v.V_Speed * (v.V_t + v.V_c)))) & ((v.V_d < (-16 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_OnEP & next(v.V_RealTrain) = L_OnEP & !((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_EPtoAP & next(v.V_RealTrain) = L_EPtoAP & (!((v.V_d > ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed))) & ((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick))))) & !(v.V_d <= ((v.V_z + (((v.V_Speed * v.V_Speed) / 2) / v.V_a)) + ((2 * v.V_c) * v.V_Speed)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_OnAP & next(v.V_RealTrain) = L_OnAP & !((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d))  |
+		 ( v.V_RealTrain = L_OnBEP & next(v.V_RealTrain) = L_OnBEP & !((v.V_d < (-15 + (v.V_Speed * v.V_tick))) & (v.V_d > (127 - (v.V_Speed * v.V_tick)))) & (next(v.V_d) = v.V_d));
 MODULE _P_SensorGate(v)
 	INIT
 		(v.V_SensorGate = L_Open) & (TRUE)
@@ -345,25 +345,27 @@ DEFINE
     TrainRadioModule                := v.V_TrainRadioModule;
 	VirtualTrain                    := v.V_VirtualTrain;
 
+LTLSPEC F RealTrain = L_OnEP;
+
 /-- Train never crosses an insecure crossing --/
-CTLSPEC AG ( RealTrain = L_OnGP -> Crossing = L_Protected );
+-- CTLSPEC AG ( RealTrain = L_OnGP -> Crossing = L_Protected );
 
 /-- Train eventually leaves the GP --/
-CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
+-- CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
 
 /-- Gates eventually open / Crossing becomes unprotected --/
-CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
-CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
-CTLSPEC ! EG Gates = L_Closed;
+-- CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
+-- CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
+-- CTLSPEC ! EG Gates = L_Closed;
 
 /-- When breaking, the train never passes the crossing --/
-CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
+-- CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
 
 /-- After sending the first request, the train must break or pass a safe crossing --/
-CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
+-- CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
 
 /-- Crossing is only protected when gates are closed --/
-LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
+-- LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
 
 /-- Sensor is only active when train is on SP --/
-LTLSPEC G RealTrain = L_OnSP <-> SensorSP = L_Active;
+-- LTLSPEC G RealTrain = L_OnSP <-> SensorSP = L_Active;
