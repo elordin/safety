@@ -98,7 +98,7 @@
     </state>
     <initialNode Id="6950d39c-e394-4be8-9e7f-eb5e7abf2d69" name="InitialNode11">
       <successors>
-        <transition Id="02d10751-47c6-4742-b802-e39758bfc555" precondition="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
+        <transition Id="02d10751-47c6-4742-b802-e39758bfc555" precondition=" ">
           <stateMoniker name="/8782685e-3dea-4616-b50a-67b08873bafd/BeforeEP" />
         </transition>
       </successors>

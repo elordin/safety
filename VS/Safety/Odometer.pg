@@ -16,7 +16,7 @@
     </state>
     <initialNode Id="1d2ee4ad-9545-43d4-bd26-684eeee17a60" name="InitialNode1">
       <successors>
-        <transition Id="e64673af-8cab-4c8f-b73e-0c2fca301d8e">
+        <transition Id="e64673af-8cab-4c8f-b73e-0c2fca301d8e" precondition="measuredDistance == d">
           <stateMoniker name="/aa6a9835-3ebe-4d8b-8165-278225fe3f5c/Measuring" />
         </transition>
       </successors>

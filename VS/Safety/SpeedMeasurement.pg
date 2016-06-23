@@ -16,7 +16,7 @@
     </state>
     <initialNode Id="e32198f1-8c80-49b0-af8e-409360e1262c" name="InitialNode1">
       <successors>
-        <transition Id="b9b5152e-e9da-4b5d-a2de-d43ed28abf57">
+        <transition Id="b9b5152e-e9da-4b5d-a2de-d43ed28abf57" precondition="measuredSpeed == Speed">
           <stateMoniker name="/1355e58e-00d1-4dd9-bba4-5ba1d2a0a0d9/Measuring" />
         </transition>
       </successors>

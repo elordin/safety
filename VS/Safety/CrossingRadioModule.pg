@@ -48,7 +48,7 @@
     </state>
     <initialNode Id="ba054498-eed1-4415-8d20-42bd584915af" name="InitialNode1">
       <successors>
-        <transition Id="a9c7c217-7499-42f4-8c21-d4ad2720ac4c">
+        <transition Id="a9c7c217-7499-42f4-8c21-d4ad2720ac4c" precondition="CrossingMessage == Unknown">
           <stateMoniker name="/e00c9c34-eb89-499a-b8c8-435a534245b4/Idle" />
         </transition>
       </successors>

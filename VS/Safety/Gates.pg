@@ -43,7 +43,7 @@
     </state>
     <initialNode Id="1473574c-0bfb-46c6-ba2d-8d0b4f4b0e6a" name="InitialNode2">
       <successors>
-        <transition Id="6337802a-38f7-4d0b-8e3e-ad25cfe11983">
+        <transition Id="6337802a-38f7-4d0b-8e3e-ad25cfe11983" precondition="Angle == 0">
           <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
         </transition>
       </successors>

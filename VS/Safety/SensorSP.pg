@@ -32,7 +32,7 @@
     </state>
     <initialNode Id="d8e8d16a-f5b8-4571-820f-fd3e1c8a54de" name="InitialNode1">
       <successors>
-        <transition Id="a7475bec-1942-4451-a8a8-80241ec0794d">
+        <transition Id="a7475bec-1942-4451-a8a8-80241ec0794d" precondition="SP_CauseOpening == No">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
         </transition>
       </successors>
