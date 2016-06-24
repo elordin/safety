@@ -4,24 +4,25 @@
 
 <#=  TransformToNuSMV() #>
 
+
 DEFINE
     Crossing                        := v.V_Crossing;
     CrossingRadioModule             := v.V_CrossingRadioModule;
     CrossingTimer                   := v.V_CrossingTimer;
-	DriveTrain                      := v.V_DriveTrain;
+    DriveTrain                      := v.V_DriveTrain;
     Gates                           := v.V_Gates;
-	Odometer                        := v.V_Odometer;
+    Odometer                        := v.V_Odometer;
     RealTrain                       := v.V_RealTrain;
     SensorGate                      := v.V_SensorGate;
     SensorSP                        := v.V_SensorSP;
     TrainRadioModule                := v.V_TrainRadioModule;
-	VirtualTrain                    := v.V_VirtualTrain;
+    VirtualTrain                    := v.V_VirtualTrain;
 
-	HAZARD  := RealTrain = L_OnGP & Crossing != L_Protected;
+    HAZARD  := RealTrain = L_OnGP & Crossing != L_Protected;
 
-	EP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed - v.V_measuredSpeed * ( v.V_t + v.V_c );
-	AP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed;
-	BEP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a;
+    EP      := -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed - v.V_measuredSpeed * ( v.V_t + v.V_c );
+    AP      := -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed;
+    BEP     := -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a;
 
 -- Initial state check
 CTLSPEC RealTrain = L_BeforeGP;
@@ -45,6 +46,75 @@ CTLSPEC v.V_Speed = 4;
 CTLSPEC v.V_Timer_Counter = 0;
 CTLSPEC v.V_Crossing_Message = L_Unknown;
 
+-- Stepwise position progression.
+CTLSPEC AX v.V_d = -44;
+CTLSPEC AX AX v.V_d = -40;
+CTLSPEC AX AX AX v.V_d = -36;
+CTLSPEC AX AX AX AX v.V_d = -32;
+CTLSPEC AX AX AX AX AX v.V_d = -28;
+CTLSPEC AX AX AX AX AX AX v.V_d = -24;
+CTLSPEC AX AX AX AX AX AX AX v.V_d = -20;
+CTLSPEC AX AX AX AX AX AX AX AX v.V_d = -16;
+CTLSPEC AX AX AX AX AX AX AX AX AX v.V_d = -12;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX v.V_d = -8;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX AX v.V_d = -4;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX AX AX v.V_d = 0;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX AX AX AX v.V_d = 4;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX AX AX AX AX v.V_d = 8;
+CTLSPEC AX AX AX AX AX AX AX AX AX AX AX AX AX AX AX v.V_d = 12;
 
+-- Real train travels across the crossing
+LTLSPEC F RealTrain = L_OnGP;
+LTLSPEC F RealTrain = L_AfterGP;
+LTLSPEC F RealTrain = L_OnSP;
+LTLSPEC F RealTrain = L_AfterSP;
+
+-- Virtual train travels across the crossing
+LTLSPEC F VirtualTrain = L_BeforeEP;
+LTLSPEC F VirtualTrain = L_OnEP;
+LTLSPEC F VirtualTrain = L_EPtoAP;
+LTLSPEC F VirtualTrain = L_OnAP;
+LTLSPEC F VirtualTrain = L_APtoBEP;
+LTLSPEC F VirtualTrain = L_OnBEP;
+LTLSPEC F VirtualTrain = L_BEPtoGP;
+LTLSPEC F VirtualTrain = L_OnGP;
+LTLSPEC F VirtualTrain = L_AfterGP;
+LTLSPEC F VirtualTrain = L_OnSP;
+LTLSPEC F VirtualTrain = L_AfterSP;
+
+-- Virtual train update delay is max. 1 step
+-- LTLSPEC G (RealTrain = L_OnGP -> (VirtualTrain = L_OnGP | X VirtualTrain = L_OnGP));
+-- LTLSPEC G (RealTrain = L_OnSP -> (VirtualTrain = L_OnSP | X VirtualTrain = L_OnSP));
+
+-- Sending of messages
+LTLSPEC G (VirtualTrain = L_OnEP -> X TrainRadioModule = L_EP_Request);
+LTLSPEC G (VirtualTrain = L_OnAP -> X TrainRadioModule = L_AP_Request);
+LTLSPEC G (CrossingRadioModule = L_EP_Requested -> X Crossing = L_ProtectionPhase);
+LTLSPEC G (CrossingRadioModule = L_AP_Requested -> X (v.V_Crossing_Message = L_Protected | v.V_Crossing_Message = L_Insecure));
+-- LTLSPEC G (CrossingRadioModule = L_AP_Requested -> X (v.V_Crossing_Message = L_Protected));
+
+-- Sensor functionality
+-- LTLSPEC G SensorGate = L_Open <-> Gates = L_Open <-> v.V_Angle = 0
+-- LTLSPEC G SensorGate = L_Closed <-> Gates = L_Closed <-> v.V_Angle = 2
+LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
+LTLSPEC G SensorSP = L_Active <-> RealTrain = L_OnSP;
+
+-- Train eventually leaves the GP
+CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
+
+-- Gates eventually open / Crossing becomes unprotected
+CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
+CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
+CTLSPEC ! EG Gates = L_Closed;
+
+-- When breaking, the train never passes the crossing
+CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
+
+-- After sending the first request, the train must break or pass a safe crossing
+CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
+
+-- Hazard free.
+-- LTLSPEC G (RealTrain = L_OnGP -> Crossing = L_Protected);
+-- LTLSPEC ! F HAZARD;
 
 LTLSPEC ! F HAZARD;
