@@ -17,27 +17,34 @@ DEFINE
     TrainRadioModule                := v.V_TrainRadioModule;
 	VirtualTrain                    := v.V_VirtualTrain;
 
-LTLSPEC F RealTrain = L_OnEP;
+	HAZARD  := RealTrain = L_OnGP & Crossing != L_Protected;
 
-/-- Train never crosses an insecure crossing --/
--- CTLSPEC AG ( RealTrain = L_OnGP -> Crossing = L_Protected );
+	EP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed - v.V_measuredSpeed * ( v.V_t + v.V_c );
+	AP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a - 2 * v.V_c * v.V_measuredSpeed;
+	BEP		:= -1 * v.V_z - v.V_measuredSpeed * v.V_measuredSpeed / 2 / v.V_a;
 
-/-- Train eventually leaves the GP --/
--- CTLSPEC AG ( RealTrain = L_OnGP -> AF RealTrain = L_AfterSP );
+-- Initial state check
+CTLSPEC RealTrain = L_BeforeGP;
+CTLSPEC VirtualTrain = L_BeforeEP;
+CTLSPEC Crossing = L_Open;
+CTLSPEC CrossingRadioModule = L_Idle;
+CTLSPEC CrossingTimer = L_Idle;
+CTLSPEC DriveTrain = L_Running;
+CTLSPEC Gates = L_Open;
+CTLSPEC Odometer = L_Measuring;
+CTLSPEC SensorGate = L_Open;
+CTLSPEC SensorSP = L_Inactive;
+CTLSPEC TrainRadioModule = L_Idle;
+CTLSPEC v.V_d = -48;
+CTLSPEC v.V_BreakCommand = L_DoNotBreak;
+CTLSPEC v.V_measuredSpeed = 4;
+CTLSPEC v.V_SP_CauseOpening = L_No;
+CTLSPEC v.V_measuredDistance = -48;
+CTLSPEC v.V_Angle = 0;
+CTLSPEC v.V_Speed = 4;
+CTLSPEC v.V_Timer_Counter = 0;
+CTLSPEC v.V_Crossing_Message = L_Unknown;
 
-/-- Gates eventually open / Crossing becomes unprotected --/
--- CTLSPEC AG ( Crossing = L_Protected -> AF Crossing = L_Open );
--- CTLSPEC AG ( Gates = L_Closed -> AF Gates = L_Open );
--- CTLSPEC ! EG Gates = L_Closed;
 
-/-- When breaking, the train never passes the crossing --/
--- CTLSPEC AG ( v.V_BreakCommand = L_Break -> ! EF RealTrain = L_OnGP );
 
-/-- After sending the first request, the train must break or pass a safe crossing --/
--- CTLSPEC AG CrossingRadioModule = L_EP_Request -> A [ RealTrain != L_OnGP U (Crossing = L_Protected & AF RealTrain = L_AfterSP) | v.V_BreakCommand = L_Break ]
-
-/-- Crossing is only protected when gates are closed --/
--- LTLSPEC G Crossing = L_Protected <-> Gates = L_Closed;
-
-/-- Sensor is only active when train is on SP --/
--- LTLSPEC G RealTrain = L_OnSP <-> SensorSP = L_Active;
+LTLSPEC ! F HAZARD;

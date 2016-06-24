@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraphDslDiagram dslVersion="1.0.0.0" Id="849e8f15-05a7-48c4-b274-e4b28e88ee31" absoluteBounds="0, 0, 11, 8.5" name="F_Gates">
+  <programGraphMoniker Id="8e6831e9-3206-4c4b-914c-559131fa1487" />
+  <nestedChildShapes>
+    <stateShape Id="7d8c4207-0bf3-4c12-9c6e-253868d010ba" absoluteBounds="3.125, 2.375, 1, 0.5">
+      <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/AllOK" />
+    </stateShape>
+    <stateShape Id="76a5dd7f-89ad-48d1-9ce6-756c0166c581" absoluteBounds="3.125, 4.25, 1, 0.5">
+      <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineStuck" />
+    </stateShape>
+    <stateShape Id="5830f9a7-38c0-441b-9843-e4f6a36c9a1c" absoluteBounds="4.375, 4.25, 1.875, 0.5">
+      <stateMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/EngineControlsBroken" />
+    </stateShape>
+    <initialStateShape Id="7653a427-f57f-4eca-b761-d4238b58a885" absoluteBounds="3.625, 1.625, 0.125, 0.125">
+      <initialNodeMoniker name="/8e6831e9-3206-4c4b-914c-559131fa1487/InitialNode1" />
+    </initialStateShape>
+    <transitionConnector Id="5af1b75d-fcea-4cd2-bc6a-11e445047b1c" edgePoints="[(3.625 : 2.875); (3.625 : 4.25)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="5fc7ae3a-a5f9-4f72-9a56-37da241bc8c2" />
+      <relativeChildShapes />
+      <nodes>
+        <stateShapeMoniker Id="7d8c4207-0bf3-4c12-9c6e-253868d010ba" />
+        <stateShapeMoniker Id="76a5dd7f-89ad-48d1-9ce6-756c0166c581" />
+      </nodes>
+    </transitionConnector>
+    <transitionConnector Id="67514b3f-bb0b-4a9b-a0a5-03f9259986ce" edgePoints="[(4.125 : 2.625); (5.3125 : 2.625); (5.3125 : 4.25)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="db2c4599-21cb-4b59-8495-9be1ef9d0820" />
+      <relativeChildShapes />
+      <nodes>
+        <stateShapeMoniker Id="7d8c4207-0bf3-4c12-9c6e-253868d010ba" />
+        <stateShapeMoniker Id="5830f9a7-38c0-441b-9843-e4f6a36c9a1c" />
+      </nodes>
+    </transitionConnector>
+    <transitionConnector Id="e3bcde27-c392-4f99-a11b-74e90b82cfed" edgePoints="[(3.9375 : 4.25); (3.9375 : 2.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="d7ec6852-8eed-4c2f-aad9-18a318ed6b63" />
+      <relativeChildShapes />
+      <nodes>
+        <stateShapeMoniker Id="76a5dd7f-89ad-48d1-9ce6-756c0166c581" />
+        <stateShapeMoniker Id="7d8c4207-0bf3-4c12-9c6e-253868d010ba" />
+      </nodes>
+    </transitionConnector>
+    <transitionConnector Id="6fcfcd92-d1db-45e5-82b6-3590f4d6e711" edgePoints="[(3.47153846153846 : 4.75); (3.47153846153846 : 5); (3.78576923076923 : 5); (3.78576923076923 : 4.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="04d8b2fe-f2bb-42e3-b3d1-af76b6af6d9e" />
+      <relativeChildShapes />
+      <nodes>
+        <stateShapeMoniker Id="76a5dd7f-89ad-48d1-9ce6-756c0166c581" />
+        <stateShapeMoniker Id="76a5dd7f-89ad-48d1-9ce6-756c0166c581" />
+      </nodes>
+    </transitionConnector>
+    <transitionConnector Id="6f73de1a-0538-4d8c-a849-d612f58e3cb1" edgePoints="[(5.01769230769231 : 4.75); (5.01769230769231 : 5); (5.62134615384615 : 5); (5.62134615384615 : 4.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="4a84b446-148a-483d-ba41-1b233ddedb0c" />
+      <relativeChildShapes />
+      <nodes>
+        <stateShapeMoniker Id="5830f9a7-38c0-441b-9843-e4f6a36c9a1c" />
+        <stateShapeMoniker Id="5830f9a7-38c0-441b-9843-e4f6a36c9a1c" />
+      </nodes>
+    </transitionConnector>
+    <transitionConnector Id="c426a17b-f058-4a65-bc2c-d184a3735d45" edgePoints="[(3.6875 : 1.75); (3.6875 : 2.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <transitionMoniker Id="1a29697f-8e9f-448b-9da7-9404ecd9fb0d" />
+      <relativeChildShapes />
+      <nodes>
+        <initialStateShapeMoniker Id="7653a427-f57f-4eca-b761-d4238b58a885" />
+        <stateShapeMoniker Id="7d8c4207-0bf3-4c12-9c6e-253868d010ba" />
+      </nodes>
+    </transitionConnector>
+  </nestedChildShapes>
+</programGraphDslDiagram>

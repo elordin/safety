@@ -3,130 +3,73 @@
   <states>
     <state Id="1c441c95-f95b-4bcf-b3fa-383a42d93bec" name="OnGP">
       <successors>
-        <transition Id="82f12c0c-fdee-428b-86e9-06ce6b549ec9" action="d := d - Speed * tick" label="// d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
+        <transition Id="82f12c0c-fdee-428b-86e9-06ce6b549ec9" action="d := d + Speed * tick" label="// d := d + Speed * tick" precondition="d &lt; 16 - Speed * tick">
           <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/AfterGP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="971fe214-89da-415b-aace-60f3565f4d24" name="BEPtoGP">
-      <successors>
-        <transition Id="5e178897-9f6f-4bf2-bcd0-0d4b8a79fdcf" guard="d &lt;= 0" label="d &lt;= 0">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnGP" />
-        </transition>
-        <transition Id="d1a3fa13-b82a-4398-978a-ba4be8273a93" guard="d &gt; 0" action="d := d - Speed * tick" label="d &gt; 0 // d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BEPtoGP" />
         </transition>
       </successors>
     </state>
     <state Id="e507bb4d-71e7-4c29-a08d-33201c4f01c8" name="AfterGP">
       <successors>
-        <transition Id="809c7473-ab9b-4d2a-9e42-a5cfd68a733b" guard="d * -1 &gt;= distToSP" label="d * -1 &gt;= distToSP">
+        <transition Id="809c7473-ab9b-4d2a-9e42-a5cfd68a733b" guard="d &gt;= distToSP - Speed * tick" action="d := d + Speed * tick" label="d &gt;= distToSP - Speed * tick // d := d + Speed * tick" precondition="d &lt; 16 - Speed * tick">
           <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnSP" />
         </transition>
-        <transition Id="c2d3083c-cc74-4248-aaf7-669981fd250c" guard="d * -1 &lt; distToSP" action="d := d - Speed * tick" label="d * -1 &lt; distToSP // d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
+        <transition Id="c2d3083c-cc74-4248-aaf7-669981fd250c" guard="d &lt; distToSP" action="d := d + Speed * tick" label="d &lt; distToSP // d := d + Speed * tick" precondition="d &lt; 16 - Speed * tick">
           <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/AfterGP" />
         </transition>
       </successors>
     </state>
     <state Id="f0289399-ddd4-4fd0-97f4-ace84ffc3e01" name="OnSP">
       <successors>
-        <transition Id="a3e99dee-4389-4010-acf4-6ab6eada41f8" action="d := d - Speed * tick" label="// d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
+        <transition Id="a3e99dee-4389-4010-acf4-6ab6eada41f8">
           <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/AfterSP" />
         </transition>
       </successors>
     </state>
-    <state Id="ca160265-47ef-4dbc-9776-dd95aed524a3" name="AfterSP">
-      <successors>
-        <transition Id="13646f4e-ad77-4b9b-82cf-a4310dac2df5" action="d := d - Speed * tick" label="// d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/AfterSP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="f39b0bad-c200-4595-a71d-a8f62c7c5fd2" name="APtoBEP">
-      <successors>
-        <transition Id="8bb3621d-39d9-4f4d-b739-0b1aadc215df" guard="d &gt; z + Speed * Speed / 2 / a" action="d := d - Speed * tick" label="d &gt; z + Speed * Speed / 2 / a // d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/APtoBEP" />
-        </transition>
-        <transition Id="6a849e66-b8ac-4c32-922f-d4f3750e3ba2" guard="d &lt;= z + Speed * Speed / 2 / a" label="d &lt;= z + Speed * Speed / 2 / a">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnBEP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="d9804646-c3a9-4919-bf36-d78da1ef1582" name="BeforeEP">
-      <successors>
-        <transition Id="7dbdcf6d-5c29-4a4b-a7d9-87e66a6d002c" guard="d &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" label="d &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnEP" />
-        </transition>
-        <transition Id="b4988118-fb5a-4a4c-a4d6-4edc5ad66d51" guard="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" action="d := d - Speed * tick" label="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c ) // d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BeforeEP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="5ff31ac0-7a3f-47ab-8ef1-e2a4acdad1f6" name="OnEP">
-      <successors>
-        <transition Id="25b03e08-bf62-40e5-b486-9909fca11ba8" action="d := d - Speed  * tick" label="// d := d - Speed  * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/EPtoAP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="b8d3119e-56d0-4518-8375-a524b445a8bb" name="EPtoAP">
-      <successors>
-        <transition Id="fb9bccf4-d5f7-4b33-beab-49442f577d67" guard="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed" action="d := d - Speed * tick" label="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed // d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/EPtoAP" />
-        </transition>
-        <transition Id="d3f191c0-d841-4153-8be7-9854e9607037" guard="d &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed " label="d &lt;= z + Speed * Speed / 2 / a + 2 * c * Speed ">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnAP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="4df771e3-836c-4341-bfac-91aad69b594e" name="OnAP">
-      <successors>
-        <transition Id="4e2c5dfc-2440-44dd-9c34-10452a81d541" action="d := d - Speed * tick" label="// d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/APtoBEP" />
-        </transition>
-      </successors>
-    </state>
-    <state Id="46c3b167-ffd3-47d2-8dff-5d9479c1cab5" name="OnBEP">
-      <successors>
-        <transition Id="6a186950-f621-47b3-a8d4-aaebbb439bbf" action="d := d - Speed * tick" label="// d := d - Speed * tick" precondition="(d &gt; -15 + Speed * tick) &amp;&amp; (d &lt; 127 - Speed * tick)">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BEPtoGP" />
-        </transition>
-      </successors>
-    </state>
+    <state Id="ca160265-47ef-4dbc-9776-dd95aed524a3" name="AfterSP" />
     <initialNode Id="cc1f7751-9c4c-42d6-ac85-fda13307dc42" name="InitialNode1">
       <successors>
-        <transition Id="767a21ce-6055-43fb-bfd7-5389aa978963" guard="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" label="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )" precondition="d &gt; z + Speed * Speed / 2 / a + 2 * c * Speed + Speed * ( t + c )">
-          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BeforeEP" />
+        <transition Id="5a093e33-182e-4a6c-a9c8-53e97e787353" guard="d == -48" label="d == -48">
+          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BeforeGP" />
         </transition>
       </successors>
     </initialNode>
+    <state Id="61fa5ca4-f154-4ed5-b119-21d0fbd123f6" name="BeforeGP">
+      <successors>
+        <transition Id="83e03531-14f7-4d98-8ac7-e3b9d2f2825f" guard="d &gt;= -1 * Speed * tick" action="d := d + Speed * tick" label="d &gt;= -1 * Speed * tick // d := d + Speed * tick" precondition="d &lt; 16 - Speed * tick">
+          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/OnGP" />
+        </transition>
+        <transition Id="e2e6c630-103d-42bf-aa83-f7693a229f8d" guard="d &lt; 0" action="d := d + Speed * tick" label="d &lt; 0 // d := d + Speed * tick" precondition="d &lt; 16 - Speed * tick">
+          <stateMoniker name="/06ae4712-3533-490a-a1d3-9dd8344406f2/BeforeGP" />
+        </transition>
+      </successors>
+    </state>
   </states>
   <variables>
     <programGraphHasVariables Id="6064503c-0b28-4838-ae38-d298f776ffd6">
       <variable Id="3a816d3a-0cbd-4808-a422-be106c80698f" name="tick" range="1" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="b5590ea2-488c-488a-9479-9333924bb9f7">
-      <variable Id="061278a9-918c-4780-873c-709b927f5365" name="c" range="2" />
+      <variable Id="061278a9-918c-4780-873c-709b927f5365" name="c" range="1" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="2d7aca82-aace-4883-815d-08706c70fb0b">
-      <variable Id="3d7875d5-76b4-40b7-b1cd-8e3f1bd3631f" name="t" range="4" />
+      <variable Id="3d7875d5-76b4-40b7-b1cd-8e3f1bd3631f" name="t" range="1" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="2fa9a5d8-0cd1-4779-abf3-7f48cefd6d76">
-      <variable Id="19210e74-6822-4774-b0f0-21b7c118e96a" name="a" range="8" />
+      <variable Id="19210e74-6822-4774-b0f0-21b7c118e96a" name="a" range="1" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="b4bb7aac-846f-4bf2-9947-2805511caaf9">
-      <variable Id="81c20b75-14f2-4937-b479-421c3b639ea5" name="z" range="8" />
+      <variable Id="81c20b75-14f2-4937-b479-421c3b639ea5" name="z" range="5" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="da629314-1c49-44a6-b4b8-1d0b5954ca5f">
-      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-16..128" />
+      <variable Id="8b34a4e3-82d4-432d-82c2-14e77a5296c8" name="d" range="-48..16" />
     </programGraphHasVariables>
     <programGraphHasVariables Id="0ae58796-5a2c-40f9-aa20-fb482077b138">
-      <variable Id="eac8ab0e-b1f5-4bdc-9d66-f3959515dc87" name="distToSP" range="8" />
+      <variable Id="eac8ab0e-b1f5-4bdc-9d66-f3959515dc87" name="distToSP" range="10" />
     </programGraphHasVariables>
   </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="1310a164-c772-4814-b2b1-06273369f7b5">
-      <importedVariable Id="a369633b-1352-4f8f-80c3-259c7df6b749" name="DriveTrain.Speed" range="0..8" />
+      <importedVariable Id="a369633b-1352-4f8f-80c3-259c7df6b749" name="DriveTrain.Speed" range="0..4" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f3486a30-fea3-4249-ab11-d9a509e989c9" name="F_SpeedMeasurement" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="a7920efd-93dd-461a-80f3-9e8518e74207" name="CorrectMeasurements">
+      <successors>
+        <transition Id="d71594a1-5300-4a70-9eba-adbcf4397feb">
+          <stateMoniker name="/f3486a30-fea3-4249-ab11-d9a509e989c9/FaultyMeasurements" />
+        </transition>
+        <transition Id="6784337f-3a20-44d6-af67-3b34534d5732">
+          <stateMoniker name="/f3486a30-fea3-4249-ab11-d9a509e989c9/CorrectMeasurements" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="3af5c7e3-c013-4da2-9f42-a984e0adb296" name="FaultyMeasurements">
+      <successors>
+        <transition Id="4744aa3d-8eda-4ff2-b1df-3fe750fb3f91">
+          <stateMoniker name="/f3486a30-fea3-4249-ab11-d9a509e989c9/CorrectMeasurements" />
+        </transition>
+        <transition Id="148cf073-a715-4509-95d1-f0cd3164da6c">
+          <stateMoniker name="/f3486a30-fea3-4249-ab11-d9a509e989c9/FaultyMeasurements" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="e1b028a8-b09f-4387-8f86-2135778848c6" name="InitialNode1">
+      <successors>
+        <transition Id="4b352490-0d48-4993-9fdd-5eff18f0495d">
+          <stateMoniker name="/f3486a30-fea3-4249-ab11-d9a509e989c9/CorrectMeasurements" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+</programGraph>

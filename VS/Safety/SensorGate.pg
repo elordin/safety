@@ -3,9 +3,6 @@
   <states>
     <state Id="912ab699-8bbb-4b1e-88e4-852d8ca7fbd5" name="Open">
       <successors>
-        <transition Id="5b7bc4c5-a00e-48f6-8788-463e45e2a615" guard="Gates == Open" label="Gates == Open">
-          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Open" />
-        </transition>
         <transition Id="16452141-85f2-4e54-9fd6-1fce240adf69" guard="Gates != Open" label="Gates != Open">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
         </transition>
@@ -23,18 +20,12 @@
         <transition Id="c244cf12-e7f6-484c-99bc-048ae0944193" guard="Gates != Closed" label="Gates != Closed">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
         </transition>
-        <transition Id="de919aa3-9cf4-40c3-834a-034fbe2776ad" guard="Gates == Closed" label="Gates == Closed">
-          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Closed" />
-        </transition>
       </successors>
     </state>
     <state Id="473d95aa-9eaf-4042-ac5f-e40ccd384f97" name="InBetween">
       <successors>
         <transition Id="e20feaba-f909-4b4e-af2a-32a18a873a9f" guard="Gates == Open" label="Gates == Open">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Open" />
-        </transition>
-        <transition Id="96bbb0d7-3f46-40ef-9a55-54a54cad0ec6" guard="Gates != Open &amp;&amp; Gates != Closed" label="Gates != Open &amp;&amp; Gates != Closed">
-          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
         </transition>
         <transition Id="f66d6f7a-2275-4af1-b1fa-4f8258eeccfc" guard="Gates == Closed" label="Gates == Closed">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Closed" />

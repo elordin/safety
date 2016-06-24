@@ -33,7 +33,7 @@
     </state>
     <initialNode Id="4e8fe2d3-c6fd-4dd3-9558-25fa1e9d3e9f" name="InitialNode1">
       <successors>
-        <transition Id="2eab4f8a-7000-4e06-ba40-c9029b0829c9" precondition="Timer_Counter == 0">
+        <transition Id="2eab4f8a-7000-4e06-ba40-c9029b0829c9" guard="Timer_Counter == 0" label="Timer_Counter == 0">
           <stateMoniker name="/8a6d7ab6-82c9-4626-9d66-4f5789667316/Idle" />
         </transition>
       </successors>

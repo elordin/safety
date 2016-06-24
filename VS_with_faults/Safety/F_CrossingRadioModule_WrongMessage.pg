@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="c6eac5ce-3f06-48a1-ab77-bb6affd507c4" name="F_CrossingRadioModule_WrongMessage" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="6d8873df-394f-412b-adff-24b8d252c8e5" name="CorrectMessage">
+      <successors>
+        <transition Id="87539a7b-f99d-4f89-8623-e00d437d52f2">
+          <stateMoniker name="/c6eac5ce-3f06-48a1-ab77-bb6affd507c4/WrongMessage" />
+        </transition>
+        <transition Id="efd015fb-42fa-4c89-9828-cf5879fe7631">
+          <stateMoniker name="/c6eac5ce-3f06-48a1-ab77-bb6affd507c4/CorrectMessage" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="ac460444-b703-4900-9a15-c08525dca51c" name="WrongMessage">
+      <successors>
+        <transition Id="b69b06e8-0f84-4bb9-93f1-dd9b370318d5">
+          <stateMoniker name="/c6eac5ce-3f06-48a1-ab77-bb6affd507c4/CorrectMessage" />
+        </transition>
+        <transition Id="cf61bfee-157d-49c1-9d44-bff2047383dc">
+          <stateMoniker name="/c6eac5ce-3f06-48a1-ab77-bb6affd507c4/WrongMessage" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="90e4056a-cd98-4e04-89f1-3e0228079ccd" name="InitialNode1">
+      <successors>
+        <transition Id="89e1b0e1-36b6-48a0-ad42-a695b98b812b">
+          <stateMoniker name="/c6eac5ce-3f06-48a1-ab77-bb6affd507c4/CorrectMessage" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+</programGraph>

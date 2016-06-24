@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f4ea3527-1145-4d4e-a4bd-b7e11568dba3" name="Crossing" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="d36670cf-3d9c-433d-9950-48e6e9444722" name="Open">
+      <successors>
+        <transition Id="5e15ddff-1884-4bca-b23d-46dccdb201c0" guard="CrossingRadioModule == EP_Requested" label="CrossingRadioModule == EP_Requested">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/ProtectionPhase" />
+        </transition>
+        <transition Id="ba8dec2d-84ba-49f6-9922-7112e5664dd2" guard="CrossingRadioModule != EP_Requested" label="CrossingRadioModule != EP_Requested">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="566fde31-2616-4170-8f5c-8462ee6efeab" name="ProtectionPhase">
+      <successors>
+        <transition Id="ae9a5ad1-e75d-4d1b-a741-062cc3d82756" guard="SensorGate == Closed" label="SensorGate == Closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Protected" />
+        </transition>
+        <transition Id="aef9405a-289f-4eea-a1b5-009614ab0990" guard="SensorGate != Closed" label="SensorGate != Closed">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/ProtectionPhase" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="72739c98-9ea9-46f0-9b6a-abe7ab05971a" name="InitialNode1">
+      <successors>
+        <transition Id="e7915c15-043f-4e4f-b68c-23ac6aa39dbd">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="bfda6841-f9a7-4c6a-a1fa-87dec4d18817" name="Protected">
+      <successors>
+        <transition Id="eae3d85e-2677-4faf-94e0-1e353a7a6559" guard="SensorSP == Active || CrossingTimer == Finished" label="SensorSP == Active || CrossingTimer == Finished">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/OpeningPhase" />
+        </transition>
+        <transition Id="864c4ffe-a15b-4cd4-a667-15c5acb3fd8b" guard="SensorSP != Active &amp;&amp; CrossingTimer != Finished" label="SensorSP != Active &amp;&amp; CrossingTimer != Finished">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Protected" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="6271c830-24a1-4781-8054-cbf5752644e1" name="OpeningPhase">
+      <successors>
+        <transition Id="750cbc75-04ff-4a89-a88f-38ab59eadb6a" guard="SensorGate == Open" label="SensorGate == Open">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Open" />
+        </transition>
+        <transition Id="beff8edb-be0e-4dea-95d5-6295b2cb7c81" guard="SensorGate != Open" label="SensorGate != Open">
+          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/OpeningPhase" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="15cb938f-f28f-45c8-a738-838ac0dca2a7">
+      <importedVariable Id="27bdcda3-c63d-448e-bd53-12d7d03a5983" name="CrossingRadioModule" range="Idle, EP_Requested, AP_Requested, Outage" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="f2581cc7-db40-4374-b68a-6840649cc449">
+      <importedVariable Id="9213b0fb-08cf-4340-a860-d5f828710fc7" name="SensorGate" range="Open, Closed, InBetween" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="2a2daea4-d3ae-4295-9855-1ba29ecec3d9">
+      <importedVariable Id="5c6e92ff-72f6-4ad3-8814-bf596591288f" name="SensorSP" range="Active, Inactive" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="935635b6-b7dd-48c7-b621-f7ae0c7da7c1">
+      <importedVariable Id="09ce4424-26bf-44b1-ba25-5bef5cf61bf8" name="CrossingTimer" range="Idle, Counting, Finished" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>

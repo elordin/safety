@@ -53,42 +53,6 @@
     <None Include="DriveTrain.pg.diagram">
       <DependentUpon>DriveTrain.pg</DependentUpon>
     </None>
-    <None Include="F_CrossingRadioModule_Outage.pg" />
-    <None Include="F_CrossingRadioModule_Outage.pg.diagram">
-      <DependentUpon>F_CrossingRadioModule_Outage.pg</DependentUpon>
-    </None>
-    <None Include="F_CrossingRadioModule_WrongMessage.pg" />
-    <None Include="F_CrossingRadioModule_WrongMessage.pg.diagram">
-      <DependentUpon>F_CrossingRadioModule_WrongMessage.pg</DependentUpon>
-    </None>
-    <None Include="F_DriveTrain.pg" />
-    <None Include="F_DriveTrain.pg.diagram">
-      <DependentUpon>F_DriveTrain.pg</DependentUpon>
-    </None>
-    <None Include="F_Gates.pg" />
-    <None Include="F_Gates.pg.diagram">
-      <DependentUpon>F_Gates.pg</DependentUpon>
-    </None>
-    <None Include="F_SensorSP.pg" />
-    <None Include="F_SensorSP.pg.diagram">
-      <DependentUpon>F_SensorSP.pg</DependentUpon>
-    </None>
-    <None Include="F_SensorGate.pg" />
-    <None Include="F_SensorGate.pg.diagram">
-      <DependentUpon>F_SensorGate.pg</DependentUpon>
-    </None>
-    <None Include="F_Odometer.pg" />
-    <None Include="F_Odometer.pg.diagram">
-      <DependentUpon>F_Odometer.pg</DependentUpon>
-    </None>
-    <None Include="F_SpeedMeasurement.pg" />
-    <None Include="F_SpeedMeasurement.pg.diagram">
-      <DependentUpon>F_SpeedMeasurement.pg</DependentUpon>
-    </None>
-    <None Include="F_TrainRadioModule_Outage.pg" />
-    <None Include="F_TrainRadioModule_Outage.pg.diagram">
-      <DependentUpon>F_TrainRadioModule_Outage.pg</DependentUpon>
-    </None>
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
       <DependentUpon>Gates.pg</DependentUpon>
