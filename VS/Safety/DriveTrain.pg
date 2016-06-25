@@ -10,7 +10,16 @@
     </initialNode>
     <state Id="23c326af-1f96-456c-ba42-1a32e1065490" name="Running">
       <successors>
-        <transition Id="e84dfaab-80c7-481e-b7b2-2d9d47d244c3" guard="BreakCommand == Break" action="Speed := Speed  - 2" label="BreakCommand == Break // Speed := Speed  - 2" precondition="Speed &gt; 1">
+        <transition Id="86eb414c-0e5a-47f0-8ac2-1edc6d55b839" guard="Speed &gt; 1 &amp;&amp; BreakCommand == Break &amp;&amp; F_DriveTrain == BreaksOK" action="Speed  := Speed - 2" label="Speed &gt; 1 &amp;&amp; BreakCommand == Break &amp;&amp; F_DriveTrain == BreaksOK // Speed  := Speed - 2" precondition="Speed &gt; 1">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="fcd63bfc-3d15-46f6-b706-7b24aeb19df0" guard="Speed &gt; 1 &amp;&amp; BreakCommand == DoNotBreak &amp;&amp; F_DriveTrain == BreakControlsBroken" action="Speed := Speed - 2" label="Speed &gt; 1 &amp;&amp; BreakCommand == DoNotBreak &amp;&amp; F_DriveTrain == BreakControlsBroken // Speed := Speed - 2" precondition="Speed &gt; 1">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="8aa4cd50-01ae-42ea-8757-d97502a5a142" guard="Speed == 1 &amp;&amp; BreakCommand == Break &amp;&amp; F_DriveTrain == BreaksOK" action="Speed := Speed - 1" label="Speed == 1 &amp;&amp; BreakCommand == Break &amp;&amp; F_DriveTrain == BreaksOK // Speed := Speed - 1" precondition="Speed &gt; 0">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="7e84d6c7-65f6-4dcf-94e3-d8034b748ba2" guard="Speed == 1 &amp;&amp; BreakCommand == DoNotBreak &amp;&amp; F_DriveTrain == BreakControlsBroken" action="Speed := Speed - 1" label="Speed == 1 &amp;&amp; BreakCommand == DoNotBreak &amp;&amp; F_DriveTrain == BreakControlsBroken // Speed := Speed - 1" precondition="Speed &gt; 0">
           <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
         </transition>
       </successors>
@@ -21,14 +30,12 @@
       <variable Id="69efd684-8f0c-4f69-9406-78c3f55cccae" name="Speed" range="0..4" />
     </programGraphHasVariables>
   </variables>
-  <comments>
-    <programGraphHasComments Id="5b745c85-bfea-49df-b6bf-6d859c281a38">
-      <comment Id="beb3373b-9a1f-48d3-8ac8-64bfe35e1f9b" text="Full Breaking Power" />
-    </programGraphHasComments>
-  </comments>
   <importedVariables>
-    <programGraphHasImportedVariables Id="f4a9dc56-cf55-4bdf-ac34-e432a12beabb">
-      <importedVariable Id="56d098cb-f93a-4a50-aed2-8706c79addc0" name="VirtualTrain.BreakCommand" range="Break, DoNotBreak" />
+    <programGraphHasImportedVariables Id="14729a78-0a59-4641-927c-c60461a05d3c">
+      <importedVariable Id="f6ae315a-52a5-4833-9316-6a87005e78e3" name="VirtualTrain.BreakCommand" range="Break, DoNotBreak" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="210c2dba-a91c-4b23-9e12-161c01581aba">
+      <importedVariable Id="a8ea6d09-454f-4267-bf79-6959262059a6" name="F_DriveTrain" range="BreaksOK, BreaksBroken, BreakControlsBroken, BreakControlsAndBreaksBroken" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

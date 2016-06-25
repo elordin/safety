@@ -32,10 +32,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Check.smv">
+    <None Include="DCCA.smv">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Check.tt</DependentUpon>
+      <DependentUpon>DCCA.tt</DependentUpon>
+    </None>
+    <None Include="F_DriveTrain.pg" />
+    <None Include="F_DriveTrain.pg.diagram">
+      <DependentUpon>F_DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorGate.pg" />
+    <None Include="F_SensorGate.pg.diagram">
+      <DependentUpon>F_SensorGate.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorSP.pg" />
+    <None Include="F_SensorSP.pg.diagram">
+      <DependentUpon>F_SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="PlausibilityCheck.smv">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PlausibilityCheck.tt</DependentUpon>
     </None>
     <None Include="Crossing.pg" />
     <None Include="Crossing.pg.diagram">
@@ -52,6 +69,10 @@
     <None Include="DriveTrain.pg" />
     <None Include="DriveTrain.pg.diagram">
       <DependentUpon>DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_Odometer.pg" />
+    <None Include="F_Odometer.pg.diagram">
+      <DependentUpon>F_Odometer.pg</DependentUpon>
     </None>
     <None Include="Gates.pg" />
     <None Include="Gates.pg.diagram">
@@ -77,13 +98,13 @@
     <None Include="SpeedMeasurement.pg.diagram">
       <DependentUpon>SpeedMeasurement.pg</DependentUpon>
     </None>
-    <None Include="VirtualTrain.pg" />
-    <None Include="VirtualTrain.pg.diagram">
-      <DependentUpon>VirtualTrain.pg</DependentUpon>
-    </None>
     <None Include="TrainRadioModule.pg" />
     <None Include="TrainRadioModule.pg.diagram">
       <DependentUpon>TrainRadioModule.pg</DependentUpon>
+    </None>
+    <None Include="VirtualTrain.pg" />
+    <None Include="VirtualTrain.pg.diagram">
+      <DependentUpon>VirtualTrain.pg</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +114,13 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Check.tt">
+    <Content Include="DCCA.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Check.smv</LastGenOutput>
+      <LastGenOutput>DCCA.smv</LastGenOutput>
+    </Content>
+    <Content Include="PlausibilityCheck.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PlausibilityCheck.smv</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

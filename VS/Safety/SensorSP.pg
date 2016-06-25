@@ -3,34 +3,38 @@
   <states>
     <state Id="9fe44ca0-01c1-484f-b089-48296b5f20d1" name="Active">
       <successors>
-        <transition Id="5a87df96-940b-4c4f-bd7a-1e85820c0a73" guard="RealTrain != OnSP" action="SP_CauseOpening := Yes" label="RealTrain != OnSP // SP_CauseOpening := Yes" precondition="true">
+        <transition Id="5a87df96-940b-4c4f-bd7a-1e85820c0a73" guard="RealTrain != OnSP &amp;&amp; F_SensorSP == CorrectMeasurements" label="RealTrain != OnSP &amp;&amp; F_SensorSP == CorrectMeasurements" precondition="true">
+          <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
+        </transition>
+        <transition Id="9cfd7276-f74c-47cc-9cfb-14ba5805c058" guard="F_SensorSP != CorrectMeasurements" label="F_SensorSP != CorrectMeasurements">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
         </transition>
       </successors>
     </state>
     <state Id="1911a68b-c537-44c6-8537-ee4b69fa2414" name="Inactive">
       <successors>
-        <transition Id="18f1abbb-2896-43b6-9696-6a7407fd506a" guard="RealTrain == OnSP" action="SP_CauseOpening := No" label="RealTrain == OnSP // SP_CauseOpening := No" precondition="true">
+        <transition Id="18f1abbb-2896-43b6-9696-6a7407fd506a" guard="RealTrain == OnSP &amp;&amp; F_SensorSP == CorrectMeasurements" label="RealTrain == OnSP &amp;&amp; F_SensorSP == CorrectMeasurements" precondition="true">
+          <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Active" />
+        </transition>
+        <transition Id="9c950955-5af5-4ffc-8840-2133b02fe5b5" guard="F_SensorSP != CorrectMeasurements" label="F_SensorSP != CorrectMeasurements">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Active" />
         </transition>
       </successors>
     </state>
     <initialNode Id="d8e8d16a-f5b8-4571-820f-fd3e1c8a54de" name="InitialNode1">
       <successors>
-        <transition Id="a7475bec-1942-4451-a8a8-80241ec0794d" guard="SP_CauseOpening == No" label="SP_CauseOpening == No">
+        <transition Id="a7475bec-1942-4451-a8a8-80241ec0794d">
           <stateMoniker name="/c87a3f57-e2ab-475d-afa3-49a470560baa/Inactive" />
         </transition>
       </successors>
     </initialNode>
   </states>
-  <variables>
-    <programGraphHasVariables Id="02248699-2453-4281-8e6d-c11acbd245d2">
-      <variable Id="3b9751b4-6e4b-4b3d-96bf-c37fbd410728" name="SP_CauseOpening" range="Yes, No" />
-    </programGraphHasVariables>
-  </variables>
   <importedVariables>
     <programGraphHasImportedVariables Id="0135340f-003d-427a-8fc0-8438a53231e7">
       <importedVariable Id="a7e69d64-f485-4e0d-ba12-76317bdd2fe2" name="RealTrain" range="OnGP, AfterGP, OnSP, AfterSP, BeforeGP" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="d11dc61a-94be-4812-8109-3087c4ab35df">
+      <importedVariable Id="8c7cb3a4-cd49-47eb-b655-5908b699c4d5" name="F_SensorSP" range="CorrectMeasurements, FaultyMeasurements" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

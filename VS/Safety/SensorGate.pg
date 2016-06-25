@@ -3,7 +3,10 @@
   <states>
     <state Id="912ab699-8bbb-4b1e-88e4-852d8ca7fbd5" name="Open">
       <successors>
-        <transition Id="16452141-85f2-4e54-9fd6-1fce240adf69" guard="Gates != Open" label="Gates != Open">
+        <transition Id="16452141-85f2-4e54-9fd6-1fce240adf69" guard="Gates != Open &amp;&amp; F_SensorGate == CorrectMeasurements" label="Gates != Open &amp;&amp; F_SensorGate == CorrectMeasurements">
+          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
+        </transition>
+        <transition Id="618b916c-bc86-4317-89be-c7af16119a15" guard="F_SensorGate != CorrectMeasurements" label="F_SensorGate != CorrectMeasurements">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
         </transition>
       </successors>
@@ -17,17 +20,26 @@
     </initialNode>
     <state Id="f0cb4a40-69d1-4fec-9e4f-05f92225949a" name="Closed">
       <successors>
-        <transition Id="c244cf12-e7f6-484c-99bc-048ae0944193" guard="Gates != Closed" label="Gates != Closed">
+        <transition Id="c244cf12-e7f6-484c-99bc-048ae0944193" guard="Gates != Closed &amp;&amp; F_SensorGate == CorrectMeasurements" label="Gates != Closed &amp;&amp; F_SensorGate == CorrectMeasurements">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/InBetween" />
         </transition>
       </successors>
     </state>
     <state Id="473d95aa-9eaf-4042-ac5f-e40ccd384f97" name="InBetween">
       <successors>
-        <transition Id="e20feaba-f909-4b4e-af2a-32a18a873a9f" guard="Gates == Open" label="Gates == Open">
+        <transition Id="e20feaba-f909-4b4e-af2a-32a18a873a9f" guard="Gates == Open &amp;&amp; F_SensorGate == CorrectMeasurements" label="Gates == Open &amp;&amp; F_SensorGate == CorrectMeasurements">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Open" />
         </transition>
-        <transition Id="f66d6f7a-2275-4af1-b1fa-4f8258eeccfc" guard="Gates == Closed" label="Gates == Closed">
+        <transition Id="f66d6f7a-2275-4af1-b1fa-4f8258eeccfc" guard="Gates == Closed &amp;&amp; F_SensorGate == CorrectMeasurements" label="Gates == Closed &amp;&amp; F_SensorGate == CorrectMeasurements">
+          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Closed" />
+        </transition>
+        <transition Id="9c0de601-2a78-4f54-8201-15dc5a2397e7" guard="F_SensorGate != CorrectMeasurements" label="F_SensorGate != CorrectMeasurements">
+          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Open" />
+        </transition>
+        <transition Id="ed7c48bb-6dfc-468e-ab82-590d0d039849" guard="F_SensorGate != CorrectMeasurements" label="F_SensorGate != CorrectMeasurements">
+          <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Closed" />
+        </transition>
+        <transition Id="3371fcd2-2052-4bcd-a277-2b5f482a0734" guard="F_SensorGate != CorrectMeasurements" label="F_SensorGate != CorrectMeasurements">
           <stateMoniker name="/748c5e2f-1afe-4332-8b83-f502dab48080/Closed" />
         </transition>
       </successors>
@@ -36,6 +48,9 @@
   <importedVariables>
     <programGraphHasImportedVariables Id="9a09b2a2-b81c-4cc5-8d21-0b4a57b01723">
       <importedVariable Id="ac6b69dd-d18e-4f31-9a06-e5a5fe93ea53" name="Gates" range="Open, Opening, Closing, Closed" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="eee10ff1-014c-4cb5-b420-2001f0bea9de">
+      <importedVariable Id="c15dfb83-98cd-4df3-96c0-48ca339cf7e8" name="F_SensorGate" range="CorrectMeasurements, FaultyMeasurements" />
     </programGraphHasImportedVariables>
   </importedVariables>
 </programGraph>

@@ -33,9 +33,6 @@
         <transition Id="eae3d85e-2677-4faf-94e0-1e353a7a6559" guard="SensorSP == Active || CrossingTimer == Finished" label="SensorSP == Active || CrossingTimer == Finished">
           <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/OpeningPhase" />
         </transition>
-        <transition Id="864c4ffe-a15b-4cd4-a667-15c5acb3fd8b" guard="SensorSP != Active &amp;&amp; CrossingTimer != Finished" label="SensorSP != Active &amp;&amp; CrossingTimer != Finished">
-          <stateMoniker name="/f4ea3527-1145-4d4e-a4bd-b7e11568dba3/Protected" />
-        </transition>
       </successors>
     </state>
     <state Id="6271c830-24a1-4781-8054-cbf5752644e1" name="OpeningPhase">

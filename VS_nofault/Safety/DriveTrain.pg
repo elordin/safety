@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="70b3dc61-19e1-492f-aaa4-4b36e73b4a83" name="DriveTrain" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <initialNode Id="9d13ad53-001f-49cf-814a-acea19760830" name="InitialNode1">
+      <successors>
+        <transition Id="a02a907c-e721-42fc-85b1-a062ae2f7f6b" guard="Speed == 4" label="Speed == 4">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+      </successors>
+    </initialNode>
+    <state Id="23c326af-1f96-456c-ba42-1a32e1065490" name="Running">
+      <successors>
+        <transition Id="86eb414c-0e5a-47f0-8ac2-1edc6d55b839" guard="Speed &gt; 1 &amp;&amp; BreakCommand == Break" action="Speed  := Speed - 2" label="Speed &gt; 1 &amp;&amp; BreakCommand == Break // Speed  := Speed - 2" precondition="Speed &gt; 1">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+        <transition Id="8aa4cd50-01ae-42ea-8757-d97502a5a142" guard="Speed == 1 &amp;&amp; BreakCommand == Break" action="Speed := Speed - 1" label="Speed == 1 &amp;&amp; BreakCommand == Break // Speed := Speed - 1" precondition="Speed &gt; 0">
+          <stateMoniker name="/70b3dc61-19e1-492f-aaa4-4b36e73b4a83/Running" />
+        </transition>
+      </successors>
+    </state>
+  </states>
+  <variables>
+    <programGraphHasVariables Id="afe89e15-3ec7-44ce-ad38-97ca2cc7e6c1">
+      <variable Id="69efd684-8f0c-4f69-9406-78c3f55cccae" name="Speed" range="0..4" />
+    </programGraphHasVariables>
+  </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="14729a78-0a59-4641-927c-c60461a05d3c">
+      <importedVariable Id="f6ae315a-52a5-4833-9316-6a87005e78e3" name="VirtualTrain.BreakCommand" range="Break, DoNotBreak" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>
