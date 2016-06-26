@@ -1,0 +1,180 @@
+-------------------------------------------------------------------------------------------------------
+-- MAIN
+-------------------------------------------------------------------------------------------------------
+MODULE main
+	VAR	
+		v		: _VARS();
+		s1 		: _S1(v);
+		k1		: _K1(v);
+		k2		: _K2(v);
+		m		: _M(v);
+		d		: _D(v);
+		s		: _S(v);
+		t		: _T(v);
+		
+		fs1		: TransientFault(v.fs1);
+		fk1		: PersistentFault(v.fk1);
+		fk2		: PersistentFault(v.fk2);
+		ft		: PersistentFault(v.ft);
+		fs		: PersistentFault(v.fs);
+		
+-------------------------------------------------------------------------------------------------------
+-- VARS
+-------------------------------------------------------------------------------------------------------
+MODULE _VARS
+	DEFINE
+		FillTimeout := 60;
+		Timeout := FillTimeout + 4; 			-- 2 Schritte Startverzögerung, 2 Schritte Abschaltverzögerung
+		RuptureTime := 5;
+		DrainTime := 10;
+		
+	VAR
+		D : { Empty, Filling, Filled, Ruptured, Draining };
+		M : { Off, On };
+		S0 : { Closed, Open };				-- NuSMV kommt mit einer Variable "S" nicht zurecht
+		K2 : { Closed, Open };
+		S1 : { Start, Closed, Open };
+		K1 : { Closed, Open };
+		T0 : { Closed, Open, Countdown }; 	-- NuSMV kommt mit einer Variable "T" nicht zurecht
+		t : 0..Timeout;  
+		f : 0..FillTimeout;
+		fk1 : { Yes, No };
+		fk2 : { Yes, No };
+		fs : { Yes, No };
+		ft : { Yes, No };
+		fs1 : { Yes, No };
+
+-------------------------------------------------------------------------------------------------------
+-- S1
+-------------------------------------------------------------------------------------------------------
+MODULE _S1(v)
+	ASSIGN
+		init(v.S1) := Start;
+		next(v.S1) := case
+				v.S1 = Start				: { Start, Closed };
+				v.S1 = Open & v.fs1 != No 	: Closed;
+				v.S1 = Closed & v.fs1 = No	: Open;
+				TRUE						: v.S1;
+			esac;
+		
+-------------------------------------------------------------------------------------------------------
+-- T
+-------------------------------------------------------------------------------------------------------
+MODULE _T(v)
+	ASSIGN
+		init(v.T0) := Closed;
+		next(v.T0) := case
+				v.T0 = Closed & v.S0 = Closed & (v.S1 = Closed | v.K1 = Closed) 	: Countdown;
+				v.T0 = Countdown & (v.S0 = Open | (v.S1 != Closed & v.K1 = Open))	: Closed;
+				v.T0 = Countdown & v.t < v.Timeout	 								: Countdown;
+				v.T0 = Countdown & v.t = v.Timeout & v.ft = No						: Open;
+				v.T0 = Countdown & v.ft = Yes										: Closed;
+				v.T0 = Open & (v.S0 = Open | (v.S1 != Closed & v.K1 = Open)) 		: Closed;
+				TRUE																: v.T0;
+			esac;
+			
+		init(v.t) := 0;
+		next(v.t) := case
+				v.T0 = Closed & next(v.T0) = Countdown		: 0;
+				v.T0 = Countdown & v.t < v.Timeout	 		: v.t + 1;
+				TRUE 										: v.t;
+			esac;
+			
+-------------------------------------------------------------------------------------------------------
+-- K1
+-------------------------------------------------------------------------------------------------------
+MODULE _K1(v)
+	ASSIGN
+		init(v.K1) := Open;
+		next(v.K1) := case
+				v.K1 = Closed & v.T0 = Open & v.fk1 = No							: Open;
+				v.K1 = Open & v.T0 != Open & v.S1 = Closed 				: Closed;
+				TRUE																: v.K1;
+			esac;
+			
+-------------------------------------------------------------------------------------------------------
+-- K2
+-------------------------------------------------------------------------------------------------------
+MODULE _K2(v)
+	ASSIGN
+		init(v.K2) := Open;
+		next(v.K2) := case
+				v.K2 = Closed & (v.S0 = Open | (v.S1 != Closed & v.K1 = Open)) & v.fk2 = No	: Open;
+				v.K2 = Open & (v.S0 = Closed & (v.S1 = Closed | v.K1 = Closed))  			: Closed;
+				TRUE																		: v.K2;
+			esac;
+
+-------------------------------------------------------------------------------------------------------
+-- M
+-------------------------------------------------------------------------------------------------------
+MODULE _M(v)
+	ASSIGN
+		init(v.M) := Off;
+		next(v.M) := case
+				v.M = Off & v.K2 = Closed	: On;
+				v.M = On & v.K2 = Open 		: Off;
+				TRUE						: v.M;
+			esac;
+			
+-------------------------------------------------------------------------------------------------------
+-- S
+-------------------------------------------------------------------------------------------------------
+MODULE _S(v)
+	ASSIGN
+		init(v.S0) := Closed;
+		next(v.S0) := case
+				v.S0 = Closed & v.D = Filled & v.fs = No	: Open;
+				v.S0 = Open & v.D = Empty 					: Closed;
+				TRUE										: v.S0;
+			esac;
+			
+-------------------------------------------------------------------------------------------------------
+-- D
+-------------------------------------------------------------------------------------------------------
+MODULE _D(v)
+	ASSIGN
+		init(v.D) := Empty;
+		next(v.D) := case
+				v.D = Empty & v.M = On							: Filling;
+				v.D = Filling & v.M = On & v.f < v.FillTimeout	: Filling;
+				v.D = Filling & v.M = On & v.f = v.FillTimeout	: Filled;
+				v.D = Filled & v.M = Off						: Draining;
+				v.D = Draining & v.M = Off & v.f < v.DrainTime	: Draining;
+				v.D = Draining & v.M = Off & v.f = v.DrainTime	: Empty;
+				v.D = Filled & v.M = On & v.f < v.RuptureTime	: Filled;
+				v.D = Filled & v.M = On & v.f = v.RuptureTime	: Ruptured;
+				TRUE											: v.D;
+			esac;
+			
+		init(v.f) := 0;
+		next(v.f) := case
+				v.D = Filling & v.M = On & v.f < v.FillTimeout						: v.f + 1;
+				v.D = Filled & v.M = On & v.f < v.RuptureTime						: v.f + 1;
+				v.D = Draining & v.M = Off & v.f < v.DrainTime						: v.f + 1;	
+				next(v.D) = Filling | next(v.D) = Filled | next(v.D) = Draining		: 0;
+				TRUE																: v.f;	
+			esac;
+			
+-------------------------------------------------------------------------------------------------------
+-- TRANSIENT FAULT
+-------------------------------------------------------------------------------------------------------
+MODULE TransientFault(v)
+	ASSIGN
+		init(v) := No;
+		
+-------------------------------------------------------------------------------------------------------
+-- PERSISTENT FAULT
+-------------------------------------------------------------------------------------------------------
+MODULE PersistentFault(v)
+	ASSIGN
+		init(v) := No;
+		next(v) := case
+				v = Yes		: Yes;
+				TRUE		: { Yes, No };
+			esac;
+			
+--------------------------------------------------------------------------------------------------------
+-- CTL/LTL SPECS
+--------------------------------------------------------------------------------------------------------
+CTLSPEC AG TRUE;
+		
