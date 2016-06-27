@@ -41,6 +41,10 @@
     <None Include="F_DriveTrain.pg.diagram">
       <DependentUpon>F_DriveTrain.pg</DependentUpon>
     </None>
+    <None Include="F_Gates.pg" />
+    <None Include="F_Gates.pg.diagram">
+      <DependentUpon>F_Gates.pg</DependentUpon>
+    </None>
     <None Include="F_SensorGate.pg" />
     <None Include="F_SensorGate.pg.diagram">
       <DependentUpon>F_SensorGate.pg</DependentUpon>
@@ -48,6 +52,10 @@
     <None Include="F_SensorSP.pg" />
     <None Include="F_SensorSP.pg.diagram">
       <DependentUpon>F_SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="F_SpeedMeasurement.pg" />
+    <None Include="F_SpeedMeasurement.pg.diagram">
+      <DependentUpon>F_SpeedMeasurement.pg</DependentUpon>
     </None>
     <None Include="PlausibilityCheck.smv">
       <AutoGen>True</AutoGen>

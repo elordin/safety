@@ -13,9 +13,11 @@ MODULE _VARS
 		V_Speed : 0..4;
 		V_BreakCommand : {L_Break, L_DoNotBreak};
 		V_F_DriveTrain : {L_BreaksOK, L_BreaksBroken, L_BreakControlsBroken, L_BreakControlsAndBreaksBroken};
+		V_F_Gates : {L_AllOK, L_EngineStuck, L_EngineControlsBroken};
 		V_F_Odometer : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_F_SensorGate : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_F_SensorSP : {L_CorrectMeasurements, L_FaultyMeasurements};
+		V_F_SpeedMeasurement : {L_CorrectMeasurements, L_FaultyMeasurements};
 		V_Gates : {L_Open, L_Opening, L_Closing, L_Closed};
 		V_Angle : 0..2;
 		V_Odometer : {L_Measuring};
@@ -94,6 +96,16 @@ MODULE _P_F_DriveTrain(v)
 		 ( v.V_F_DriveTrain = L_BreakControlsBroken & next(v.V_F_DriveTrain) = L_BreakControlsBroken & TRUE & (TRUE))  |
 		 ( v.V_F_DriveTrain = L_BreakControlsAndBreaksBroken & next(v.V_F_DriveTrain) = L_BreaksBroken & TRUE & (TRUE))  |
 		 ( v.V_F_DriveTrain = L_BreakControlsAndBreaksBroken & next(v.V_F_DriveTrain) = L_BreakControlsAndBreaksBroken & TRUE & (TRUE));
+MODULE _P_F_Gates(v)
+	INIT
+		(v.V_F_Gates = L_AllOK) & (TRUE)
+	TRANS
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_EngineStuck & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_EngineControlsBroken & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_AllOK & next(v.V_F_Gates) = L_AllOK & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineStuck & next(v.V_F_Gates) = L_AllOK & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineStuck & next(v.V_F_Gates) = L_EngineStuck & TRUE & (TRUE))  |
+		 ( v.V_F_Gates = L_EngineControlsBroken & next(v.V_F_Gates) = L_EngineControlsBroken & TRUE & (TRUE));
 MODULE _P_F_Odometer(v)
 	INIT
 		(v.V_F_Odometer = L_CorrectMeasurements) & (TRUE)
@@ -118,6 +130,14 @@ MODULE _P_F_SensorSP(v)
 		 ( v.V_F_SensorSP = L_CorrectMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
 		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_CorrectMeasurements & TRUE & (TRUE))  |
 		 ( v.V_F_SensorSP = L_FaultyMeasurements & next(v.V_F_SensorSP) = L_FaultyMeasurements & TRUE & (TRUE));
+MODULE _P_F_SpeedMeasurement(v)
+	INIT
+		(v.V_F_SpeedMeasurement = L_CorrectMeasurements) & (TRUE)
+	TRANS
+		 ( v.V_F_SpeedMeasurement = L_CorrectMeasurements & next(v.V_F_SpeedMeasurement) = L_FaultyMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_CorrectMeasurements & next(v.V_F_SpeedMeasurement) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_FaultyMeasurements & next(v.V_F_SpeedMeasurement) = L_CorrectMeasurements & TRUE & (TRUE))  |
+		 ( v.V_F_SpeedMeasurement = L_FaultyMeasurements & next(v.V_F_SpeedMeasurement) = L_FaultyMeasurements & TRUE & (TRUE));
 MODULE _P_Gates(v)
 	INIT
 		(v.V_Gates = L_Open) & ((v.V_Angle = 0))
@@ -225,9 +245,11 @@ MODULE main
 		p_CrossingTimer : _P_CrossingTimer(v);
 		p_DriveTrain : _P_DriveTrain(v);
 		p_F_DriveTrain : _P_F_DriveTrain(v);
+		p_F_Gates : _P_F_Gates(v);
 		p_F_Odometer : _P_F_Odometer(v);
 		p_F_SensorGate : _P_F_SensorGate(v);
 		p_F_SensorSP : _P_F_SensorSP(v);
+		p_F_SpeedMeasurement : _P_F_SpeedMeasurement(v);
 		p_Gates : _P_Gates(v);
 		p_Odometer : _P_Odometer(v);
 		p_RealTrain : _P_RealTrain(v);
@@ -267,7 +289,8 @@ DEFINE
 		v.V_F_Odometer         != L_FaultyMeasurements &
 		v.V_F_SensorSP         != L_FaultyMeasurements &
 		v.V_F_SensorGate       != L_FaultyMeasurements &
-		v.V_F_DriveTrain       != L_BreaksOK           ;
+		v.V_F_DriveTrain       != L_BreaksOK           &
+		v.V_F_Gates            != L_AllOK              ;
 
 	-- { Odometer }
 	F1 := v.V_F_SensorSP       != L_FaultyMeasurements &
@@ -283,67 +306,30 @@ DEFINE
 	F3 := v.V_F_Odometer       != L_FaultyMeasurements &
 		  v.V_F_SensorSP       != L_FaultyMeasurements &
 		  v.V_F_DriveTrain     != L_BreaksOK           ;
-		  
+
 	-- { DriveTrain }
 	F4 := v.V_F_Odometer       != L_FaultyMeasurements &
 		  v.V_F_SensorSP       != L_FaultyMeasurements &
 		  v.V_F_SensorGate     != L_FaultyMeasurements ;
-
-	-- { Odomter, SensorSP }
-	F12 := v.V_F_SensorGate    != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != BreaksOK             ;
-
-	-- { Odomter, SensorGate }
-	F13 := v.V_F_SensorSP      != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != BreaksOK             ;
-
-	-- { Odometer, DriveTrain }
-	F14 := v.V_F_SensorSP      != L_FaultyMeasurements &
-		   v.V_F_SensorGate    != L_FaultyMeasurements ;
-
-	-- { SensorGate, SensorSP }
-	F23 := v.V_F_Odometer      != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != L_BreaksOK           ;
-
-	-- { SensorSP, DriveTrain }
-	F24 := v.V_F_Odometer      != L_FaultyMeasurements &
-		   v.V_F_SensorGate    != L_FaultyMeasurements ;
-
-	-- { SensorGate, DriveTrain }
-	F34 := v.V_F_Odometer      != L_FaultyMeasurements &
-		   v.V_F_SensorSP      != L_FaultyMeasurements ;
-
-	-- { Odometer, SensorSP, SensorGate }
-	F123 := v.V_F_DriveTrain   != L_BreaksOK           ;
 	
-	-- { Odometer, SensorSP, DriveTrain }
-	F124 := v.V_F_SensorGate   != L_FaultyMeasurements ;
-	
-	-- { Odometer, SensorGate, DriveTrain }
-	F134 := v.V_F_SensorSP     != L_FaultyMeasurements ;
+	-- { Gates }	  
+	F5 := v.V_F_Odometer       != L_FaultyMeasurements &
+		  v.V_F_SensorSP       != L_FaultyMeasurements &
+		  v.V_F_SensorGate     != L_FaultyMeasurements &
+		  v.V_F_DriveTrain     != L_BreaksOK           ;
 
-	-- { SensorSP, SensorGate, DriveTrain }
-	F234 := v.V_F_Odometer     != L_FaultyMeasurements ;
-	
-	-- { Odometer, SensorSP, SensorGate, DriveTrain }
-	F1234 := TRUE;
+	-- { SpeedMeasurement }
+	F6 := v.V_F_Odometer       != L_FaultyMeasurements &
+		  v.V_F_SensorSP       != L_FaultyMeasurements &
+		  v.V_F_SensorGate     != L_FaultyMeasurements &
+		  v.V_F_DriveTrain     != L_BreaksOK           &
+		  v.V_F_Gates          != L_AllOK              ;
 
 
-LTLSPEC F1 U HAZARD;
-LTLSPEC F2 U HAZARD;
-LTLSPEC F3 U HAZARD;
-LTLSPEC F4 U HAZARD;
 
-LTLSPEC F12 U HAZARD;
-LTLSPEC F13 U HAZARD;
-LTLSPEC F14 U HAZARD;
-LTLSPEC F23 U HAZARD;
-LTLSPEC F24 U HAZARD;
-LTLSPEC F34 U HAZARD;
-
-LTLSPEC F123 U HAZARD;
-LTLSPEC F124 U HAZARD;
-LTLSPEC F134 U HAZARD;
-LTLSPEC F234 U HAZARD;
-
-LTLSPEC F1234 U HAZARD;
+-- LTLSPEC F1 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F2 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F3 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F4 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F5 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F6 U HAZARD; -- Single Point of Failure

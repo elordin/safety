@@ -31,7 +31,8 @@ DEFINE
 		v.V_F_Odometer         != L_FaultyMeasurements &
 		v.V_F_SensorSP         != L_FaultyMeasurements &
 		v.V_F_SensorGate       != L_FaultyMeasurements &
-		v.V_F_DriveTrain       != L_BreaksOK           ;
+		v.V_F_DriveTrain       != L_BreaksOK           &
+		v.V_F_Gates            != L_AllOK              ;
 
 	-- { Odometer }
 	F1 := v.V_F_SensorSP       != L_FaultyMeasurements &
@@ -47,67 +48,30 @@ DEFINE
 	F3 := v.V_F_Odometer       != L_FaultyMeasurements &
 		  v.V_F_SensorSP       != L_FaultyMeasurements &
 		  v.V_F_DriveTrain     != L_BreaksOK           ;
-		  
+
 	-- { DriveTrain }
 	F4 := v.V_F_Odometer       != L_FaultyMeasurements &
 		  v.V_F_SensorSP       != L_FaultyMeasurements &
 		  v.V_F_SensorGate     != L_FaultyMeasurements ;
-
-	-- { Odomter, SensorSP }
-	F12 := v.V_F_SensorGate    != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != BreaksOK             ;
-
-	-- { Odomter, SensorGate }
-	F13 := v.V_F_SensorSP      != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != BreaksOK             ;
-
-	-- { Odometer, DriveTrain }
-	F14 := v.V_F_SensorSP      != L_FaultyMeasurements &
-		   v.V_F_SensorGate    != L_FaultyMeasurements ;
-
-	-- { SensorGate, SensorSP }
-	F23 := v.V_F_Odometer      != L_FaultyMeasurements &
-	       v.V_F_DriveTrain    != L_BreaksOK           ;
-
-	-- { SensorSP, DriveTrain }
-	F24 := v.V_F_Odometer      != L_FaultyMeasurements &
-		   v.V_F_SensorGate    != L_FaultyMeasurements ;
-
-	-- { SensorGate, DriveTrain }
-	F34 := v.V_F_Odometer      != L_FaultyMeasurements &
-		   v.V_F_SensorSP      != L_FaultyMeasurements ;
-
-	-- { Odometer, SensorSP, SensorGate }
-	F123 := v.V_F_DriveTrain   != L_BreaksOK           ;
 	
-	-- { Odometer, SensorSP, DriveTrain }
-	F124 := v.V_F_SensorGate   != L_FaultyMeasurements ;
-	
-	-- { Odometer, SensorGate, DriveTrain }
-	F134 := v.V_F_SensorSP     != L_FaultyMeasurements ;
+	-- { Gates }	  
+	F5 := v.V_F_Odometer       != L_FaultyMeasurements &
+		  v.V_F_SensorSP       != L_FaultyMeasurements &
+		  v.V_F_SensorGate     != L_FaultyMeasurements &
+		  v.V_F_DriveTrain     != L_BreaksOK           ;
 
-	-- { SensorSP, SensorGate, DriveTrain }
-	F234 := v.V_F_Odometer     != L_FaultyMeasurements ;
-	
-	-- { Odometer, SensorSP, SensorGate, DriveTrain }
-	F1234 := TRUE;
+	-- { SpeedMeasurement }
+	F6 := v.V_F_Odometer       != L_FaultyMeasurements &
+		  v.V_F_SensorSP       != L_FaultyMeasurements &
+		  v.V_F_SensorGate     != L_FaultyMeasurements &
+		  v.V_F_DriveTrain     != L_BreaksOK           &
+		  v.V_F_Gates          != L_AllOK              ;
 
 
-LTLSPEC F1 U HAZARD;
-LTLSPEC F2 U HAZARD;
-LTLSPEC F3 U HAZARD;
-LTLSPEC F4 U HAZARD;
 
-LTLSPEC F12 U HAZARD;
-LTLSPEC F13 U HAZARD;
-LTLSPEC F14 U HAZARD;
-LTLSPEC F23 U HAZARD;
-LTLSPEC F24 U HAZARD;
-LTLSPEC F34 U HAZARD;
-
-LTLSPEC F123 U HAZARD;
-LTLSPEC F124 U HAZARD;
-LTLSPEC F134 U HAZARD;
-LTLSPEC F234 U HAZARD;
-
-LTLSPEC F1234 U HAZARD;
+-- LTLSPEC F1 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F2 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F3 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F4 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F5 U HAZARD; -- Single Point of Failure
+-- LTLSPEC F6 U HAZARD; -- Single Point of Failure
