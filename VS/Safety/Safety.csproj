@@ -37,6 +37,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DCCA.tt</DependentUpon>
     </None>
+    <None Include="F_CrossingRadioModule_Outage.pg" />
+    <None Include="F_CrossingRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_Outage.pg</DependentUpon>
+    </None>
+    <None Include="F_CrossingRadioModule_WrongMessage.pg" />
+    <None Include="F_CrossingRadioModule_WrongMessage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_WrongMessage.pg</DependentUpon>
+    </None>
     <None Include="F_DriveTrain.pg" />
     <None Include="F_DriveTrain.pg.diagram">
       <DependentUpon>F_DriveTrain.pg</DependentUpon>
@@ -56,6 +64,10 @@
     <None Include="F_SpeedMeasurement.pg" />
     <None Include="F_SpeedMeasurement.pg.diagram">
       <DependentUpon>F_SpeedMeasurement.pg</DependentUpon>
+    </None>
+    <None Include="F_TrainRadioModule_Outage.pg" />
+    <None Include="F_TrainRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_TrainRadioModule_Outage.pg</DependentUpon>
     </None>
     <None Include="PlausibilityCheck.smv">
       <AutoGen>True</AutoGen>

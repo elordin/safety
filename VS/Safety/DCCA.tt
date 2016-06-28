@@ -6,72 +6,136 @@
 
 
 DEFINE
-    Crossing                        := v.V_Crossing;
-    CrossingRadioModule             := v.V_CrossingRadioModule;
-    CrossingTimer                   := v.V_CrossingTimer;
-	DriveTrain                      := v.V_DriveTrain;
-    Gates                           := v.V_Gates;
-	Odometer                        := v.V_Odometer;
-    RealTrain                       := v.V_RealTrain;
-    SensorGate                      := v.V_SensorGate;
-    SensorSP                        := v.V_SensorSP;
-    TrainRadioModule                := v.V_TrainRadioModule;
-	VirtualTrain                    := v.V_VirtualTrain;
-	 
-    HAZARD                          := RealTrain = L_OnGP & Crossing != L_Protected;
+    HAZARD										:= v.V_RealTrain = L_OnGP   & 
+	                                               v.V_Crossing != L_Protected;
 
-    EP                              := 
-		-1 * v.V_z - v.V_Speed * v.V_Speed / 2 / v.V_a - 2 * v.V_c * v.V_Speed - v.V_Speed * ( v.V_t + v.V_c );
-    AP								:= 
-		-1 * v.V_z - v.V_Speed * v.V_Speed / 2 / v.V_a - 2 * v.V_c * v.V_Speed;
-    BEP								:= 
-		-1 * v.V_z - v.V_Speed * v.V_Speed / 2 / v.V_a;
-		
 	NOFAULT :=
-		v.V_F_Odometer         != L_FaultyMeasurements &
-		v.V_F_SensorSP         != L_FaultyMeasurements &
-		v.V_F_SensorGate       != L_FaultyMeasurements &
-		v.V_F_DriveTrain       != L_BreaksOK           &
-		v.V_F_Gates            != L_AllOK              ;
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 
-	-- { Odometer }
-	F1 := v.V_F_SensorSP       != L_FaultyMeasurements &
-		  v.V_F_SensorGate     != L_FaultyMeasurements &
-		  v.V_F_DriveTrain     != L_BreaksOK           ;
+	-- SPoF
+
+	F_CrossingRadioModule_Outage :=
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 	
-	-- { SensorSP }
-	F2 := v.V_F_Odometer       != L_FaultyMeasurements &
-		  v.V_F_SensorGate     != L_FaultyMeasurements &
-		  v.V_F_DriveTrain     != L_BreaksOK           ;
+	F_CrossingRadioModule_WrongMessage :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 	
-	-- { SensorGate }
-	F3 := v.V_F_Odometer       != L_FaultyMeasurements &
-		  v.V_F_SensorSP       != L_FaultyMeasurements &
-		  v.V_F_DriveTrain     != L_BreaksOK           ;
+	F_DriveTrain_a :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      & (
+		v.V_F_DriveTrain					    = L_BreaksOK            |
+		v.V_F_DriveTrain					    = L_BreakControlsBroken ) &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 
-	-- { DriveTrain }
-	F4 := v.V_F_Odometer       != L_FaultyMeasurements &
-		  v.V_F_SensorSP       != L_FaultyMeasurements &
-		  v.V_F_SensorGate     != L_FaultyMeasurements ;
+	F_DriveTrain_b :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      & (
+		v.V_F_DriveTrain					    = L_BreaksOK            | 
+		v.V_F_DriveTrain					    = L_BreaksBroken        ) &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
+
+	F_Gates	:=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 	
-	-- { Gates }	  
-	F5 := v.V_F_Odometer       != L_FaultyMeasurements &
-		  v.V_F_SensorSP       != L_FaultyMeasurements &
-		  v.V_F_SensorGate     != L_FaultyMeasurements &
-		  v.V_F_DriveTrain     != L_BreaksOK           ;
+	F_Odometer :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
+		  
+	F_SensorGate :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 
-	-- { SpeedMeasurement }
-	F6 := v.V_F_Odometer       != L_FaultyMeasurements &
-		  v.V_F_SensorSP       != L_FaultyMeasurements &
-		  v.V_F_SensorGate     != L_FaultyMeasurements &
-		  v.V_F_DriveTrain     != L_BreaksOK           &
-		  v.V_F_Gates          != L_AllOK              ;
+	F_SensorSP :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 
+	F_SpeedMeasurement :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_TrainRadioModule_Outage			= L_WorkingCorrectly    ;
 
+	F_TrainRadioModule_Outage :=
+		v.V_F_CrossingRadioModule_Outage		= L_WorkingCorrectly    &
+		v.V_F_CrossingRadioModule_WrongMessage	= L_CorrectMessage      &
+		v.V_F_DriveTrain					    = L_BreaksOK            &
+		v.V_F_Gates								= L_AllOK               &
+		v.V_F_Odometer							= L_CorrectMeasurements &
+		v.V_F_SensorGate						= L_CorrectMeasurements &
+		v.V_F_SensorSP							= L_CorrectMeasurements &
+		v.V_F_SpeedMeasurement					= L_CorrectMeasurements ;
 
--- LTLSPEC F1 U HAZARD; -- Single Point of Failure
--- LTLSPEC F2 U HAZARD; -- Single Point of Failure
--- LTLSPEC F3 U HAZARD; -- Single Point of Failure
--- LTLSPEC F4 U HAZARD; -- Single Point of Failure
--- LTLSPEC F5 U HAZARD; -- Single Point of Failure
--- LTLSPEC F6 U HAZARD; -- Single Point of Failure
+	-- 2PF
+
+LTLSPEC F HAZARD;
+-- LTLSPEC F_CrossingRadioModule_Outage        U HAZARD;
+-- LTLSPEC F_CrossingRadioModule_WrongMessage  U HAZARD;
+-- LTLSPEC F_DriveTrain_a                      U HAZARD;
+-- LTLSPEC F_DriveTrain_b                      U HAZARD;
+-- LTLSPEC F_Gates                             U HAZARD;
+-- LTLSPEC F_Odometer                          U HAZARD;
+-- LTLSPEC F_SensorGate                        U HAZARD; 
+-- LTLSPEC F_SensorSP                          U HAZARD; 
+-- LTLSPEC F_SpeedMeasurement                  U HAZARD; 
+-- LTLSPEC F_TrainRadioModule_Outage           U HAZARD; 
