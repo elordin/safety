@@ -18,6 +18,74 @@ MODULE main
 		ft		: PersistentFault(v.ft);
 		fs		: PersistentFault(v.fs);
 		
+--------------------------------------------------------------------------------------------------------
+-- CTL/LTL SPECS
+--------------------------------------------------------------------------------------------------------
+DEFINE 
+	no_fs1 := v.fs1 = No;
+	no_fk1 := v.fk1 = No;
+	no_fk2 := v.fk2 = No;
+	no_ft := v.ft = No;
+	no_fs := v.fs = No;
+
+	nofaults := no_fs1 & no_fk1 & no_fk2 & no_ft & no_fs;
+	
+	only_fs1 := no_fk1 & no_fk2 & no_ft & no_fs;
+	only_fk1 := no_fs1 & no_fk2 & no_ft & no_fs;
+	only_fk2 := no_fs1 & no_fk1 & no_ft & no_fs;
+	only_ft := no_fs1 & no_fk1 & no_fk2 & no_fs;
+	only_fs := no_fs1 & no_fk1 & no_fk2 & no_ft;
+	
+	only_fs1_fk1 := no_fk2 & no_ft & no_fs;
+	only_fs1_fs := no_fk1 & no_fk2 & no_ft;
+	only_fs1_ft := no_fk1 & no_fk2 & no_fs;
+	only_fk1_fs := no_fs1 & no_fk2 & no_ft;
+	only_fk1_ft := no_fs1 & no_fk2 & no_fs;
+	only_fs_ft := no_fs1 & no_fk1 & no_fk2;
+	
+	only_fs1_fk1_ft := no_fk2 & no_fs;
+			   
+	hazard := v.D = Ruptured;
+
+-- {}
+LTLSPEC ! (nofaults U hazard);
+
+-- {fs1}
+-- LTLSPEC ! (only_fs1 U hazard);
+
+-- {fk1}
+-- LTLSPEC ! (only_fk1 U hazard);
+
+-- {fk2}
+-- LTLSPEC ! (only_fk2 U hazard);
+
+-- {ft}
+-- LTLSPEC ! (only_ft U hazard);
+
+-- {fs}
+-- LTLSPEC ! (only_fs U hazard);
+
+-- {fs1, fk1}
+-- LTLSPEC ! (only_fs1_fk1 U hazard);
+
+-- {fs1, fs}
+-- LTLSPEC ! (only_fs1_fs U hazard);
+
+-- {fs1, ft}
+-- LTLSPEC ! (only_fs1_ft U hazard);
+
+-- {fk1, fs}
+-- LTLSPEC ! (only_fk1_fs U hazard);
+
+-- {fk1, ft)
+-- LTLSPEC ! (only_fk1_ft U hazard);
+
+-- {fs, ft)
+-- LTLSPEC ! (only_fs_ft U hazard);
+
+-- {fs1, fk1, ft}
+-- LTLSPEC ! (only_fs1_fk1_ft U hazard);
+		
 -------------------------------------------------------------------------------------------------------
 -- VARS
 -------------------------------------------------------------------------------------------------------
@@ -172,9 +240,4 @@ MODULE PersistentFault(v)
 				v = Yes		: Yes;
 				TRUE		: { Yes, No };
 			esac;
-			
---------------------------------------------------------------------------------------------------------
--- CTL/LTL SPECS
---------------------------------------------------------------------------------------------------------
-CTLSPEC AG TRUE;
 		

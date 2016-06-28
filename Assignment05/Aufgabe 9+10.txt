@@ -1,0 +1,11 @@
+Drucktank
+
+Minimal Cut Set:
+- {fk2}
+- {fs1, fs}
+- {fk1, fs}
+- {fs, ft}
+
+P(Hazard) <= P(fk2) + P(fs1)*P(fs) + P(fk1)*P(fs) + P(fs)*P(ft)
+          <= 3*10^-5 + 3*10^-5*10^-4 + 3*10^-5*10^-4 + 10*-4*10^-4
+		  ~ 3*10^-5	
