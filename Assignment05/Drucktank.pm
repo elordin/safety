@@ -52,94 +52,190 @@ const int t_Open = 2;
 const int f_no = 0;
 const int f_yes = 1;
 
-module drucktank
-	d  : [0..4] init d_Empty;
-	m  : [0..1] init m_Off;
-	s1 : [0..3] init s1_Start;
-	s  : [0..1] init s_Closed;
-	k1 : [0..1] init k1_Open;
-	k2 : [0..1] init k2_Open;
-	t  : [0..2] init t_Closed;
-
-	fs1 : [0..1] init f_no;
-	fs  : [0..1] init f_no;
-	fk1 : [0..1] init f_no;
-	fk2 : [0..1] init f_no;
-	ft  : [0..1] init f_no;
-
-	var_t : int init 0;
-	var_f : int init 0;
+module S1
+	s1 : [0..2] init s1_Start;
 
 	// commands s1
-	[] s1=s1_Start -> 0.5 : (s1'=s1_Start) +
+	[synch] s1=s1_Start -> 0.5 : (s1'=s1_Start) +
 			  0.5 : (s1'=s1_Closed);
-	[] s1=s1_Open & fs1!=f_no -> 1.0 : (s1'=s1_Closed);
-	[] s1=s1_Closed & fs1=f_no -> 1.0 : (s1'=s1_Open);
-	
+	[synch] s1=s1_Open & fs1!=f_no -> 1.0 : (s1'=s1_Closed);
+	[synch] s1=s1_Closed & fs1=f_no -> 1.0 : (s1'=s1_Open);
+	// else
+	[synch] !(s1=s1_Start | (s1=s1_Open & fs1!=f_no) | s1=s1_Closed & fs1=f_no) -> 1.0 : (s1'=s1);
+
+endmodule
+
+module T
+	t  : [0..2] init t_Closed;
+
 	// commands t
-	[] t=t_Closed & s=s_Closed & (s1=s1_Closed | k1=k1_Closed) -> 1.0 : (t'=t_Countdown);
-	[] t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) -> 1.0 : (t'=t_Closed);
-	[] t=t_Countdown & var_t<Timeout -> 1.0 : (t'=t_Countdown);
-	[] t=t_Countdown & var_t=Timeout & ft=f_no -> 1.0 : (t'=t_Open);
-	[] t=t_Countdown & ft=f_yes -> 1.0 : (t'=t_Closed);
-	[] t=t_Open & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) -> 1.0 : (t'=t_Closed);
+	[synch] t=t_Closed & s=s_Closed & (s1=s1_Closed | k1=k1_Closed) -> 1.0 : (t'=t_Countdown);
+	[synch] t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) -> 1.0 : (t'=t_Closed);
+	[synch] t=t_Countdown & var_t<Timeout & !(t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open))) -> 1.0 : (t'=t_Countdown);
+	[synch] t=t_Countdown & var_t=Timeout & ft=f_no & !(t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open))) -> 1.0 : (t'=t_Open);
+	[synch] t=t_Countdown & ft=f_yes & !(t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open))) & !(t=t_Countdown & var_t<Timeout & !(t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)))) -> 1.0 : (t'=t_Closed);
+	[synch] t=t_Open & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) -> 1.0 : (t'=t_Closed);
+	//else
+	[synch] !((t=t_Closed & s=s_Closed & (s1=s1_Closed | k1=k1_Closed)) |
+		  (t=t_Countdown & (s=s_Open | (s1!=s1_Closed & k1=k1_Open))) |
+		  (t=t_Countdown & var_t<Timeout) |
+		  (t=t_Countdown & var_t=Timeout & ft=f_no) |
+		  (t=t_Countdown & ft=f_yes) |
+		  (t=t_Open & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)))) -> 1.0 : (t'=t);
+
+endmodule
+
+module  varT
+	var_t : [0..Timeout] init 0;
 
 	// commands var_t
-	[] t=t_Closed -> 1.0 : (var_t'=0);
-	[] t=t_Countdown & var_t<Timeout -> 1.0 : (var_t'=var_t+1);
+	[synch] t=t_Closed -> 1.0 : (var_t'=0);
+	[synch] t=t_Countdown & var_t<Timeout -> 1.0 : (var_t'=var_t+1);
+	//else
+	[synch] !(t=t_Closed | (t=t_Countdown & var_t<Timeout)) -> 1.0 : (var_t'=var_t);
+
+endmodule
+
+module K1
+	k1 : [0..1] init k1_Open;
 
 	// commands k1
-	[] k1=k1_Closed & t=t_Open & fk1=f_no -> 1.0 : (k1'=k1_Open);
-	[] k1=k1_Open & t!=t_Open & s1=s1_Closed -> 1.0 : (k1'=k1_Closed);
+	[synch] k1=k1_Closed & t=t_Open & fk1=f_no -> 1.0 : (k1'=k1_Open);
+	[synch] k1=k1_Open & t!=t_Open & s1=s1_Closed -> 1.0 : (k1'=k1_Closed);
+	// else
+	[synch] !((k1=k1_Closed & t=t_Open & fk1=f_no) |
+		  (k1=k1_Open & t!=t_Open & s1=s1_Closed)) -> 1.0 : (k1'=k1);
+
+endmodule
+
+module K2
+	k2 : [0..1] init k2_Open;
 
 	// commands k2
-	[] k2=k2_Closed & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) & fk2=f_no -> 1.0 : (k2'=k2_Open);
-	[] k2=k2_Open & (s=s_Closed & (s1=s1_Closed | k1=k1_Closed)) -> 1.0 : (k2'=k2_Closed);
+	[synch] k2=k2_Closed & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) & fk2=f_no -> 1.0 : (k2'=k2_Open);
+	[synch] k2=k2_Open & (s=s_Closed & (s1=s1_Closed | k1=k1_Closed)) -> 1.0 : (k2'=k2_Closed);
+	// else
+	[synch] !((k2=k2_Closed & (s=s_Open | (s1!=s1_Closed & k1=k1_Open)) & fk2=f_no) |
+		  (k2=k2_Open & (s=s_Closed & (s1=s1_Closed | k1=k1_Closed)))) -> 1.0 : (k2'=k2);
+
+endmodule
+
+module M
+	m  : [0..1] init m_Off;
 
 	// commands m
-	[] m=m_Off & k2=k2_Closed -> 1.0 : (m'=m_On);
-	[] m=m_On & k2=k2_Open -> 1.0 : (m'=m_Off);
+	[synch] m=m_Off & k2=k2_Closed -> 1.0 : (m'=m_On);
+	[synch] m=m_On & k2=k2_Open -> 1.0 : (m'=m_Off);
+	// else
+	[synch] !((m=m_Off & k2=k2_Closed) |
+		  (m=m_On & k2=k2_Open)) -> 1.0 : (m'=m);
+
+endmodule
+
+module _S
+	s  : [0..1] init s_Closed;
 
 	// commands s
-	[] s=s_Closed & d=d_Filled & fs=f_no -> 1.0 : (s'=s_Open);
-	[] s=s_Open & d=d_Empty -> 1.0 : (s'=s_Closed);
+	[synch] s=s_Closed & d=d_Filled & fs=f_no -> 1.0 : (s'=s_Open);
+	[synch] s=s_Open & d=d_Empty -> 1.0 : (s'=s_Closed);
+	// else
+	[synch] !((s=s_Closed & d=d_Filled & fs=f_no) |
+		  (s=s_Open & d=d_Empty)) -> 1.0 : (s'=s);
+
+endmodule
+
+module D
+	d  : [0..4] init d_Empty;
 
 	// commands d
-	[] d=d_Empty & m=m_On -> 1.0 : (d'=d_Filling);
-	[] d=d_Filling & m=m_On & var_f<FillTimeout -> 1.0 : (d'=d_Filling);
-	[] d=d_Filling & m=m_On & var_f=FillTimeout -> 1.0 : (d'=d_Filled);
-	[] d=d_Filled & m=m_Off -> 1.0 : (d'=d_Draining);
-	[] d=d_Draining & m=m_Off & var_f<DrainTime -> 1.0 : (d'=d_Draining);
-	[] d=d_Draining & m=m_Off & var_f=DrainTime -> 1.0 : (d'=d_Empty);
-	[] d=d_Filled & m=m_On & var_f<RuptureTime -> 1.0 : (d'=d_Filled);
-	[] d=d_Filled & m=m_On & var_f=RuptureTime -> 1.0 : (d'=d_Ruptured);
+	[synch] d=d_Empty & m=m_On -> 1.0 : (d'=d_Filling);
+	[synch] d=d_Filling & m=m_On & var_f<FillTimeout -> 1.0 : (d'=d_Filling);
+	[synch] d=d_Filling & m=m_On & var_f=FillTimeout -> 1.0 : (d'=d_Filled);
+	[synch] d=d_Filled & m=m_Off -> 1.0 : (d'=d_Draining);
+	[synch] d=d_Draining & m=m_Off & var_f<DrainTime -> 1.0 : (d'=d_Draining);
+	[synch] d=d_Draining & m=m_Off & var_f=DrainTime -> 1.0 : (d'=d_Empty);
+	[synch] d=d_Filled & m=m_On & var_f<RuptureTime -> 1.0 : (d'=d_Filled);
+	[synch] d=d_Filled & m=m_On & var_f=RuptureTime -> 1.0 : (d'=d_Ruptured);
+	// else
+	[synch] !((d=d_Empty & m=m_On) |
+		  (d=d_Filling & m=m_On & var_f<FillTimeout) |
+		  (d=d_Filling & m=m_On & var_f=FillTimeout) |
+		  (d=d_Filled & m=m_Off) |
+		  (d=d_Draining & m=m_Off & var_f<DrainTime) |
+		  (d=d_Draining & m=m_Off & var_f=DrainTime) |
+		  (d=d_Filled & m=m_On & var_f<RuptureTime) |
+		  (d=d_Filled & m=m_On & var_f=RuptureTime)) -> 1.0 : (d'=d);
+endmodule
+
+module varF
+	var_f : [0..FillTimeout] init 0;
+	firstDraining : bool init true;
+	firstFilled: bool init true;
 
 	// commands var_f
-	[] d=d_Filling & m=m_On & var_f<FillTimeout -> 1.0 : (var_f'=var_f+1);
-	[] d=d_Filled & m=m_On & var_f<RuptureTime -> 1.0 : (var_f'=var_f+1);
-	[] d=d_Draining & m=m_Off & var_f<DrainTime -> 1.0 : (var_f'=var_f+1);
-	[] d=d_Empty -> 1.0 : (var_f'=0);
+	[synch] d=d_Filling & m=m_On & var_f<FillTimeout -> 1.0 : (var_f'=var_f+1);
+	[synch] d=d_Filled & m=m_On & var_f<RuptureTime & !firstFilled -> 1.0 : (var_f'=var_f+1);
+	[synch] d=d_Draining & m=m_Off & var_f<DrainTime & !firstDraining -> 1.0 : (var_f'=var_f+1);
+	[synch] d=d_Empty -> 1.0 : (var_f'=0) & (firstDraining'=true) & (firstFilled'=true);
+	[synch] d=d_Filled & firstFilled -> 1.0 : (var_f'=0) & (firstFilled'=false);
+	[synch] d=d_Draining & firstDraining -> 1.0 : (var_f'=0) & (firstDraining'=false);
+	// else
+	[synch] !((d=d_Filling & m=m_On & var_f<FillTimeout) |
+		  (d=d_Filled & m=m_On & var_f<RuptureTime & !firstFilled) |
+		  (d=d_Draining & m=m_Off & var_f<DrainTime & !firstDraining) |
+		  (d=d_Empty) |
+		  (d=d_Filled & firstFilled ) |
+		  (d=d_Draining & firstDraining)) -> 1.0 : (var_f'=var_f);
+
+endmodule
+
+module FS1
+	fs1 : [0..1] init f_no;
 
 	// commands fs1
-	[] fs1=f_no -> p_fs1 : (fs1'=f_yes) +
+	[synch] fs1=f_no -> p_fs1 : (fs1'=f_yes) +
 		       1.0 - p_fs1 : (fs1'=f_no);
-	[] fs1=f_yes -> p_fs1 : (fs1'=f_yes) +
+	[synch] fs1=f_yes -> p_fs1 : (fs1'=f_yes) +
 		       1.0 - p_fs1 : (fs1'=f_no);
 
-	// commands fk1
-	[] fk1=f_no -> p_fk1 : (fk1'=f_yes) + 
-		       1.0 - p_fk1 : (fk1'=f_no);
+endmodule
 
-	// commands fk2		
-	[] fk2=f_no -> p_fk2 : (fk2'=f_yes) + 
-		       1.0 - p_fk2 : (fk2'=f_no);
+module FS
+	fs  : [0..1] init f_no;
 
 	// commands fs
-	[] fs=f_no -> p_fs : (fs'=f_yes) + 
+	[synch] fs=f_no -> p_fs : (fs'=f_yes) + 
 		       1.0 - p_fs : (fs'=f_no);
+	[synch] fs=f_yes -> 1.0 : (fs'=fs);
+
+endmodule
+
+module FK1
+	fk1 : [0..1] init f_no;
+
+	// commands fk1
+	[synch] fk1=f_no -> p_fk1 : (fk1'=f_yes) + 
+		       1.0 - p_fk1 : (fk1'=f_no);
+	[synch] fk1=f_yes -> 1.0 : (fk1'=fk1);
+
+endmodule
+
+module FK2
+	fk2 : [0..1] init f_no;
+
+	// commands fk2		
+	[synch] fk2=f_no -> p_fk2 : (fk2'=f_yes) + 
+		       (1 - p_fk2 ) : (fk2'=f_no);
+	[synch] fk2=f_yes -> 1.0 : (fk2'=fk2);
+
+endmodule
+
+module FT
+	ft  : [0..1] init f_no;
 
 	// commands ft
-	[] ft=f_no -> p_ft : (ft'=f_yes) + 
+	[synch] ft=f_no -> p_ft : (ft'=f_yes) + 
 		       1.0 - p_ft : (ft'=f_no);
+	[synch] ft=f_yes -> 1.0 : (ft'=ft);
 
 endmodule

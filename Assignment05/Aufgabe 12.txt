@@ -1,0 +1,16 @@
+P=? [true U d=d_Ruptured) = 0,99985.. ~ 1
+
+Da der Füllvorgang unendlich oft durchgeführt wird, nähert sich die
+Wahrscheinlichkeit, dass irgendwann der Drucktank explodiert, an 1 an.
+
+
+P=? [(true) U<=100 (d=d_Ruptured)] = 0,00206..
+(Wahrscheinlichkeit, dass der Drucktank explodiert, bei einem Füllvorgang)
+
+In der DCCA wurde diese Wahrscheinlichkeit mit 3*10^-5 bestimmt. Allerdings ist man
+dabei davon ausgegangen, dass die Fehler mit der angegebenen Wahrscheinlichkeit im Laufe
+eines Füllvorgangs auftreten. In diesem Modell geht man davon aus, dass die Fehler in jeder
+Transition mit dieser Wahrscheinlichkeit auftreten können und deshalb ist die berechnete
+Wahrscheinlichkeit um ungefähr den Faktor 100 höher.
+
+	
