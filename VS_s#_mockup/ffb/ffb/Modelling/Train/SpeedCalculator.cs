@@ -4,13 +4,13 @@ namespace ffb.Modelling.Train
 {
     public class SpeedCalculator : Component
     {
-        public virtual int MeasuredDistance { get; private set; }
+        public virtual int MeasuredSpeed { get; private set; }
 
-        public extern int Distance { get; }
+        public extern int Speed { get; }
 
         public override void Update()
         {
-            MeasuredDistance = Distance;
+            MeasuredSpeed = Speed;
         }
     }
 }

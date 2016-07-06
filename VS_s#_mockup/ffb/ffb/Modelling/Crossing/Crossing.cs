@@ -22,13 +22,13 @@ namespace ffb.Modelling.Crossing
 
         public virtual Response Response { get; private set; }
 
-        public extern Request Request { get; }
+        private Request Request { get { return RadioModule.RequestOut; } }
 
-        public extern bool GatesClosed { get; }
+        private bool GatesClosed { get { return SensorGate.Closed; } }
 
-        public extern bool GatesOpen { get; }
+        private bool GatesOpen { get { return SensorGate.Open; } }
 
-        public extern bool TimerFinished { get; }
+        private bool TimerFinished { get { return Timer.Finished; } }
 
         public extern bool SensorSPActive { get; }
 

@@ -29,13 +29,11 @@ namespace ffb.Modelling.Reality
 
         public bool OnSP {get { return StateMachine == State.OnSP; }}
 
-        public extern int Speed { get; }
-
         public override void Update()
         {
             Update(DriveTrain);
 
-            Action action = () => { Distance += Speed*Tick; };
+            Action action = () => { Distance += DriveTrain.Speed*Tick; };
 
             StateMachine.
                 Transition(
@@ -46,7 +44,7 @@ namespace ffb.Modelling.Reality
                 Transition(
                     from: State.BeforeGP,
                     to: State.OnGP,
-                    guard: Distance >= -1*Speed*Tick,
+                    guard: Distance >= -1*DriveTrain.Speed*Tick,
                     action: action).
                 Transition(
                     from: State.OnGP, 
@@ -55,12 +53,12 @@ namespace ffb.Modelling.Reality
                 Transition(
                     from: State.AfterGP, 
                     to: State.AfterGP,
-                    guard: Distance < Constants.DistToSP,
+                    guard: Distance < Model.DistToSP,
                     action: action).
                 Transition(
                     from: State.AfterGP, 
                     to: State.OnSP,
-                    guard: Distance >= Constants.DistToSP - Speed*Tick,
+                    guard: Distance >= Model.DistToSP - DriveTrain.Speed*Tick,
                     action: action).
                 Transition(
                     from: State.OnSP, 

@@ -22,13 +22,13 @@ namespace ffb.Modelling.Train
 
         public virtual BreakCommand BreakCommand { get; private set; }
 
-        public extern int MeasuredDistance { get; }
+        private int MeasuredDistance { get { return Odometer.MeasuredDistance; } }
 
-        public extern int MeasuredSpeed { get; }
+        private int MeasuredSpeed { get { return SpeedCalculator.MeasuredSpeed; } }
 
         public virtual  Request Request { get; private set; }
 
-        public extern Response Response { get; }
+        private Response Response { get { return RadioModule.ResponseOut; } }
 
         public VirtualTrain()
         {
@@ -45,8 +45,8 @@ namespace ffb.Modelling.Train
                     to: State.OnEP,
                     guard:
                         MeasuredDistance >=
-                        -1*Constants.Z - MeasuredSpeed*MeasuredSpeed/2/Constants.A - 2*Constants.C*MeasuredSpeed -
-                        MeasuredSpeed*(Constants.T + Constants.C)).
+                        -1*Model.Z - MeasuredSpeed*MeasuredSpeed/2/Model.A - 2*Model.C*MeasuredSpeed -
+                        MeasuredSpeed*(Model.T + Model.C)).
                 Transition(
                     from: State.OnEP,
                     to: State.EPtoAP,
@@ -54,7 +54,7 @@ namespace ffb.Modelling.Train
                 Transition(
                     from: State.EPtoAP, 
                     to: State.OnAP,
-                    guard: MeasuredDistance >= -1*Constants.Z - MeasuredSpeed*MeasuredSpeed/2/Constants.A - 2*Constants.C*MeasuredSpeed).
+                    guard: MeasuredDistance >= -1*Model.Z - MeasuredSpeed*MeasuredSpeed/2/Model.A - 2*Model.C*MeasuredSpeed).
                 Transition(
                     from: State.OnAP, 
                     to: State.APtoBEP,
@@ -62,7 +62,7 @@ namespace ffb.Modelling.Train
                 Transition(
                     from: State.APtoBEP,
                     to: State.OnBEP,
-                    guard: MeasuredDistance >= -1*Constants.Z - MeasuredSpeed*MeasuredSpeed/2/Constants.A).
+                    guard: MeasuredDistance >= -1*Model.Z - MeasuredSpeed*MeasuredSpeed/2/Model.A).
                 Transition(
                     from: State.OnBEP, 
                     to: State.BEPtoGP,
@@ -82,7 +82,7 @@ namespace ffb.Modelling.Train
                 Transition(
                     from: State.AfterGP, 
                     to: State.OnSP,
-                    guard: MeasuredDistance >= Constants.DistToSP).
+                    guard: MeasuredDistance >= Model.DistToSP).
                 Transition(
                     from: State.OnSP, 
                     to: State.AfterSP);
