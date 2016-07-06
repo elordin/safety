@@ -15,7 +15,7 @@ namespace ffb.Modelling.Train
         public Odometer Odometer { get; set; }
 
         [Hidden, Subcomponent]
-        public SpeedCalculator SpeedCalculator { get; set; }
+        public SpeedMeasurement SpeedMeasurement { get; set; }
 
         [Hidden, Subcomponent]
         public TrainRadioModule RadioModule { get; set; }
@@ -24,7 +24,7 @@ namespace ffb.Modelling.Train
 
         private int MeasuredDistance { get { return Odometer.MeasuredDistance; } }
 
-        private int MeasuredSpeed { get { return SpeedCalculator.MeasuredSpeed; } }
+        private int MeasuredSpeed { get { return SpeedMeasurement.MeasuredSpeed; } }
 
         public virtual  Request Request { get; private set; }
 
@@ -37,7 +37,7 @@ namespace ffb.Modelling.Train
 
         public override void Update()
         {
-            Update(Odometer, SpeedCalculator, RadioModule);
+            Update(Odometer, SpeedMeasurement, RadioModule);
 
             _stateMachine.
                 Transition(

@@ -16,5 +16,21 @@ namespace ffb.Modelling.Crossing
             Closed = GateState == GateState.Closed;
             Open = GateState == GateState.Open;
         }
+
+        public readonly Fault DeffectOpen = new TransientFault();
+
+        [FaultEffect(Fault = nameof(DeffectOpen))]
+        public class DeffectOpenEffect : SensorGate
+        {
+            public override bool Open { get { return !base.Open; } }
+        }
+
+        public readonly Fault DeffectClosed = new TransientFault();
+
+        [FaultEffect(Fault = nameof(DeffectClosed))]
+        public class DeffectClosedEffect : SensorGate
+        {
+            public override bool Closed { get { return !base.Closed; } }
+        }
     }
 }

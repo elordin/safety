@@ -12,5 +12,16 @@ namespace ffb.Modelling.Reality
         {
             Active = TrainOnSP;
         }
+
+        public readonly Fault Deffect = new TransientFault();
+
+        [FaultEffect(Fault = nameof(Deffect))]
+        public class DeffectEffect : SensorSP
+        {
+            public override void Update()
+            {
+                Active = true;
+            }
+        }
     }
 }

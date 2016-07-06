@@ -20,7 +20,7 @@ namespace ffb.Modelling
             {
                 RadioModule = new TrainRadioModule(),
                 Odometer = new Odometer(),
-                SpeedCalculator = new SpeedCalculator()
+                SpeedMeasurement = new SpeedMeasurement()
             };
 
             Crossing = new Crossing.Crossing
@@ -41,7 +41,7 @@ namespace ffb.Modelling
             // Do binding
 
             // Reality ->
-            Bind(nameof(SpeedCalculator.Speed), nameof(DriveTrain.Speed));
+            Bind(nameof(SpeedMeasurement.Speed), nameof(DriveTrain.Speed));
             Bind(nameof(Odometer.Distance), nameof(RealTrain.Distance));
             Bind(nameof(SensorSp.TrainOnSP), nameof(RealTrain.OnSP));
             Bind(nameof(Crossing.SensorSPActive), nameof(SensorSp.Active));
@@ -65,7 +65,7 @@ namespace ffb.Modelling
 
         public Odometer Odometer { get { return VirtualTrain.Odometer; } }
 
-        public SpeedCalculator SpeedCalculator { get { return VirtualTrain.SpeedCalculator; } }
+        public SpeedMeasurement SpeedMeasurement { get { return VirtualTrain.SpeedMeasurement; } }
 
         public TrainRadioModule TrainRadioModule { get { return VirtualTrain.RadioModule; } }
 

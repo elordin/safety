@@ -21,5 +21,16 @@ namespace ffb.Modelling.Reality
                 Speed = Math.Max(Speed - 2, 0);
             }
         }
+
+        public readonly Fault BreaksBroken = new TransientFault();
+
+        [FaultEffect(Fault = nameof(BreaksBroken))]
+        public class BreaksBrokenEffect : DriveTrain
+        {
+            public override void Update()
+            {
+                // Do nothing
+            }
+        }
     }
 }

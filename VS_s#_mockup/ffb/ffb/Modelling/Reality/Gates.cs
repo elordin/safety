@@ -50,5 +50,16 @@ namespace ffb.Modelling.Reality
                     to: GateState.Open,
                     guard: _angle == 0);
         }
+
+        public readonly Fault Broken = new PermanentFault();
+
+        [FaultEffect(Fault = nameof(Broken))]
+        public class BrokenEffect : Gates
+        {
+            public override void Update()
+            {
+                // Do nothing
+            }
+        }
     }
 }
