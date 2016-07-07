@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.props" Condition="Exists('..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{346D999E-C1E1-49BB-ADA8-01140C53AFA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ffb</RootNamespace>
+    <AssemblyName>ffb</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SafetySharp.Modeling, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ISSE.SafetySharp.1.2.3\lib\net45\SafetySharp.Modeling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Checks.cs" />
+    <Compile Include="Modelling\BreakCommand.cs" />
+    <Compile Include="Modelling\Crossing\CrossingState.cs" />
+    <Compile Include="Modelling\Crossing\Crossing.cs" />
+    <Compile Include="Modelling\Crossing\CrossingRadioModule.cs" />
+    <Compile Include="Modelling\Crossing\CrossingTimer.cs" />
+    <Compile Include="Modelling\Crossing\SensorGate.cs" />
+    <Compile Include="Modelling\Model.cs" />
+    <Compile Include="Modelling\Reality\GateState.cs" />
+    <Compile Include="Modelling\RadioModule.cs" />
+    <Compile Include="Modelling\Reality\DriveTrain.cs" />
+    <Compile Include="Modelling\Reality\Gates.cs" />
+    <Compile Include="Modelling\Reality\RealTrain.cs" />
+    <Compile Include="Modelling\Reality\SensorSP.cs" />
+    <Compile Include="Modelling\Request.cs" />
+    <Compile Include="Modelling\Response.cs" />
+    <Compile Include="Modelling\Train\Odometer.cs" />
+    <Compile Include="Modelling\Train\SpeedMeasurement.cs" />
+    <Compile Include="Modelling\Train\TrainRadioModule.cs" />
+    <Compile Include="Modelling\Train\VirtualTrain.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\ISSE.SafetySharp.1.2.3\analyzers\dotnet\cs\SafetySharp.Compiler.dll" />
+    <Analyzer Include="..\packages\ISSE.SafetySharp.1.2.3\analyzers\dotnet\cs\SafetySharp.Modeling.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.props'))" />
+    <Error Condition="!Exists('..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.targets'))" />
+  </Target>
+  <Import Project="..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.targets" Condition="Exists('..\packages\ISSE.SafetySharp.1.2.3\build\ISSE.SafetySharp.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,32 @@
+=======================================================================
+=======      Deductive Cause Consequence Analysis: Results      =======
+=======================================================================
+
+*** Warning: Unhandled exceptions have been thrown during the analysis. ***
+
+Elapsed Time: 00:54:34.3378380
+Fault Count: 10
+Faults: BreaksBroken, Broken, Deffect, DeffectClosed, DeffectOpen, NoMeasurements, Outage, Outage, WrongMeasurements, WrongMeasurements
+
+Checked Fault Sets: 116 (11% of all fault sets)
+Minimal Critical Sets: 10
+
+   (1) { Deffect }
+   (2) { Broken }
+   (3) { DeffectClosed }
+   (4) { BreaksBroken, NoMeasurements, Outage, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (5) { BreaksBroken, NoMeasurements, Outage, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (6) { NoMeasurements, Outage, WrongMeasurements, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (7) { NoMeasurements, Outage, WrongMeasurements, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (8) { BreaksBroken, Outage, Outage, WrongMeasurements, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (9) { BreaksBroken, DeffectOpen, Outage, WrongMeasurements, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+   (10) { BreaksBroken, DeffectOpen, Outage, WrongMeasurements, WrongMeasurements }
+    An unhandled exception of type System.OutOfMemoryException was thrown while checking the fault set: Failed to find an empty hash table slot within a reasonable amount of time. Try increasing the state capacity.
+NUnit VS Adapter 2.0.0.0 executing tests is finished
+========== Run test finished: 1 run (0:54:35,8254408) ==========
