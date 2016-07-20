@@ -10,3 +10,6 @@ Ergebnis der DCCA des FFB:
 8. {F_Gates, F_SensorGate}
 9. {F_Gates, F_SpeedMeasurement}
 10. {F_SpeedMeasurement, F_TrainRadioModule_Outage}
+11. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_SensorGate}
+12. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_Speed}
+13. {F_DriveTrain, F_SensorGate, F_SpeedMeasurement}
