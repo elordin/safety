@@ -27,7 +27,9 @@ namespace Safety
                 Errors.CRM_WrongMessage,
                 Errors.DriveTrain,
                 Errors.Gates,
+                Errors.Odometer,
                 Errors.SensorGate,
+                Errors.SensorSP,
                 Errors.SpeedMeasurement,
                 Errors.TRM_Outage
             };
@@ -47,10 +49,8 @@ namespace Safety
             hazards.Add(new List<Errors>{Errors.CRM_WrongMessage, Errors.DriveTrain, Errors.SpeedMeasurement});
             hazards.Add(new List<Errors>{Errors.DriveTrain, Errors.SensorGate, Errors.SpeedMeasurement});
 
-
-
             var result = GetPowerSet(errors);
-            result = result.Where(r => r.Count() == 3 && !ContainsAny(r, hazards));
+            result = result.Where(r => r.Any() && !ContainsAny(r, hazards));
 
             Console.Write(string.Join(Environment.NewLine,
                 result.Select(subset =>
