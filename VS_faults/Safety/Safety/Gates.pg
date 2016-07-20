@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programGraph xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="46a52955-9a96-4afb-89e8-857d0799e142" name="Gates" xmlns="http://schemas.microsoft.com/dsltools/ProgramGraphDsl">
+  <states>
+    <state Id="fcb23f4f-8255-46fc-9810-a38f081e1a9b" name="Open">
+      <successors>
+        <transition Id="3cb78b41-c8b5-4b4f-8906-632e10746874" guard="Crossing != ProtectionPhase &amp;&amp; F_Gates == AllOK" label="Crossing != ProtectionPhase &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+        <transition Id="b88156d3-7f68-4889-baad-a3f2115169d3" guard="Crossing == ProtectionPhase &amp;&amp; F_Gates == AllOK" label="Crossing == ProtectionPhase &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closing" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="d212fd33-acde-4dd5-8b47-c5f786a797ac" name="Opening">
+      <successors>
+        <transition Id="ff5d52d9-ab36-4f48-b456-be4de27a85ff" guard="Angle == 0 &amp;&amp; F_Gates == AllOK" label="Angle == 0 &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+        <transition Id="82608388-1c4e-443e-8372-bb19c8e459bc" guard="Angle &gt; 0 &amp;&amp; F_Gates == AllOK" action="Angle := Angle - 1" label="Angle &gt; 0 &amp;&amp; F_Gates == AllOK // Angle := Angle - 1" precondition="Angle &gt; 0">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Opening" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="17b01cb4-70bb-4707-a441-48925a02eea6" name="Closing">
+      <successors>
+        <transition Id="fd8e31f2-5397-4986-bcc2-72180c18c8c3" guard="Angle == 2 &amp;&amp; F_Gates == AllOK" label="Angle == 2 &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
+        </transition>
+        <transition Id="03ebaa1a-a7a8-47fc-89fb-c6a2417de232" guard="Angle &lt; 9 &amp;&amp; F_Gates == AllOK" action="Angle := Angle + 1" label="Angle &lt; 9 &amp;&amp; F_Gates == AllOK // Angle := Angle + 1" precondition="Angle &lt; 2">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closing" />
+        </transition>
+      </successors>
+    </state>
+    <state Id="240875f3-807e-4ba1-ba91-021a0683feef" name="Closed">
+      <successors>
+        <transition Id="7e608836-465c-435e-9ac7-347332de04cf" guard="Crossing == OpeningPhase &amp;&amp; F_Gates == AllOK" label="Crossing == OpeningPhase &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Opening" />
+        </transition>
+        <transition Id="7b40e62d-918a-46a2-b10d-501ad023e949" guard="Crossing != OpeningPhase &amp;&amp; F_Gates == AllOK" label="Crossing != OpeningPhase &amp;&amp; F_Gates == AllOK">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Closed" />
+        </transition>
+      </successors>
+    </state>
+    <initialNode Id="1473574c-0bfb-46c6-ba2d-8d0b4f4b0e6a" name="InitialNode2">
+      <successors>
+        <transition Id="6337802a-38f7-4d0b-8e3e-ad25cfe11983" precondition="Angle == 0">
+          <stateMoniker name="/46a52955-9a96-4afb-89e8-857d0799e142/Open" />
+        </transition>
+      </successors>
+    </initialNode>
+  </states>
+  <variables>
+    <programGraphHasVariables Id="69b042b5-e314-435e-a20d-f751f625f187">
+      <variable Id="97c9202f-953c-432c-a3ef-a1d92555d1c6" name="Angle" range="0..2" />
+    </programGraphHasVariables>
+  </variables>
+  <importedVariables>
+    <programGraphHasImportedVariables Id="89eb0f61-3aa6-4e7a-a616-21adbbcb12df">
+      <importedVariable Id="d34c3723-8ac0-4162-b57e-82a9be512ded" name="Crossing" range="Open, ProtectionPhase, Protected, OpeningPhase" />
+    </programGraphHasImportedVariables>
+    <programGraphHasImportedVariables Id="9b3d9929-e71d-4177-b1c4-1c40601bde20">
+      <importedVariable Id="ffb67cb2-6b3b-4042-b94e-2dcbdea315fa" name="F_Gates" range="AllOK, EngineStuck, EngineControlsBroken" />
+    </programGraphHasImportedVariables>
+  </importedVariables>
+</programGraph>

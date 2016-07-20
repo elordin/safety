@@ -1,0 +1,32 @@
+﻿<#@ template inherits="Safety.ProgramGraphDsl.ProgramGraphTransformation" hostspecific="true" #>
+<#@ output encoding="us-ascii" extension=".smv" #>
+<#@ assembly Name="Safety.ProgramGraphDsl.dll" #>
+
+<#=  TransformToNuSMV() #>
+
+DEFINE
+    Crossing                        := v.V_Crossing;
+    CrossingRadioModule             := v.V_CrossingRadioModule;
+    CrossingTimer                   := v.V_CrossingTimer;
+	DriveTrain                      := v.V_DriveTrain;
+    Gates                           := v.V_Gates;
+	Odometer                        := v.V_Odometer;
+    RealTrain                       := v.V_RealTrain;
+    SensorGate                      := v.V_SensorGate;
+    SensorSP                        := v.V_SensorSP;
+    TrainRadioModule                := v.V_TrainRadioModule;
+	VirtualTrain                    := v.V_VirtualTrain;
+	 
+    HAZARD                          := RealTrain = L_OnGP & Gates != L_Closed;
+
+	NOFAULT							:= v.V_F_CrossingRadioModule_Outage = L_WorkingCorrectly &
+									   v.V_F_CrossingRadioModule_WrongMessage = L_CorrectMessage &
+									   v.V_F_DriveTrain = L_BreaksOK &
+									   v.V_F_Gates = L_AllOK &
+									   v.V_F_Odometer = L_CorrectMeasurements &
+									   v.V_F_SensorGate = L_CorrectMeasurements &
+									   v.V_F_SensorSP = L_CorrectMeasurements &
+									   v.V_F_SpeedMeasurement = L_CorrectMeasurements &
+									   v.V_F_TrainRadioModule_Outage = L_WorkingCorrectly;
+	
+LTLSPEC !(NOFAULT U HAZARD);
