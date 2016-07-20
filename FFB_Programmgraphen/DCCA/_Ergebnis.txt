@@ -1,0 +1,10 @@
+Ergebnis der DCCA des FFB:
+
+1. {F_SensorSP}
+2. {F_Odometer}
+3. {F_DriveTrain, F_CrossingRadioModule_Outage}
+4. {F_DriveTrain, F_TrainRadioModule_Outage}
+5. {F_DriveTrain, F_Gates}
+
+
+
