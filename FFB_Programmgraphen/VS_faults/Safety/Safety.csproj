@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{183DE6C5-0790-4CF5-A657-5E95920317D8}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Safety</RootNamespace>
+    <AssemblyName>Safety</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PowerSet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Check.smv">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Check.tt</DependentUpon>
+    </None>
+    <None Include="Check.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Check.smv</LastGenOutput>
+    </None>
+    <None Include="Crossing.pg" />
+    <None Include="Crossing.pg.diagram">
+      <DependentUpon>Crossing.pg</DependentUpon>
+    </None>
+    <None Include="CrossingRadioModule.pg" />
+    <None Include="CrossingRadioModule.pg.diagram">
+      <DependentUpon>CrossingRadioModule.pg</DependentUpon>
+    </None>
+    <None Include="CrossingTimer.pg" />
+    <None Include="CrossingTimer.pg.diagram">
+      <DependentUpon>CrossingTimer.pg</DependentUpon>
+    </None>
+    <None Include="DriveTrain.pg" />
+    <None Include="DriveTrain.pg.diagram">
+      <DependentUpon>DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_CrossingRadioModule_Outage.pg" />
+    <None Include="F_CrossingRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_Outage.pg</DependentUpon>
+    </None>
+    <None Include="F_CrossingRadioModule_WrongMessage.pg" />
+    <None Include="F_CrossingRadioModule_WrongMessage.pg.diagram">
+      <DependentUpon>F_CrossingRadioModule_WrongMessage.pg</DependentUpon>
+    </None>
+    <None Include="F_DriveTrain.pg" />
+    <None Include="F_DriveTrain.pg.diagram">
+      <DependentUpon>F_DriveTrain.pg</DependentUpon>
+    </None>
+    <None Include="F_Gates.pg" />
+    <None Include="F_Gates.pg.diagram">
+      <DependentUpon>F_Gates.pg</DependentUpon>
+    </None>
+    <None Include="F_Odometer.pg" />
+    <None Include="F_Odometer.pg.diagram">
+      <DependentUpon>F_Odometer.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorGate.pg" />
+    <None Include="F_SensorGate.pg.diagram">
+      <DependentUpon>F_SensorGate.pg</DependentUpon>
+    </None>
+    <None Include="F_SensorSP.pg" />
+    <None Include="F_SensorSP.pg.diagram">
+      <DependentUpon>F_SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="F_SpeedMeasurement.pg" />
+    <None Include="F_SpeedMeasurement.pg.diagram">
+      <DependentUpon>F_SpeedMeasurement.pg</DependentUpon>
+    </None>
+    <None Include="F_TrainRadioModule_Outage.pg" />
+    <None Include="F_TrainRadioModule_Outage.pg.diagram">
+      <DependentUpon>F_TrainRadioModule_Outage.pg</DependentUpon>
+    </None>
+    <None Include="Gates.pg" />
+    <None Include="Gates.pg.diagram">
+      <DependentUpon>Gates.pg</DependentUpon>
+    </None>
+    <None Include="Odometer.pg" />
+    <None Include="Odometer.pg.diagram">
+      <DependentUpon>Odometer.pg</DependentUpon>
+    </None>
+    <None Include="RealTrain.pg" />
+    <None Include="RealTrain.pg.diagram">
+      <DependentUpon>RealTrain.pg</DependentUpon>
+    </None>
+    <None Include="SensorGate.pg" />
+    <None Include="SensorGate.pg.diagram">
+      <DependentUpon>SensorGate.pg</DependentUpon>
+    </None>
+    <None Include="SensorSP.pg" />
+    <None Include="SensorSP.pg.diagram">
+      <DependentUpon>SensorSP.pg</DependentUpon>
+    </None>
+    <None Include="SpeedMeasurement.pg" />
+    <None Include="SpeedMeasurement.pg.diagram">
+      <DependentUpon>SpeedMeasurement.pg</DependentUpon>
+    </None>
+    <None Include="TrainRadioModule.pg" />
+    <None Include="TrainRadioModule.pg.diagram">
+      <DependentUpon>TrainRadioModule.pg</DependentUpon>
+    </None>
+    <None Include="VirtualTrain.pg" />
+    <None Include="VirtualTrain.pg.diagram">
+      <DependentUpon>VirtualTrain.pg</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
