@@ -12,7 +12,7 @@
         <transition Id="646e11d3-1343-41b4-a8cd-2096af6361f6" guard="TrainRadioModule == EP_Request &amp;&amp; F_CrossingRadioModule_Outage == WorkingCorrectly" action="Crossing_Message := Unknown" label="TrainRadioModule == EP_Request &amp;&amp; F_CrossingRadioModule_Outage == WorkingCorrectly // Crossing_Message := Unknown" precondition="true">
           <stateMoniker name="/e00c9c34-eb89-499a-b8c8-435a534245b4/EP_Requested" />
         </transition>
-        <transition Id="f04ff58c-6cff-4d11-bcda-5b3b3ea569f3" guard="F_CrossingRadioModule_Outage != WorkingCorrectly" label="F_CrossingRadioModule_Outage != WorkingCorrectly">
+        <transition Id="f04ff58c-6cff-4d11-bcda-5b3b3ea569f3" guard="F_CrossingRadioModule_Outage != WorkingCorrectly" action="Crossing_Message := Unknown" label="F_CrossingRadioModule_Outage != WorkingCorrectly // Crossing_Message := Unknown" precondition="true">
           <stateMoniker name="/e00c9c34-eb89-499a-b8c8-435a534245b4/Outage" />
         </transition>
       </successors>
@@ -71,7 +71,7 @@
       <importedVariable Id="6545c4b8-adcf-4c53-9e6d-501f77f4606e" name="Crossing" range="Open, ProtectionPhase, Protected, OpeningPhase" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="057262e2-cea3-4886-a488-5dcd187bb8aa">
-      <importedVariable Id="5ee15a8c-cdfa-4dad-a8a2-5f305bdcf8a0" name="TrainRadioModule" range="Idle, EP_Request, AP_Request, Outage" />
+      <importedVariable Id="5ee15a8c-cdfa-4dad-a8a2-5f305bdcf8a0" name="TrainRadioModule" range="Idle, EP_Request, AP_Request" />
     </programGraphHasImportedVariables>
     <programGraphHasImportedVariables Id="8e214ef0-db45-476e-ba9a-4b891fa1c5c9">
       <importedVariable Id="8ebc6260-534b-48aa-aaf1-91bea8501307" name="F_CrossingRadioModule_WrongMessage" range="CorrectMessage, WrongMessage" />

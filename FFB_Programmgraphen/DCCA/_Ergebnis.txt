@@ -5,6 +5,8 @@ Ergebnis der DCCA des FFB:
 3. {F_DriveTrain, F_CrossingRadioModule_Outage}
 4. {F_DriveTrain, F_TrainRadioModule_Outage}
 5. {F_DriveTrain, F_Gates}
-
-
-
+6. {F_Gates, F_CrossingRadioModule_WrongMessage}
+7. {F_CrossingRadioModule_Outage, F_SpeedMeasurement}
+8. {F_Gates, F_SensorGate}
+9. {F_Gates, F_SpeedMeasurement}
+10. {F_SpeedMeasurement, F_TrainRadioModule_Outage}
