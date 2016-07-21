@@ -14,6 +14,8 @@ Minimal-kritische Mengen:
 	11. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_SensorGate}
 	12. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_Speed}
 	13. {F_DriveTrain, F_SensorGate, F_SpeedMeasurement}
-	
-	
+
+
 F_DriveTrain entspricht einem (Teil-)Ausfall der Bremsen.
+
+Es sind jedoch viele der Faults der (ausführlichen) FTA nicht modelliert und werden entsprechend nicht überprüft.
