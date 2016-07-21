@@ -26,6 +26,7 @@ namespace ffb.Modelling.Train
             }
         }
 
+
         public readonly Fault OdometerNoMeasurements = new TransientFault();
 
         [FaultEffect(Fault = nameof(OdometerNoMeasurements))]
