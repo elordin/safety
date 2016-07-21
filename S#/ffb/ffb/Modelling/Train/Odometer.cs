@@ -15,9 +15,9 @@ namespace ffb.Modelling.Train
             MeasuredDistance = Distance;
         }
 
-        public readonly Fault WrongMeasurements = new TransientFault();
+        public readonly Fault OdometerWrongMeasurements = new TransientFault();
 
-        [FaultEffect(Fault = nameof(WrongMeasurements))]
+        [FaultEffect(Fault = nameof(OdometerWrongMeasurements))]
         public class WrongMeasurementsEffect : Odometer
         {
             public override void Update()
@@ -26,9 +26,9 @@ namespace ffb.Modelling.Train
             }
         }
 
-        public readonly Fault NoMeasurements = new TransientFault();
+        public readonly Fault OdometerNoMeasurements = new TransientFault();
 
-        [FaultEffect(Fault = nameof(NoMeasurements))]
+        [FaultEffect(Fault = nameof(OdometerNoMeasurements))]
         public class NoMeasurementsEffect : Odometer
         {
             public override void Update()

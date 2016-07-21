@@ -36,7 +36,7 @@ namespace ffb.Modelling.Crossing
 
         public override void Update()
         {
-            Update(RadioModule, Timer, SensorGate);
+            Update(Timer, SensorGate);
 
             _stateMachine.
                 Transition(
@@ -64,6 +64,8 @@ namespace ffb.Modelling.Crossing
             {
                 Response = Response.Unknown;
             }
+
+            Update(RadioModule);
         }
     }
 }

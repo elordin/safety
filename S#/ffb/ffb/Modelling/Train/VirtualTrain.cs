@@ -38,7 +38,7 @@ namespace ffb.Modelling.Train
 
         public override void Update()
         {
-            Update(Odometer, SpeedMeasurement, RadioModule);
+            Update(Odometer, SpeedMeasurement);
 
             _stateMachine.
                 Transition(
@@ -85,6 +85,9 @@ namespace ffb.Modelling.Train
                 Transition(
                     from: State.OnSP, 
                     to: State.AfterSP);
+
+            Update(RadioModule);
+
         }
     }
 }

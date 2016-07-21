@@ -5,9 +5,9 @@ namespace ffb.Modelling.Crossing
 {
     public class CrossingRadioModule : RadioModule
     {
-        public readonly Fault Outage = new TransientFault();
+        public readonly Fault CrossingRadioOutage = new TransientFault();
 
-        [FaultEffect(Fault = nameof(Outage))]
+        [FaultEffect(Fault = nameof(CrossingRadioOutage))]
         public class OutageEffect : CrossingRadioModule
         {
             public override void Update()
@@ -16,8 +16,9 @@ namespace ffb.Modelling.Crossing
             }
         }
 
-        public readonly Fault WrongMessage = new TransientFault();
+        public readonly Fault CrossingRadioWrongMessage = new TransientFault();
 
+        [FaultEffect(Fault = nameof(CrossingRadioWrongMessage))]
         public class WrongMessageEffect : CrossingRadioModule
         {
             public override void Update()

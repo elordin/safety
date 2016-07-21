@@ -17,6 +17,7 @@ namespace ffb.Modelling
         public const int EndDistance = -64; // m
         public const int MaxSpeed = 45; // m/s
         public const int Tick = 1; // s
+        public const int GateSpeed = 45; // deg/s
 
         public Model()
         {
@@ -94,8 +95,8 @@ namespace ffb.Modelling
         [Root(RootKind.Plant)]
         public Gates Gates { get; private set; }
 
-        public Formula Hazard => ! Crossing.Protected && RealTrain.OnGP;
-        public Formula NoHazard => Crossing.Protected || ! RealTrain.OnGP; 
+        public Formula Hazard => ! Gates.Closed && RealTrain.OnGP;
+        public Formula NoHazard => Gates.Closed || ! RealTrain.OnGP; 
     }
 
 }

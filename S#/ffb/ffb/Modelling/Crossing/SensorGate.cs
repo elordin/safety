@@ -17,17 +17,17 @@ namespace ffb.Modelling.Crossing
             Open = GateState == GateState.Open;
         }
 
-        public readonly Fault DeffectOpen = new TransientFault();
+        public readonly Fault SensorGateDefectOpen = new TransientFault();
 
-        [FaultEffect(Fault = nameof(DeffectOpen))]
+        [FaultEffect(Fault = nameof(SensorGateDefectOpen))]
         public class DeffectOpenEffect : SensorGate
         {
             public override bool Open { get { return !base.Open; } }
         }
 
-        public readonly Fault DeffectClosed = new TransientFault();
+        public readonly Fault SensorGateDefectClosed = new TransientFault();
 
-        [FaultEffect(Fault = nameof(DeffectClosed))]
+        [FaultEffect(Fault = nameof(SensorGateDefectClosed))]
         public class DeffectClosedEffect : SensorGate
         {
             public override bool Closed { get { return !base.Closed; } }

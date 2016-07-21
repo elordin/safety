@@ -19,7 +19,7 @@ namespace ffb.Modelling.Reality
         {
             if (BreakCommand == BreakCommand.Break)
             {
-                Speed -= 2;
+                Speed -= Model.A;
             }
         }
 

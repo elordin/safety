@@ -14,9 +14,9 @@ namespace ffb.Modelling.Train
             MeasuredSpeed = Speed;
         }
 
-        public readonly Fault WrongMeasurements = new TransientFault();
+        public readonly Fault SpeedWrongMeasurements = new TransientFault();
 
-        [FaultEffect(Fault = nameof(WrongMeasurements))]
+        [FaultEffect(Fault = nameof(SpeedWrongMeasurements))]
         public class WrongMeasurementsEffect : SpeedMeasurement
         {
             public override void Update()
