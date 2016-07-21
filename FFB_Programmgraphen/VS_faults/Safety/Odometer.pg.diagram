@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<programGraphDslDiagram dslVersion="1.0.0.0" Id="078de0a0-e8de-46dc-be70-86037f83b656" absoluteBounds="0, 0, 11.875, 8.5" name="ProgramGraphDsl1">
+<programGraphDslDiagram dslVersion="1.0.0.0" Id="078de0a0-e8de-46dc-be70-86037f83b656" absoluteBounds="0, 0, 11, 8.5" name="ProgramGraphDsl1">
   <programGraphMoniker Id="aa6a9835-3ebe-4d8b-8165-278225fe3f5c" />
   <nestedChildShapes>
     <stateShape Id="c6482777-f4c5-40c4-9634-7f3067dbfdc8" absoluteBounds="1.875, 1.875, 1, 0.5">
@@ -49,8 +49,5 @@
         <stateShapeMoniker Id="c6482777-f4c5-40c4-9634-7f3067dbfdc8" />
       </nodes>
     </transitionConnector>
-    <commentBoxShape Id="7a2bea5f-5f25-44f8-ab0f-72d3023571cc" absoluteBounds="8.625, 2, 3, 0.25">
-      <commentMoniker Id="f568b6b9-ce9c-42c9-85f3-69d7a11df1f0" />
-    </commentBoxShape>
   </nestedChildShapes>
 </programGraphDslDiagram>

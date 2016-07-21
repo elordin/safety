@@ -27,11 +27,6 @@
       <variable Id="7d0d8255-0e91-4fea-ba02-7784d8d867de" name="measuredDistance" range="-96..24" />
     </programGraphHasVariables>
   </variables>
-  <comments>
-    <programGraphHasComments Id="d26e2625-87ba-42f5-91b3-4dd37afa6d5f">
-      <comment Id="f568b6b9-ce9c-42c9-85f3-69d7a11df1f0" text="Requires precondition &quot;d &gt; -1&quot; no good reason. " />
-    </programGraphHasComments>
-  </comments>
   <importedVariables>
     <programGraphHasImportedVariables Id="80aefd03-2517-4e4d-b3c7-720379cad7ab">
       <importedVariable Id="56c36c0c-616a-4614-93c5-0eae23ea5e37" name="RealTrain.d" range="-96..24" />
