@@ -1,0 +1,19 @@
+Ergebnis der DCCA des FFB:
+
+Minimal-kritische Mengen:
+	 1. {F_SensorSP}
+	 2. {F_Odometer}
+	 3. {F_CrossingRadioModule_Outage, F_DriveTrain}
+	 4. {F_CrossingRadioModule_Outage, F_SpeedMeasurement}
+	 5. {F_CrossingRadioModule_WrongMessage, F_Gates}
+	 6. {F_DriveTrain, F_Gates}
+	 7. {F_DriveTrain, F_TrainRadioModule_Outage}
+	 8. {F_Gates, F_SensorGate}
+	 9. {F_Gates, F_SpeedMeasurement}
+	10. {F_SpeedMeasurement, F_TrainRadioModule_Outage}
+	11. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_SensorGate}
+	12. {F_CrossingRadioModule_WrongMessage, F_DriveTrain, F_Speed}
+	13. {F_DriveTrain, F_SensorGate, F_SpeedMeasurement}
+	
+	
+F_DriveTrain entspricht einem (Teil-)Ausfall der Bremsen.
